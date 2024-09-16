@@ -231,7 +231,7 @@ class clienteControlador extends clienteModelo
          $id = mainModel::decryption($_POST['cliente_id_del']);
          $id = mainModel::limpiar_cadena($id);
 
-      //comprobando el usuario en la base de datos
+      //comprobando el cliente en la base de datos
 
       $check_cliente = mainModel::ejecutar_consulta_simple("SELECT cliente_id FROM  cliente WHERE cliente_id='$id'");
 
@@ -265,7 +265,7 @@ class clienteControlador extends clienteModelo
           exit();
       }
 
-      //comprobando el privilegio del usuario a eliminar
+      //comprobando el privilegio del usuario que intenta eliminar
 
       session_start(['name' => 'SPM']);
       if ($_SESSION['privilegio_spm'] != 1) {
@@ -282,16 +282,13 @@ class clienteControlador extends clienteModelo
       }
 
       $eliminar_cliente = clienteModelo::eliminar_cliente_modelo($id);
-
+        //para contar registros que fueron eliminados por la consulta 
         if ($eliminar_cliente->rowCount() == 1) {
             $alerta = [
                 "Alerta" => "recargar",
                 "Titulo" => "Cliente eliminado.",
                 "Texto" => "Cliente eliminado con exito.",
                 "Tipo" => "success"
-
-
-
             ];
 
             header('Content-Type: application/json');
@@ -311,6 +308,192 @@ class clienteControlador extends clienteModelo
         }
 
     }//fin controlador
+    
+     //controlador para los datos de cliente
+     public  function datos_cliente_controlador($tipo, $id)
+     {
+         $tipo = mainModel::limpiar_cadena($tipo);
+         $id = mainModel::decryption($id);
+         $id = mainModel::limpiar_cadena($id);
+ 
+         return clienteModelo::datos_cliente_modelo($tipo, $id);
+     } // fin controlador
 
+      //controlador para actualizar cliente
+    public function actualizar_cliente_controlador()
+    {
+        //Recibiendo el id  
+        $id = mainModel::decryption($_POST['cliente_id_up']);
+        $id = mainModel::limpiar_cadena($id);
+       
+
+        //comprobar el cliente mediante el id en la BDD
+        $check_client = mainModel::ejecutar_consulta_simple("SELECT * FROM cliente WHERE cliente_id = '$id' ");
+
+        if ($check_client->rowCount()<= 0) {
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado.",
+                "Texto" => "No hemos encontrado el cliente en el sistema",
+                "Tipo" => "error"
+            ];
+
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        } else {
+            $campos = $check_client->fetch();
+        }
+        //recibiendo parametros del formulario
+        $dni = mainModel::limpiar_cadena($_POST['cliente_dni_up']);
+        $nombre = mainModel::limpiar_cadena($_POST['cliente_nombre_up']);
+        $apellido = mainModel::limpiar_cadena($_POST['cliente_apellido_up']);
+        $telefono = mainModel::limpiar_cadena($_POST['cliente_telefono_up']);
+        $direccion = mainModel::limpiar_cadena($_POST['cliente_direccion_up']);
+
+        // Comprobar los datos obligatorios vengan con datos
+        if ($dni == "" || $nombre == "" || $apellido == "" || $telefono == "" || $direccion == "" ) {
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado",
+                "Texto" => "No has llenado todos los campos que son obligatorios.",
+                "Tipo" => "error"
+            ];
+
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        }
+
+        
+        //Verificar integridad de los datos
+        if (mainModel::verificar_datos("[0-9-]{1,20}", $dni)) {
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado",
+                "Texto" => "El DNI no coincide con el formato solicitado.",
+                "Tipo" => "error"
+            ];
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        }
+
+        if (mainModel::verificar_datos("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{4,40}", $nombre)) {
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado",
+                "Texto" => "El nombre no coincide con el formato solicitado.",
+                "Tipo" => "error"
+            ];
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        }
+
+
+        if (mainModel::verificar_datos("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{4,40}", $apellido)) {
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado",
+                "Texto" => "El apellido no coincide con el formato solicitado.",
+                "Tipo" => "error"
+            ];
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        }
+        if ($telefono != "") {
+            if (mainModel::verificar_datos("[0-9()+]{8,20}", $telefono)) {
+                $alerta = [
+                    "Alerta" => "simple",
+                    "Titulo" => "Ocurrió un error inesperado",
+                    "Texto" => "El número telefono no coincide con el formato solicitado.",
+                    "Tipo" => "error"
+                ];
+                header('Content-Type: application/json');
+                echo json_encode($alerta);
+                exit();
+            }
+        }
+
+
+        if (mainModel::verificar_datos("[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ().,#\- ]{1,190}", $direccion)) {
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado",
+                "Texto" => "La dirección no coincide con el formato solicitado.",
+                "Tipo" => "error"
+            ];
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        }
+
+
+        //Comrpobando el DNI
+
+        if ($dni != $campos['cliente_dni']) {
+            $check_dni = mainModel::ejecutar_consulta_simple("SELECT cliente_dni FROM cliente WHERE  cliente_dni='$dni'");
+            if ($check_dni->rowCount() > 0) {
+                $alerta = [
+                    "Alerta" => "simple",
+                    "Titulo" => "Ocurrió un error inesperado",
+                    "Texto" => "Existe un usuario registrado con ese DNI.",
+                    "Tipo" => "error"
+                ];
+                header('Content-Type: application/json');
+                echo json_encode($alerta);
+                exit();
+            }
+        }
+
+
+        //comprobando privilegios
+        session_start(['name'=>'SPM']);
+        if($_SESSION['privilegio_spm'] < 1 || $_SESSION['privilegio_spm'] > 2){
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado",
+                "Texto" => "No tienes permisos para esta tarea.",
+                "Tipo" => "error"
+            ];
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        }
+       
+        //Preparando datos par enviar al modelo
+        $datos_cliente_up = [
+            "DNI" => $dni,
+            "Nombre" => $nombre,
+            "Apellido" => $apellido,
+            "Telefono" => $telefono,
+            "Direccion" => $direccion,
+            "ID" => $id
+
+        ];
+
+        if (clienteModelo::actualizar_cliente_modelo($datos_cliente_up)) {
+            $alerta = [
+                "Alerta" => "recargar",
+                "Titulo" => "Datos actualizados",
+                "Texto" => "Los datos han sido actualizados con exito.",
+                "Tipo" => "success"
+            ];
+          
+        } else {
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado",
+                "Texto" => "No hemos podido actualizar los datos.",
+                "Tipo" => "error"
+            ];
+            
+        }
+        header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+    } //fin controlador
     
 }

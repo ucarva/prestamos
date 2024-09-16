@@ -10,13 +10,24 @@
 			
 			<!-- Content -->
 			<div class="full-box tile-container">
+
+			<?php 
+					
+						require_once "./controladores/clienteControlador.php";
+						$ins_cliente = new clienteControlador();
+						//consulta a la base de datos para ver los registros
+						$total_clientes = $ins_cliente->datos_cliente_controlador("Conteo",0);
+
+				?>
 				<a href="<?php echo SERVERURL;?>client-new/" class="tile">
 					<div class="tile-tittle">Clientes</div>
 					<div class="tile-icon">
 						<i class="fas fa-users fa-fw"></i>
-						<p>5 Registrados</p>
+						<p><?php echo $total_clientes->rowCount(); ?> Registrados</p>
+						
 					</div>
 				</a>
+				
 				
 				<a href="<?php echo SERVERURL;?>item-list/" class="tile">
 					<div class="tile-tittle">Items</div>
