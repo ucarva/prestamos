@@ -254,7 +254,7 @@ class usuarioControlador extends usuarioModelo
         exit();
     } //fin controlador
 
-    // Controlador para listar paginar usuarios
+    // Controlador para listar paginas usuarios
     public function paginador_usuario_controlador($pagina, $registros, $privilegio, $id, $url, $busqueda)
     {
         $pagina = mainModel::limpiar_cadena($pagina);

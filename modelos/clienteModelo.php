@@ -25,7 +25,21 @@ require_once "mainModel.php";
         
 
         
-    }
+    }//fin modelo
+
+    //Modelo para eliminar el cliente
+    protected static function eliminar_cliente_modelo($id){
+
+      $sql=mainModel::conectar()->prepare("DELETE FROM cliente WHERE cliente_id=:ID");
+
+      //sustituyendo marcador :ID por la variable $id
+      $sql->bindParam(":ID",$id);
+
+      $sql->execute();
+      return $sql;
+
+
+  }//fin modelo
 
 
 
