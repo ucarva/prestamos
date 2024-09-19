@@ -11,8 +11,7 @@
 			<!-- Content -->
 			<div class="full-box tile-container">
 
-			<?php 
-					
+				<?php 	
 						require_once "./controladores/clienteControlador.php";
 						$ins_cliente = new clienteControlador();
 						//consulta a la base de datos para ver los registros
@@ -28,12 +27,18 @@
 					</div>
 				</a>
 				
-				
+				<?php 	
+						require_once "./controladores/itemControlador.php";
+						$ins_item = new itemControlador();
+						//consulta a la base de datos para ver los registros
+						$total_items = $ins_item->datos_item_controlador("Conteo",0);
+
+				?>
 				<a href="<?php echo SERVERURL;?>item-list/" class="tile">
 					<div class="tile-tittle">Items</div>
 					<div class="tile-icon">
 						<i class="fas fa-pallet fa-fw"></i>
-						<p>9 Registrados</p>
+						<p><?php echo $total_items->rowCount(); ?> Registrados</p>
 					</div>
 				</a>
 
