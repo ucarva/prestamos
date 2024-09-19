@@ -294,4 +294,172 @@ public function agregar_item_controlador()
       return itemModelo::datos_item_modelo($tipo, $id);
 } // fin controlador
 
+     //controlador para actualizar item
+     public function actualizar_item_controlador()
+{
+         //Recibiendo el id  
+         $id = mainModel::decryption($_POST['item_id_up']);
+         $id = mainModel::limpiar_cadena($id);
+        
+ 
+         //comprobar el item mediante el id en la BDD
+         $check_client = mainModel::ejecutar_consulta_simple("SELECT * FROM item WHERE item_id = '$id' ");
+ 
+         if ($check_client->rowCount()<= 0) {
+             $alerta = [
+                 "Alerta" => "simple",
+                 "Titulo" => "Ocurrió un error inesperado.",
+                 "Texto" => "No hemos encontrado el item en el sistema",
+                 "Tipo" => "error"
+             ];
+ 
+             header('Content-Type: application/json');
+             echo json_encode($alerta);
+             exit();
+         } else {
+             $campos = $check_client->fetch();
+         }
+         
+         //recibiendo parametros del formulario
+        $codigo = mainModel::limpiar_cadena($_POST['item_codigo_up']);
+        $nombre = mainModel::limpiar_cadena($_POST['item_nombre_up']);
+        $stock = mainmodel::limpiar_cadena($_POST['item_stock_up']);
+        $estado = mainModel::limpiar_cadena($_POST['item_estado_up']);
+        $detalle = mainModel::limpiar_cadena($_POST['item_detalle_up']);
+ 
+         // Comprobar los datos obligatorios vengan con datos
+         if ($codigo == "" || $nombre == "" || $stock == "" || $estado == "" || $detalle == "" ) {
+             $alerta = [
+                 "Alerta" => "simple",
+                 "Titulo" => "Ocurrió un error inesperado",
+                 "Texto" => "No has llenado todos los campos que son obligatorios.",
+                 "Tipo" => "error"
+             ];
+ 
+             header('Content-Type: application/json');
+             echo json_encode($alerta);
+             exit();
+         }
+ 
+         
+         //Verificar integridad de los datos
+         if (mainModel::verificar_datos("[a-zA-Z0-9-]{1,45}", $codigo)) {
+             $alerta = [
+                 "Alerta" => "simple",
+                 "Titulo" => "Ocurrió un error inesperado",
+                 "Texto" => "El Codigo no coincide con el formato solicitado.",
+                 "Tipo" => "error"
+             ];
+             header('Content-Type: application/json');
+             echo json_encode($alerta);
+             exit();
+         }
+ 
+         if (mainModel::verificar_datos("[a-zA-záéíóúÁÉÍÓÚñÑ0-9 ]{1,140}", $nombre)) {
+             $alerta = [
+                 "Alerta" => "simple",
+                 "Titulo" => "Ocurrió un error inesperado",
+                 "Texto" => "El nombre no coincide con el formato solicitado.",
+                 "Tipo" => "error"
+             ];
+             header('Content-Type: application/json');
+             echo json_encode($alerta);
+             exit();
+         }
+ 
+ 
+         if (mainModel::verificar_datos("[0-9]{1,9}", $stock)) {
+             $alerta = [
+                 "Alerta" => "simple",
+                 "Titulo" => "Ocurrió un error inesperado",
+                 "Texto" => "El stock no coincide con el formato solicitado.",
+                 "Tipo" => "error"
+             ];
+             header('Content-Type: application/json');
+             echo json_encode($alerta);
+             exit();
+         }
+         
+ 
+ 
+         if (mainModel::verificar_datos("[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ().,#\- ]{1,190}", $detalle)) {
+             $alerta = [
+                 "Alerta" => "simple",
+                 "Titulo" => "Ocurrió un error inesperado",
+                 "Texto" => "El detalle no coincide con el formato solicitado.",
+                 "Tipo" => "error"
+             ];
+             header('Content-Type: application/json');
+             echo json_encode($alerta);
+             exit();
+         }
+ 
+ 
+         //Comrpobando el codigo
+ 
+         if ($codigo != $campos['item_codigo']) {
+             $check_dni = mainModel::ejecutar_consulta_simple("SELECT item_codigo FROM item WHERE  item_codigo='$codigo'");
+             if ($check_dni->rowCount() > 0) {
+                 $alerta = [
+                     "Alerta" => "simple",
+                     "Titulo" => "Ocurrió un error inesperado",
+                     "Texto" => "Existe un item registrado con ese codigo.",
+                     "Tipo" => "error"
+                 ];
+                 header('Content-Type: application/json');
+                 echo json_encode($alerta);
+                 exit();
+             }
+         }
+ 
+ 
+         //comprobando privilegios
+         session_start(['name'=>'SPM']);
+         if($_SESSION['privilegio_spm'] < 1 || $_SESSION['privilegio_spm'] > 2){
+             $alerta = [
+                 "Alerta" => "simple",
+                 "Titulo" => "Ocurrió un error inesperado",
+                 "Texto" => "No tienes permisos para esta tarea.",
+                 "Tipo" => "error"
+             ];
+             header('Content-Type: application/json');
+             echo json_encode($alerta);
+             exit();
+         }
+        
+         //Preparando datos par enviar al modelo
+         $datos_item_up = [
+
+            "Codigo" => $codigo,
+            "Nombre" => $nombre,
+            "Stock" => $stock,
+            "Estado" => $estado,
+            "Detalle"=>$detalle,
+            "ID" => $id
+
+    
+        ];
+ 
+         if (itemModelo::actualizar_item_modelo($datos_item_up)) {
+             $alerta = [
+                 "Alerta" => "recargar",
+                 "Titulo" => "Datos actualizados",
+                 "Texto" => "Los datos del item han sido actualizados con exito.",
+                 "Tipo" => "success"
+             ];
+           
+         } else {
+             $alerta = [
+                 "Alerta" => "simple",
+                 "Titulo" => "Ocurrió un error inesperado",
+                 "Texto" => "No hemos podido actualizar los datos.",
+                 "Tipo" => "error"
+             ];
+             
+         }
+         header('Content-Type: application/json');
+             echo json_encode($alerta);
+             exit();
+} //fin controlador
+
 }
