@@ -9,7 +9,7 @@ if ($peticionAjax) {
 
 class itemControlador extends itemModelo{
     
-//Controlador para agregar item
+    //Controlador para agregar item
 public function agregar_item_controlador()
 {
         $codigo = mainModel::limpiar_cadena($_POST['item_codigo_reg']);
@@ -88,9 +88,9 @@ public function agregar_item_controlador()
         exit();
 } //fin controlador
 
- // Controlador para paginar items
- public function paginador_item_controlador($pagina,$registros,$privilegio,$url,$busqueda)
- {
+    // Controlador para paginar items
+public function paginador_item_controlador($pagina,$registros,$privilegio,$url,$busqueda)
+{
      $pagina = mainModel::limpiar_cadena($pagina);
      $registros = mainModel::limpiar_cadena($registros);
      $privilegio = mainModel::limpiar_cadena($privilegio);
@@ -208,10 +208,10 @@ public function agregar_item_controlador()
 
 
      return $tabla;
- } //fin controlador
+} //fin controlador
 
-  // Controlador para eliminar item
-  public function eliminar_item_controlador()
+    // Controlador para eliminar item
+public function eliminar_item_controlador()
 {
       //recibiendo el id del usuario
       $id = mainModel::decryption($_POST['item_id_del']);
@@ -282,10 +282,10 @@ public function agregar_item_controlador()
           echo json_encode($alerta);
           exit();
       }
-} //fincontrolador
+} //fin controlador
 
-  //controlador para los datos de item
-  public  function datos_item_controlador($tipo, $id)
+    //controlador para los datos de item
+public  function datos_item_controlador($tipo, $id)
 {
       $tipo = mainModel::limpiar_cadena($tipo);
       $id = mainModel::decryption($id);
@@ -294,8 +294,8 @@ public function agregar_item_controlador()
       return itemModelo::datos_item_modelo($tipo, $id);
 } // fin controlador
 
-     //controlador para actualizar item
-     public function actualizar_item_controlador()
+    //controlador para actualizar item
+public function actualizar_item_controlador()
 {
          //Recibiendo el id  
          $id = mainModel::decryption($_POST['item_id_up']);
