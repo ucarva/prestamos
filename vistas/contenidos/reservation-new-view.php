@@ -34,16 +34,27 @@
                     <div class="container-fluid">
                         <p class="text-center roboto-medium">AGREGAR CLIENTE O ITEMS</p>
                         <p class="text-center">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalCliente"><i class="fas fa-user-plus"></i> &nbsp; Agregar cliente</button>
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalItem"><i class="fas fa-box-open"></i> &nbsp; Agregar item</button>
-                        </p>
+
+                        <?php if(empty($_SESSION['datos_cliente'])) {?>
+                           
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalCliente"><i class="fas fa-user-plus"></i> &nbsp; Agregar cliente</button>
+                        <?php } ?>
+
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalItem"><i class="fas fa-box-open"></i> &nbsp; Agregar item</button>
+                        
+                    </p>
+
                         <div>
                             <span class="roboto-medium">CLIENTE:</span> 
+                            <?php if(empty($_SESSION['datos_cliente'])) {?>
                             <span class="text-danger">&nbsp; <i class="fas fa-exclamation-triangle"></i> Seleccione un cliente</span>
-                            <form action="" style="display: inline-block !important;">
-                                Uriel Carvajalino
-                                <button type="button" class="btn btn-danger"><i class="fas fa-user-times"></i></button>
+                            <?php } else{?>
+                            <form class="FormularioAjax" action="<?php echo SERVERURL; ?>ajax/prestamoAjax.php"  method="POST" data-form="loans" style="display: inline-block !important;">
+                                <input type="hidden" name="id_eliminar_cliente" value="<?php echo  $_SESSION['datos_cliente']['ID']; ?>" >
+                                <?php echo $_SESSION['datos_cliente']['Nombre']." ".$_SESSION['datos_cliente']['Apellido']." (".$_SESSION['datos_cliente']['DNI'].")";?>
+                                <button type="submit" class="btn btn-danger"><i class="fas fa-user-times"></i></button>
                             </form>
+                            <?php } ?>
                         </div>
                         <div class="table-responsive">
                             <table class="table table-dark table-sm">
@@ -302,7 +313,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary"><i class="fas fa-search fa-fw"></i> &nbsp; Buscar</button>
+                            <button type="button" class="btn btn-primary"  onclick="buscar_item()" ><i class="fas fa-search fa-fw"></i> &nbsp; Buscar</button>
                             &nbsp; &nbsp;
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                         </div>

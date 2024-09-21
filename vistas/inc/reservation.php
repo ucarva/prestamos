@@ -48,26 +48,55 @@
         cancelButtonColor: '#d33',
         confirmButtonText: 'Si, agregar',
         cancelButtonText: 'No, cancelar'
-    }).then((result) => {
-        if (result.value) {
-            let datos = new FormData();
-            datos.append("id_agregar_cliente",id);
+        }).then((result) => {
+            if (result.value) {
+                let datos = new FormData();
+                datos.append("id_agregar_cliente",id);
 
-           
-           fetch("<?php echo SERVERURL;?>ajax/prestamoAjax.php",{
-            method:'POST',
-            body:datos
-           })
-           .then(respuesta => respuesta.json())
-           .then(respuesta => {
-                return alertas_ajax(respuesta);
-           });
-        
+            
+            fetch("<?php echo SERVERURL;?>ajax/prestamoAjax.php",{
+                method:'POST',
+                body:datos
+            })
+            .then(respuesta => respuesta.json())
+            .then(respuesta => {
+                    return alertas_ajax(respuesta);
+            });
+            
+            }else{
+                $('#ModalCliente').modal('show'); 
+            }
+        });
+
+}
+
+    //buscar item
+    function buscar_item(){
+
+        let input_item=document.querySelector('#input_item').value;
+//quitar espacios
+        input_item= input_item.trim();
+
+        if( input_item!=""){
+            let datos = new FormData();
+            datos.append("buscar_item",input_item);      
+                fetch("<?php echo SERVERURL;?>ajax/prestamoAjax.php",{
+                    method:'POST',
+                    body:datos
+                })
+                .then(respuesta => respuesta.text())
+                .then(respuesta => {
+                    let tabla_items=document.querySelector('#tabla_items'); 
+                    tabla_items.innerHTML=respuesta;
+                });
         }else{
-            $('#ModalCliente').modal('show'); 
+            Swal.fire({
+            title: 'Ocurrio un error',
+            text: 'Debes introducir el codigo o el nombre del item',
+            type: 'error',
+            confirmButtonText: 'Aceptar'
+        });
         }
-    });
 
     }
-
 </script>

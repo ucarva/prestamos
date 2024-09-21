@@ -128,4 +128,42 @@ class prestamoControlador extends prestamoModelo{
 
     }//fin controlador
 
+    //Controlador eliminar cliente para prestamo
+    public function eliminar_cliente_prestamo_controlador(){
+
+        //iniciar la sesion
+        session_start(['name'=>'SPM']);
+
+        //eliminar los datos del cliente en la sesion
+        unset($_SESSION['datos_cliente']);
+
+        if(empty($_SESSION['datos_cliente'])){
+            $alerta = [
+                "Alerta" => "recargar",
+                "Titulo" => "Cliente removido",
+                "Texto" => "Los datos del cliente se han removido con exito",
+                "Tipo" => "success"
+            ];
+    
+        }else{
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado",
+                "Texto" => "No hemos podido remover los datos del cliente",
+                "Tipo" => "error"
+            ];      
+        }
+
+        echo json_encode($alerta);
+        exit();
+
+
+
+    }//fin controlador
+
+    //controlador para buscar item
+    public function buscar_item_prestamo_controlador(){
+
+    }//fin controlador
+
 }
