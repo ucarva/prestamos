@@ -5,7 +5,7 @@
     require_once "../config/APP.php";
 
     if(isset($_POST['buscar_cliente'])  || isset($_POST['id_agregar_cliente'])|| isset($_POST['id_eliminar_cliente'])
-        || isset($_POST['buscar_item'])){
+        || isset($_POST['buscar_item']) || isset($_POST['id_agregar_item']) || isset($_POST['id_eliminar_item'])) { 
 
         require_once"../controladores/prestamoControlador.php"; 
         $ins_prestamo = new prestamoControlador();
@@ -27,6 +27,16 @@
         //buscar item
         if(isset($_POST['buscar_item'])){
             echo $ins_prestamo->buscar_item_prestamo_controlador();
+        }
+
+        //agregar item
+        if(isset($_POST['id_agregar_item'])){
+            echo $ins_prestamo->agregar_item_prestamo_controlador();
+        }
+
+        //eliminar item
+        if(isset($_POST['id_eliminar_item'])){
+            echo $ins_prestamo->eliminar_item_prestamo_controlador();
         }
         
 
