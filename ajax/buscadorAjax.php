@@ -49,7 +49,7 @@
             //iniciar busqueda 
             if(isset($_POST['fecha_inicio']) || isset($_POST['fecha_final'])){
 
-                if($_POST['fecha_inicio'] =="" || isset($_POST['fecha_final'])=="" ){
+                if($_POST['fecha_inicio'] =="" || $_POST['fecha_final']=="") {
                     $alerta = [
                         "Alerta" => "simple",
                         "Titulo" => "Ocurrió un error inesperado",
