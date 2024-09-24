@@ -94,14 +94,25 @@
         }
 
         //Función validar fechas
-        protected static function verificar_fecha($fecha,$cadena){
-           $valores=explode('-',$fecha);
-           if(count($valores)==3  && checkdate($valores[1],$valores[2],$valores[0])){
-            return false;
-           }else{
-            return true;
-           }
+        protected static function verificar_fecha($fecha) {
+            $valores = explode('-', $fecha);
+            if (count($valores) == 3 && checkdate($valores[1], $valores[2], $valores[0])) {
+                return true;  // Fecha válida
+            } else {
+                return false; // Fecha no válida
+            }
         }
+        protected static function verificar_hora($hora) {
+            // Registrar la hora que se va a validar
+            error_log("Hora a validar: " . $hora);
+        
+            if (preg_match("/^([0-1][0-9]|2[0-3]):([0-5][0-9])$/", $hora)) {
+                return false;  // Hora válida
+            } else {
+                return true;   // Hora no válida
+            }
+        }
+        
 
         //función para paginación
         protected static function paginador_tablas($pagina,$Npaginas,$url,$botones){
