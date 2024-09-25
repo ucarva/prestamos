@@ -689,8 +689,7 @@ class prestamoControlador extends prestamoModelo
         $inicio = ($pagina > 0) ? (($pagina * $registros) - $registros) : 0;
 
         if ($tipo == "Busqueda") {
-            if (!mainModel::verificar_fecha($fecha_inicio) || !mainModel::verificar_fecha($fecha_final))        
-             {
+            if (!mainModel::verificar_fecha($fecha_inicio) || !mainModel::verificar_fecha($fecha_final)) {
                 return '
                     <div class="alert alert-danger text-center" role="alert">
 			            <p><i class="fas fa-exclamation-triangle fa-5x"></i></p>
@@ -709,12 +708,10 @@ class prestamoControlador extends prestamoModelo
             // Asegurarse de que las fechas estén en el formato correcto
             $fecha_inicio = date('Y-m-d', strtotime($fecha_inicio));
             $fecha_final = date('Y-m-d', strtotime($fecha_final));
-        
+
             $consulta = "SELECT SQL_CALC_FOUND_ROWS $campos FROM prestamo INNER JOIN cliente ON prestamo.cliente_id=cliente.cliente_id 
             WHERE (prestamo.prestamo_fecha_inicio BETWEEN '$fecha_inicio' AND '$fecha_final')
             ORDER BY prestamo.prestamo_fecha_inicio DESC LIMIT $inicio,$registros";
-        
-        
         } else {
             $consulta = "SELECT SQL_CALC_FOUND_ROWS $campos FROM prestamo INNER JOIN cliente ON prestamo.cliente_id=cliente.cliente_id 
             WHERE prestamo.prestamo_estado='$tipo' ORDER BY prestamo.prestamo_fecha_inicio DESC LIMIT $inicio,$registros";
@@ -839,5 +836,130 @@ class prestamoControlador extends prestamoModelo
         return $tabla;
     } //fin controlador
 
+    // Controlador para eliminar prestamos
+    public function eliminar_prestamo_controlador()
+    {
+        //Recibiendo codigo de prestamo
+        $codigo = mainModel::decryption($_POST['prestamo_codigo_del']);
+        $codigo = mainModel::limpiar_cadena($codigo);
+
+        //Comprobando prestamo en la bdd
+        $check_prestamo = mainModel::ejecutar_consulta_simple("SELECT prestamo_codigo FROM prestamo WHERE prestamo_codigo='$codigo'");
+
+        if ($check_prestamo->rowCount() <= 0) {
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado",
+                "Texto" => "El prestamo que intenta eliminar no existe en el sistema.",
+                "Tipo" => "error"
+            ];
+
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        }
+
+        //comprobando el privilegio del usuario para eliminar
+
+        session_start(['name' => 'SPM']);
+        if ($_SESSION['privilegio_spm'] != 1) {
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado.",
+                "Texto" => "No tienes los permisos necesarios para realizar esta operación.",
+                "Tipo" => "error"
+            ];
+
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        }
+
+        //Comprobando y eliminando prestamo en la bdd pago
+        $check_pagos = mainModel::ejecutar_consulta_simple("SELECT prestamo_codigo FROM pago WHERE prestamo_codigo='$codigo'");
+
+        $check_pagos=$check_pagos->rowCount();
+
+        if($check_pagos>0){
+            $eliminar_pagos=prestamoModelo::eliminar_prestamo_modelo($codigo,"Pago");
+
+            if($eliminar_pagos->rowCount()!=$check_pagos){
+                $alerta = [
+                    "Alerta" => "simple",
+                    "Titulo" => "Ocurrió un error inesperado.",
+                    "Texto" => "No hemos podido eliminar el prestamo, por favor intenta nuevamente.",
+                    "Tipo" => "error"
+                ];
+    
+                header('Content-Type: application/json');
+                echo json_encode($alerta);
+                exit();
+
+            }
+        }
+
+         //Comprobando y eliminando prestamo en la bdd detalle
+         $check_detalles = mainModel::ejecutar_consulta_simple("SELECT prestamo_codigo FROM detalle WHERE prestamo_codigo='$codigo'");
+
+         $check_detalles=$check_detalles->rowCount();
+ 
+         if($check_detalles>0){
+             $eliminar_detalles=prestamoModelo::eliminar_prestamo_modelo($codigo,"Detalle");
+ 
+             if($eliminar_detalles->rowCount()!=$check_detalles){
+                 $alerta = [
+                     "Alerta" => "simple",
+                     "Titulo" => "Ocurrió un error inesperado.",
+                     "Texto" => "No hemos podido eliminar el prestamo, por favor intenta nuevamente.",
+                     "Tipo" => "error"
+                 ];
+     
+                 header('Content-Type: application/json');
+                 echo json_encode($alerta);
+                 exit();
+ 
+             }
+         }
+
+           //Comprobando y eliminando prestamo en la bdd prestamos      
+        $eliminar_prestamo=prestamoModelo::eliminar_prestamo_modelo($codigo,"Prestamo");
+
+        if( $eliminar_prestamo->rowCount()==1){
+
+            $alerta = [
+                "Alerta" => "recargar",
+                "Titulo" => "Prestamo eliminado.",
+                "Texto" => "El prestamo ha sido eliminado del sistema.",
+                "Tipo" => "success"
+            ];
+
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        }else{
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado.",
+                "Texto" => "No hemos podido eliminar el prestamo, por favor intenta nuevamente.",
+                "Tipo" => "error"
+            ];
+
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+
+        }
+
+   
+              
+           
+ 
+
+
+
+    } //fin controlador
+
+
+    
 
 }
