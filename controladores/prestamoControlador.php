@@ -433,9 +433,7 @@ class prestamoControlador extends prestamoModelo
         $observacion = mainModel::limpiar_cadena($_POST['prestamo_observacion_reg']);
 
 
-        //validando datos
-
-
+        //validando integridad datos
         if (mainModel::verificar_hora($hora_inicio)) {
             $alerta = [
                 "Alerta" => "simple",
@@ -878,53 +876,51 @@ class prestamoControlador extends prestamoModelo
         //Comprobando y eliminando prestamo en la bdd pago
         $check_pagos = mainModel::ejecutar_consulta_simple("SELECT prestamo_codigo FROM pago WHERE prestamo_codigo='$codigo'");
 
-        $check_pagos=$check_pagos->rowCount();
+        $check_pagos = $check_pagos->rowCount();
 
-        if($check_pagos>0){
-            $eliminar_pagos=prestamoModelo::eliminar_prestamo_modelo($codigo,"Pago");
+        if ($check_pagos > 0) {
+            $eliminar_pagos = prestamoModelo::eliminar_prestamo_modelo($codigo, "Pago");
 
-            if($eliminar_pagos->rowCount()!=$check_pagos){
+            if ($eliminar_pagos->rowCount() != $check_pagos) {
                 $alerta = [
                     "Alerta" => "simple",
                     "Titulo" => "Ocurrió un error inesperado.",
                     "Texto" => "No hemos podido eliminar el prestamo, por favor intenta nuevamente.",
                     "Tipo" => "error"
                 ];
-    
+
                 header('Content-Type: application/json');
                 echo json_encode($alerta);
                 exit();
-
             }
         }
 
-         //Comprobando y eliminando prestamo en la bdd detalle
-         $check_detalles = mainModel::ejecutar_consulta_simple("SELECT prestamo_codigo FROM detalle WHERE prestamo_codigo='$codigo'");
+        //Comprobando y eliminando prestamo en la bdd detalle
+        $check_detalles = mainModel::ejecutar_consulta_simple("SELECT prestamo_codigo FROM detalle WHERE prestamo_codigo='$codigo'");
 
-         $check_detalles=$check_detalles->rowCount();
- 
-         if($check_detalles>0){
-             $eliminar_detalles=prestamoModelo::eliminar_prestamo_modelo($codigo,"Detalle");
- 
-             if($eliminar_detalles->rowCount()!=$check_detalles){
-                 $alerta = [
-                     "Alerta" => "simple",
-                     "Titulo" => "Ocurrió un error inesperado.",
-                     "Texto" => "No hemos podido eliminar el prestamo, por favor intenta nuevamente.",
-                     "Tipo" => "error"
-                 ];
-     
-                 header('Content-Type: application/json');
-                 echo json_encode($alerta);
-                 exit();
- 
-             }
-         }
+        $check_detalles = $check_detalles->rowCount();
 
-           //Comprobando y eliminando prestamo en la bdd prestamos      
-        $eliminar_prestamo=prestamoModelo::eliminar_prestamo_modelo($codigo,"Prestamo");
+        if ($check_detalles > 0) {
+            $eliminar_detalles = prestamoModelo::eliminar_prestamo_modelo($codigo, "Detalle");
 
-        if( $eliminar_prestamo->rowCount()==1){
+            if ($eliminar_detalles->rowCount() != $check_detalles) {
+                $alerta = [
+                    "Alerta" => "simple",
+                    "Titulo" => "Ocurrió un error inesperado.",
+                    "Texto" => "No hemos podido eliminar el prestamo, por favor intenta nuevamente.",
+                    "Tipo" => "error"
+                ];
+
+                header('Content-Type: application/json');
+                echo json_encode($alerta);
+                exit();
+            }
+        }
+
+        //Comprobando y eliminando prestamo en la bdd prestamos      
+        $eliminar_prestamo = prestamoModelo::eliminar_prestamo_modelo($codigo, "Prestamo");
+
+        if ($eliminar_prestamo->rowCount() == 1) {
 
             $alerta = [
                 "Alerta" => "recargar",
@@ -936,7 +932,7 @@ class prestamoControlador extends prestamoModelo
             header('Content-Type: application/json');
             echo json_encode($alerta);
             exit();
-        }else{
+        } else {
             $alerta = [
                 "Alerta" => "simple",
                 "Titulo" => "Ocurrió un error inesperado.",
@@ -947,19 +943,255 @@ class prestamoControlador extends prestamoModelo
             header('Content-Type: application/json');
             echo json_encode($alerta);
             exit();
-
         }
-
-   
-              
-           
- 
-
-
-
     } //fin controlador
 
 
-    
+    //agregar pago prtestamo
+    public function agregar_pago_controlador()
+    {
+
+        //recibiendo el codigo del prestamo
+        $codigo = mainModel::decryption($_POST['pago_codigo_reg']);
+        $codigo = mainModel::limpiar_cadena($codigo);
+
+        $monto = mainModel::limpiar_cadena($_POST['pago_monto_reg']);
+        $monto = number_format($monto, 2, '.', '');
+
+
+        //comprobando que el pago sea mayor a 0
+        if ($monto <= 0) {
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado",
+                "Texto" => "El pago debe de ser mayor a 0.",
+                "Tipo" => "error"
+            ];
+
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        }
+
+        //Comprobando prestamo en la bdd
+        $datos_prestamo = mainModel::ejecutar_consulta_simple("SELECT * FROM prestamo WHERE prestamo_codigo='$codigo'");
+
+        if ($datos_prestamo->rowCount() <= 0) {
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado",
+                "Texto" => "El prestamo al cual intenta agregar el pago no existe en el sistema.",
+                "Tipo" => "error"
+            ];
+
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        } else {
+            $datos_prestamo = $datos_prestamo->fetch();
+        }
+
+        //Comprobando que el monto no sea mayor a lo que falta por pagar
+        $pendiente = number_format(($datos_prestamo['prestamo_total'] - $datos_prestamo['prestamo_pagado']), 2, '.', '');
+
+        if ($monto > $pendiente) {
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado",
+                "Texto" => "El monto que acabas de ingresar supera el saldo pendiente que tiene este prestamo.",
+                "Tipo" => "error"
+            ];
+
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        }
+
+        //comprobando privilegios
+        session_start(['name' => 'SPM']);
+        if ($_SESSION['privilegio_spm'] < 1 || $_SESSION['privilegio_spm'] > 2) {
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado",
+                "Texto" => "No tienes permisos para esta tarea.",
+                "Tipo" => "error"
+            ];
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        }
+
+
+        //Calculando total pagado y fecha
+        $total_pagado = number_format(($monto+$datos_prestamo['prestamo_pagado']),2,'.','');
+
+        $fecha = date("Y-m-d");
+
+        $datos_pago_reg = [
+
+            "Total" => $monto,
+            "Fecha" => $fecha,
+            "Codigo" => $codigo
+
+        ];
+
+        $agregar_pago = prestamoModelo::agregar_pago_modelo($datos_pago_reg);
+
+        if ($agregar_pago->rowCount() == 1) {
+
+            $datos_prestamo_up = [
+                "Tipo" => "Pago",
+                "Monto" => $total_pagado,
+                "Codigo" => $codigo
+            ];
+
+            if (prestamoModelo::actualizar_prestamo_modelo($datos_prestamo_up)) {
+                $alerta = [
+                    "Alerta" => "recargar",
+                    "Titulo" => "Pago realizado",
+                    "Texto" => "El pago de " .MONEDA.$monto." se ha realizado con exito",
+                    "Tipo" => "success"
+                ];
+                header('Content-Type: application/json');
+                echo json_encode($alerta);
+                exit();
+
+            } else {
+
+                prestamoModelo::eliminar_prestamo_modelo($codigo,"Pago");
+                $alerta = [
+                    "Alerta" => "simple",
+                    "Titulo" => "Ocurrió un error inesperado",
+                    "Texto" => "No hemos podido registrar el pago.",
+                    "Tipo" => "error"
+                ];
+                header('Content-Type: application/json');
+                echo json_encode($alerta);
+                exit();
+            }
+        } else {
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado",
+                "Texto" => "No hemos podido registrar el pago.",
+                "Tipo" => "error"
+            ];
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($alerta);
+        exit();
+    } //fin controlador
+
+
+    //actualizar prestamo
+    public function actualizar_prestamo_controlador()
+    {
+          //recibiendo el codigo del prestamo
+          $codigo = mainModel::decryption($_POST['prestamo_codigo_up']);
+          $codigo = mainModel::limpiar_cadena($codigo);
+
+        //Comprobando prestamo en la bdd
+        $check_prestamo = mainModel::ejecutar_consulta_simple("SELECT prestamo_codigo FROM prestamo WHERE prestamo_codigo='$codigo'");
+
+        if ($check_prestamo->rowCount() <= 0) {
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado",
+                "Texto" => "El prestamo al cual intenta actualizar no existe en el sistema.",
+                "Tipo" => "error"
+            ];
+
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        } 
+
+        //Recibiendo datos
+
+        $estado=mainModel::limpiar_cadena($_POST['prestamo_estado_up']);
+        $observacion=mainModel::limpiar_cadena($_POST['prestamo_observacion_up']);
+
+        //validando integridad de los datos
+        if ($observacion != "") {
+            if (mainModel::verificar_datos("[a-zA-z0-9áéíóúÁÉÍÓÚñÑ#() ]{1,400}", $observacion)) {
+                $alerta = [
+                    "Alerta" => "simple",
+                    "Titulo" => "Ocurrió un error inesperado",
+                    "Texto" => "La observacion no coincide con el formato solicitado.",
+                    "Tipo" => "error"
+                ];
+                header('Content-Type: application/json');
+                echo json_encode($alerta);
+                exit();
+            }
+        }
+
+        if ($estado != "Reservacion" && $estado != "Prestamo" && $estado != "Finalizado") {
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado",
+                "Texto" => "El estado no coincide con el formato solicitado.",
+                "Tipo" => "error"
+            ];
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        }
+
+        //comprobando privilegios
+        session_start(['name' => 'SPM']);
+        if ($_SESSION['privilegio_spm'] < 1 || $_SESSION['privilegio_spm'] > 2) {
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado",
+                "Texto" => "No tienes permisos para esta tarea.",
+                "Tipo" => "error"
+            ];
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        }
+
+        //creando array de datos a actualizar a enviar al modelo
+        $datos_prestamo_up=[
+            "Tipo"=>"Prestamo",
+            "Estado"=>$estado,
+            "Observacion"=>$observacion,
+            "Codigo"=>$codigo
+            
+        ];
+
+        if(prestamoModelo::actualizar_prestamo_modelo($datos_prestamo_up)){
+            $alerta = [
+                "Alerta" => "recargar",
+                "Titulo" => "Prestamo actualizado",
+                "Texto" => "Los datos del prestamo se han actualizado con exito.",
+                "Tipo" => "success"
+            ];
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        }else{
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado",
+                "Texto" => "No hemos podido actualizar el prestamo",
+                "Tipo" => "error"
+            ];
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        }
+
+        
+
+        
+
+
+    }//fin controlador
+
+
+
 
 }

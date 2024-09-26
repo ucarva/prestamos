@@ -80,7 +80,6 @@
                                             $subtotal=$items['Cantidad']*($items['Costo']*$items['Tiempo']);
 
                                             $subtotal=number_format($subtotal,2,'.','');
-                                    
 
                         ?>
                                     <tr class="text-center" >
