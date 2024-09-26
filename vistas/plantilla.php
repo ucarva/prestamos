@@ -25,7 +25,7 @@
 		//delimitar ver nuestra url para lista usuario solo ver el numero
 		$pagina = explode("/", $_GET['views']);
 
-		//para cerrar sesión quie nno este logeado
+		//para cerrar sesión quien no este logeado
 		require_once "./controladores/loginControlador.php";
 		$lc = new loginControlador();
 
