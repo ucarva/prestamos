@@ -33,16 +33,34 @@
 					</li>
 
 					<li>
-						<a href="#" class="nav-btn-submenu"><i class="fas fa-pallet fa-fw"></i> &nbsp; Items <i class="fas fa-chevron-down"></i></a>
+						<a href="#" class="nav-btn-submenu"><i class="fas fa-pallet fa-fw"></i> &nbsp; Asistentes <i class="fas fa-chevron-down"></i></a>
 						<ul>
 							<li>
-								<a href="<?php echo SERVERURL; ?>item-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; Agregar item</a>
+								<a href="<?php echo SERVERURL; ?>asistente-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; Agregar asistente</a>
 							</li>
 							<li>
-								<a href="<?php echo SERVERURL; ?>item-list/"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; Lista de items</a>
+								<a href="<?php echo SERVERURL; ?>asistente-list/"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; Lista de asistente</a>
 							</li>
 							<li>
-								<a href="<?php echo SERVERURL; ?>item-search/"><i class="fas fa-search fa-fw"></i> &nbsp; Buscar item</a>
+								<a href="<?php echo SERVERURL; ?>asistente-search/"><i class="fas fa-search fa-fw"></i> &nbsp; Buscar asistente</a>
+							</li>
+						</ul>
+					</li>
+
+					<li>
+						<a href="#" class="nav-btn-submenu"><i class="fas fa-pallet fa-fw"></i> &nbsp;Eventos <i class="fas fa-chevron-down"></i></a>
+						<ul>
+							<li>
+								<a href="<?php echo SERVERURL; ?>categoria-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; Agregar categoria</a>
+							</li>
+							<li>
+								<a href="<?php echo SERVERURL; ?>evento-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; Crear eventos</a>
+							</li>
+							<li>
+								<a href="<?php echo SERVERURL; ?>evento-list/"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; Lista de eventos</a>
+							</li>
+							<li>
+								<a href="<?php echo SERVERURL; ?>evento-search/"><i class="fas fa-search fa-fw"></i> &nbsp; Buscar eventos</a>
 							</li>
 						</ul>
 					</li>

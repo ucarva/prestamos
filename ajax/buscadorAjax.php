@@ -10,7 +10,7 @@
         $data_url=[
             "usuario"=>"user-search",
             "cliente"=>"client-search",
-            "item"=>"item-search",
+            "asistente"=>"asistente-search",
             "prestamo"=>"reservation-search"
         ];
 

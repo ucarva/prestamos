@@ -3,13 +3,26 @@
 				<h3 class="text-left">
 					<i class="fab fa-dashcube fa-fw"></i> &nbsp; DASHBOARD
 				</h3>
-				<p class="text-justify">
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit nostrum rerum animi natus beatae ex. Culpa blanditiis tempore amet alias placeat, obcaecati quaerat ullam, sunt est, odio aut veniam ratione.
-				</p>
+				
 			</div>
 			
 			<!-- Content -->
 			<div class="full-box tile-container">
+
+			<?php 	
+						require_once "./controladores/asistenteControlador.php";
+						$ins_asistente = new asistenteControlador();
+						//consulta a la base de datos para ver los registros
+						$total_asistentes = $ins_asistente->datos_asistente_controlador("Conteo",0);
+
+				?>
+				<a href="<?php echo SERVERURL;?>asistente-list/" class="tile">
+					<div class="tile-tittle">asistentes</div>
+					<div class="tile-icon">
+						<i class="fas fa-pallet fa-fw"></i>
+						<p><?php echo $total_asistentes->rowCount(); ?> Registrados</p>
+					</div>
+				</a>
 
 				<?php 	
 						require_once "./controladores/clienteControlador.php";
@@ -27,20 +40,7 @@
 					</div>
 				</a>
 				
-				<?php 	
-						require_once "./controladores/itemControlador.php";
-						$ins_item = new itemControlador();
-						//consulta a la base de datos para ver los registros
-						$total_items = $ins_item->datos_item_controlador("Conteo",0);
-
-				?>
-				<a href="<?php echo SERVERURL;?>item-list/" class="tile">
-					<div class="tile-tittle">Items</div>
-					<div class="tile-icon">
-						<i class="fas fa-pallet fa-fw"></i>
-						<p><?php echo $total_items->rowCount(); ?> Registrados</p>
-					</div>
-				</a>
+				
 
 				<?php 	
 						require_once "./controladores/prestamoControlador.php";

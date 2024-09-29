@@ -1,0 +1,149 @@
+<?php
+
+if ($peticionAjax) {
+    require_once "../modelos/categoriaModelo.php";
+} else {
+    require_once "./modelos/categoriaModelo.php";
+}
+
+
+class categoriaControlador extends categoriaModelo
+{
+    //Controlador para agregar categoria
+    public function agregar_categoria_controlador()
+    {
+        $descripcion = mainModel::limpiar_cadena($_POST['categoria_nombre_reg']);
+        $id_admin = mainModel::limpiar_cadena($_POST['id_admin']);
+
+        //registro de datos
+
+        $datos_categoria_reg = [
+
+            "Descripcion" => $descripcion,
+            "id_admin" => $id_admin
+
+        ];
+
+        $agregar_categoria = categoriaModelo::agregar_categoria_modelo($datos_categoria_reg);
+
+        if ($agregar_categoria->rowCount() == 1) {
+            $alerta = [
+                "Alerta" => "limpiar",
+                "Titulo" => "Categoria registrado",
+                "Texto" => "Los datos de la categoria han sido registrado con exito.",
+                "Tipo" => "success"
+
+            ];
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        } else {
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado",
+                "Texto" => "No se pudo registrar la categoria.",
+                "Tipo" => "error"
+            ];
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        }
+        header('Content-Type: application/json');
+        echo json_encode($alerta);
+        exit();
+    } //fin controlador
+
+    // Controlador para paginar categorias
+    public function paginador_categoria_controlador($pagina, $registros, $busqueda)
+    {
+        $pagina = mainModel::limpiar_cadena($pagina);
+        $registros = mainModel::limpiar_cadena($registros);
+        $busqueda = mainModel::limpiar_cadena($busqueda);
+
+
+        $pagina = (isset($pagina) && $pagina > 0) ? (int)$pagina : 1;
+        $inicio = ($pagina > 0) ? (($pagina * $registros) - $registros) : 0;
+
+        $listaCategorias = categoriaModelo::consultar_categoria_modelo($inicio, $registros, $busqueda);
+
+        return $listaCategorias;
+    } //fin controlador
+
+    // Controlador para eliminar categoria
+    public function eliminar_categoria_controlador()
+    {
+        $eliminar_categoria = categoriaModelo::eliminar_categoria_modelo();
+        if ($eliminar_categoria != null) {
+            $alerta = [
+                "Alerta" => "recargar",
+                "Titulo" => "categoria eliminada.",
+                "Texto" => "Categoria eliminada con exito.",
+                "Tipo" => "success"
+            ];
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        } else {
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado.",
+                "Texto" => "No hemos podido eliminar la Categoria.",
+                "Tipo" => "error"
+            ];
+
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        }
+    } //fin controlador
+
+    //controlador para actualizar categoria
+    public function actualizar_categoria_controlador()
+    {
+        //recibiendo parametros del formulario
+        $descripcion = mainModel::limpiar_cadena($_POST['categoria_nombre_up']);
+        $id_admin = mainModel::limpiar_cadena($_POST['id_admin']);
+
+        //Preparando datos par enviar al modelo
+        $datos_categoria_up = [
+            "Descripcion" => $descripcion,
+            "id_admin" => $id_admin,
+        ];
+
+        $categoriaActualizada = categoriaModelo::actualizar_categoria_modelo($datos_categoria_up);
+
+        if ($categoriaActualizada != null) {
+            $alerta = [
+                "Alerta" => "recargar",
+                "Titulo" => "Datos actualizados",
+                "Texto" => "Los datos del categoria han sido actualizados con exito.",
+                "Tipo" => "success"
+            ];
+        } else {
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado",
+                "Texto" => "No hemos podido actualizar los datos.",
+                "Tipo" => "error"
+            ];
+        }
+        header('Content-Type: application/json');
+        echo json_encode($alerta);
+        exit();
+    } //fin controlador
+
+    //controlador para los datos de categoria
+    public  function datos_categoria_controlador($tipo, $id)
+    {
+        $tipo = mainModel::limpiar_cadena($tipo);
+        $id = mainModel::decryption($id);
+        $id = mainModel::limpiar_cadena($id);
+
+        return categoriaModelo::datos_categoria_modelo($tipo, $id);
+    } // fin controlador
+
+
+
+
+
+}

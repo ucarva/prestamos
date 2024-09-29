@@ -22,7 +22,7 @@ class loginControlador extends loginModelo
         if ($usuario == "" || $clave == "") {
             echo '<script>
                         Swal.fire({
-                        title: "Ocurrio un error inesperado ,
+                        title: "Ocurrio un error inesperado",
                         text: "Usuario y contraseña obligatorios",
                         type: "error",
                         confirmButtonText: "Aceptar"
@@ -37,7 +37,7 @@ class loginControlador extends loginModelo
         if (mainModel::verificar_datos("[a-zA-Z0-9]{1,35}", $usuario)) {
             echo '<script>
             Swal.fire({
-            title: "Ocurrio un error inesperado ,
+            title: "Ocurrio un error inesperado",
             text: "El Nombre de usuario no cumple con el formato solicitado",
             type: "error",
             confirmButtonText: "Aceptar"
@@ -48,7 +48,7 @@ class loginControlador extends loginModelo
         if (mainModel::verificar_datos("[a-zA-Z0-9$@.-]{7,100}", $clave)) {
             echo '<script>
             Swal.fire({
-            title: "Ocurrio un error inesperado ,
+            title: "Ocurrio un error inesperado",
             text: "La contraseña no cumple con el formato solicitado",
             type: "error",
             confirmButtonText: "Aceptar"
@@ -70,18 +70,18 @@ class loginControlador extends loginModelo
 
             session_start(['name' => 'SPM']);
 
-            $_SESSION['id_spm'] = $row['usuario_id'];
+            $_SESSION['id_spm'] = $row['id_admin'];
             $_SESSION['nombre_spm'] = $row['usuario_nombre'];
-            $_SESSION['apellido_spm'] = $row['usuario_apellido'];
-            $_SESSION['usuario_spm'] = $row['usuario_usuario'];
-            $_SESSION['privilegio_spm'] = $row['usuario_privilegio'];
+            $_SESSION['apellido_spm'] = $row['apellido'];
+            $_SESSION['usuario_spm'] = $row['telefono'];
+            $_SESSION['privilegio_spm'] = $row['privilegio'];
             $_SESSION['token_spm'] = md5(uniqid(mt_rand(), true));
 
             return header("Location: " .SERVERURL. "home/");
         } else {
             echo '<script>
             Swal.fire({
-            title: "Ocurrio un error inesperado ,
+            title: "Ocurrio un error inesperado",
             text: "El usuario o clave son incorrectas",
             type: "error",
             confirmButtonText: "Aceptar"
