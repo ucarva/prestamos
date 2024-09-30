@@ -1,7 +1,7 @@
 <!-- Page header -->
 <div class="full-box page-header">
     <h3 class="text-left">
-        <i class="fas fa-search fa-fw"></i> &nbsp; BUSCAR ASISTENTE
+        <i class="fas fa-search fa-fw"></i> &nbsp; BUSCAR EVENTO
     </h3>
     
 </div>
@@ -10,13 +10,13 @@
 <div class="container-fluid">
     <ul class="full-box list-unstyled page-nav-tabs">
         <li>
-            <a href="<?php echo SERVERURL; ?>asistente-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; AGREGAR ASISTENTE</a>
+            <a href="<?php echo SERVERURL; ?>evento-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; AGREGAR EVENTO</a>
         </li>
         <li>
-            <a href="<?php echo SERVERURL; ?>asistente-list/"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; LISTA DE ASISTENTE</a>
+            <a href="<?php echo SERVERURL; ?>evento-list/"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; LISTA DE EVENTOS</a>
         </li>
         <li>
-            <a class="active" href="<?php echo SERVERURL; ?>asistente-search/"><i class="fas fa-search fa-fw"></i> &nbsp; BUSCAR ASISTENTE</a>
+            <a class="active" href="<?php echo SERVERURL; ?>evento-search/"><i class="fas fa-search fa-fw"></i> &nbsp; BUSCAR EVENTO</a>
         </li>
     </ul>
 </div>

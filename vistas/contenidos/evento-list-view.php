@@ -1,21 +1,21 @@
   <!-- Page header -->
   <div class="full-box page-header">
       <h3 class="text-left">
-          <i class="fas fa-clipboard-list fa-fw"></i> &nbsp; LISTA DE ASISTENTES
+          <i class="fas fa-clipboard-list fa-fw"></i> &nbsp; LISTA DE EVENTOS
       </h3>
-      
+
   </div>
 
   <div class="container-fluid">
       <ul class="full-box list-unstyled page-nav-tabs">
           <li>
-              <a href="<?php echo SERVERURL; ?>asistente-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; AGREGAR ASISTENTE</a>
+              <a href="<?php echo SERVERURL; ?>evento-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; AGREGAR EVENTOS</a>
           </li>
           <li>
-              <a class="active" href="<?php echo SERVERURL; ?>asistente-list/"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; LISTA DE ASISTENTES</a>
+              <a class="active" href="<?php echo SERVERURL; ?>evento-list/"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; LISTA DE EVENTOS</a>
           </li>
           <li>
-              <a href="<?php echo SERVERURL; ?>asistente-search/"><i class="fas fa-search fa-fw"></i> &nbsp; BUSCAR ASISTENTE</a>
+              <a href="<?php echo SERVERURL; ?>evento-search/"><i class="fas fa-search fa-fw"></i> &nbsp; BUSCAR EVENTOS</a>
           </li>
       </ul>
   </div>
@@ -25,44 +25,58 @@
       <?php
 
         // llamando al controlador
-        require_once "./controladores/asistenteControlador.php";
-        $ins_asistente = new asistenteControlador();
+        require_once "./controladores/eventoControlador.php";
+        $ins_evento = new eventoControlador();
         $model = new mainModel();
-        
-        // Obtener lista de asistentes
-        $listaAsistentes = $ins_asistente->paginador_asistente_controlador($pagina[1], 20, "");
-        
+
+        // Obtener lista de eventos
+        $listaEventos = $ins_evento->paginador_evento_controlador($pagina[1], 20, "");
+
         // Inicializar la tabla
         $tabla = '<div class="table-responsive">
                      <table class="table table-dark table-sm">
                         <thead>
                             <tr class="text-center roboto-medium">                    
                                 <th>NOMBRE</th>
-                                <th>APELLIDO</th>
-                                <th>CELULAR</th>                        
-                                <th>ACTUALIZAR</th>
+                                <th>DESCRIPCION</th>
+                                <th>HORA</th>                        
+                                <th>VALOR EVENTO</th>
+                                <th>CATEGORIA</th>
+                                <th>LUGAR</th>
+                                <th>CUPO PERSONAS</th>
+                                <th>ESTADO</th>
+                                <th>TIPO</th>                        
+                                <th>ENTRADA</th>
+                                <th>ACTUALIZAR</th>                        
                                 <th>ELIMINAR</th>
-                                <th>EVENTO</th>
                             </tr>
                         </thead>
                         <tbody>';
-        
+
         // Verificar si hay asistentes en la lista
-        if (count($listaAsistentes) > 0) {
-            // Iterar sobre los asistentes
-            foreach ($listaAsistentes as $rows) {
+        if (count($listaEventos) > 0) {
+            // Iterar sobre los Eventos
+            foreach ($listaEventos as $rows) {
                 $tabla .= '<tr class="text-center">
-                    <td>' . $rows['nombres'] . '</td>
-                    <td>' . $rows['apellidos'] . '</td>
-                    <td>' . $rows['celular'] . '</td>
+                            <td>' . $rows['titulo'] . '</td>
+                            <td>' . $rows['descripcion'] . '</td>
+                            <td>' . $rows['hora'] . '</td>
+                            <td>' . $rows['valor_base'] . '</td>
+                            <td>' . $rows['categoria_descripcion'] . '</td> 
+                            <td>' . $rows['lugar'] . '</td>
+                            <td>' . $rows['cupo'] . '</td>
+                            <td>' . $rows['estado'] . '</td>
+                            <td>' . $rows['tipo'] . '</td>
+                            <td>' . $rows['tipo_entrada_descripcion'] . '</td>
+                                    
                     <td>
-                        <a href="' . SERVERURL . 'asistente-update/' . $model->encryption($rows['id_asistente']) . '/" class="btn btn-success">
+                        <a href="' . SERVERURL . 'evento-update/' . $model->encryption($rows['id_evento']) . '/" class="btn btn-success">
                             <i class="fas fa-sync-alt"></i>
                         </a>
                     </td>
                     <td>
-                        <form class="FormularioAjax" action="' . SERVERURL . 'ajax/asistenteAjax.php" method="POST" data-form="delete" autocomplete="off">
-                            <input type="hidden" name="asistente_id_del" value="' . $model->encryption($rows['id_asistente']) . '" >
+                        <form class="FormularioAjax" action="' . SERVERURL . 'ajax/eventoAjax.php" method="POST" data-form="delete" autocomplete="off">
+                            <input type="hidden" name="evento_id_del" value="' . $model->encryption($rows['id_evento']) . '" >
                             <button type="submit" class="btn btn-warning">
                                 <i class="far fa-trash-alt"></i>
                             </button>
@@ -74,13 +88,13 @@
             // Si no hay registros, mostrar mensaje
             $tabla .= '<tr class="text-center"><td colspan="6">No hay registros en el sistema</td></tr>';
         }
-        
+
         $tabla .= '</tbody>
                  </table>
              </div>';
-        
+
         // Mostrar la tabla
         echo $tabla;
-        
+
         ?>
   </div>

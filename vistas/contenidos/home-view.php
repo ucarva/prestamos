@@ -25,17 +25,17 @@
 				</a>
 
 				<?php 	
-						require_once "./controladores/clienteControlador.php";
-						$ins_cliente = new clienteControlador();
+						require_once "./controladores/eventoControlador.php";
+						$ins_evento = new eventoControlador();
 						//consulta a la base de datos para ver los registros
-						$total_clientes = $ins_cliente->datos_cliente_controlador("Conteo",0);
+						$total_eventos = $ins_evento->datos_evento_controlador("Conteo",0);
 
 				?>
-				<a href="<?php echo SERVERURL;?>client-new/" class="tile">
-					<div class="tile-tittle">Clientes</div>
+				<a href="<?php echo SERVERURL;?>evento-new/" class="tile">
+					<div class="tile-tittle">Eventos</div>
 					<div class="tile-icon">
 						<i class="fas fa-users fa-fw"></i>
-						<p><?php echo $total_clientes->rowCount(); ?> Registrados</p>
+						<p><?php echo $total_eventos->rowCount(); ?> Registrados</p>
 						
 					</div>
 				</a>

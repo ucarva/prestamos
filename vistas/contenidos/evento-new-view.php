@@ -9,7 +9,7 @@
 <div class="container-fluid">
     <ul class="full-box list-unstyled page-nav-tabs">
         <li>
-            <a class="active" href="<?php echo SERVERURL; ?>categoria-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; AGREGAR EVENTO</a>
+            <a class="active" href="<?php echo SERVERURL; ?>evento-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; AGREGAR EVENTO</a>
         </li>
         <li>
             <a href="<?php echo SERVERURL; ?>evento-list/"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; LISTA DE EVENTOS</a>
@@ -95,7 +95,7 @@
                                         echo '<option value="' . $rows['id_categoria'] . '">' . $rows['descripcion'] . '</option>';
                                     }
                                 } else {
-                                    
+
                                     echo '<option value="">No hay categorías disponibles</option>';
                                 }
                                 ?>
@@ -129,43 +129,43 @@
 
                     <!-- Tipo de Entrada -->
                     <div class="container-fluid">
-    <div class="form-group">
-        <label for="evento_entrada" class="bmd-label-floating">Tipo entrada</label>
-        <select class="form-control" name="evento_entrada_reg" id="evento_entrada" required>
-            <option value="">Seleccione un tipo de entrada</option>
+                        <div class="form-group">
+                            <label for="evento_entrada" class="bmd-label-floating">Tipo entrada</label>
+                            <select class="form-control" name="evento_entrada_reg" id="evento_entrada" required>
+                                <option value="">Seleccione un tipo de entrada</option>
 
-            <?php
-            // Llamando al controlador
-            require_once "./controladores/entradaControlador.php";
-            $ins_entrada = new entradaControlador();
+                                <?php
+                                // Llamando al controlador
+                                require_once "./controladores/entradaControlador.php";
+                                $ins_entrada = new entradaControlador();
 
-            // Obtener lista de tipos de entrada
-            $listaEntradas = $ins_entrada->paginador_entrada_controlador($pagina[1], 20, "");
+                                // Obtener lista de tipos de entrada
+                                $listaEntradas = $ins_entrada->paginador_entrada_controlador($pagina[1], 20, "");
 
-            // Verificar si hay entradas en la lista
-            if (count($listaEntradas) > 0) {
-                // Iterar sobre las entradas
-                foreach ($listaEntradas as $rows) {
-                    // Aquí ya no estamos encriptando el ID
-                    echo '<option value="' . $rows['id_tipo_entrada'] . '">' . $rows['descripcion'] . '</option>';
-                }
-            } else {
-                echo '<option value="">No hay entradas disponibles</option>';
-            }
-            ?>
-        </select>
-    </div>
-</div>
+                                // Verificar si hay entradas en la lista
+                                if (count($listaEntradas) > 0) {
+                                    // Iterar sobre las entradas
+                                    foreach ($listaEntradas as $rows) {
+                                        // Aquí ya no estamos encriptando el ID
+                                        echo '<option value="' . $rows['id_tipo_entrada'] . '">' . $rows['descripcion'] . '</option>';
+                                    }
+                                } else {
+                                    echo '<option value="">No hay entradas disponibles</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
 
-                    
-                     <!-- Tipo de Evento -->
+
+                    <!-- Tipo de Evento -->
                     <div class="col-12 col-md-6">
                         <div class="form-group">
                             <label for="evento_evento" class="bmd-label-floating">Tipo evento</label>
                             <select class="form-control" name="evento_evento_reg" id="evento_evento">
                                 <option value="" selected="" disabled="">Seleccione una opción</option>
-                                <option value="Habilitado">Pago</option>
-                                <option value="Deshabilitado">Gratis</option>
+                                <option value="Pago">Pago</option>
+                                <option value="Gratis">Gratis</option>
                             </select>
                         </div>
                     </div>
