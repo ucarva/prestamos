@@ -1,7 +1,7 @@
   <!-- Page header -->
   <div class="full-box page-header">
       <h3 class="text-left">
-          <i class="fas fa-clipboard-list fa-fw"></i> &nbsp; LISTA DE CATEGORIAS
+          <i class="fas fa-clipboard-list fa-fw"></i> &nbsp; TIPOS DE ENTRADAS
       </h3>
       
   </div>
@@ -9,10 +9,10 @@
   <div class="container-fluid">
       <ul class="full-box list-unstyled page-nav-tabs">
           <li>
-              <a href="<?php echo SERVERURL; ?>categoria-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; AGREGAR CATEGORIAS</a>
+              <a href="<?php echo SERVERURL; ?>entrada-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; CREAR ENTRADAS</a>
           </li>
           <li>
-              <a class="active" href="<?php echo SERVERURL; ?>categoria-list/"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; LISTA DE CATEGORIAS</a>
+              <a class="active" href="<?php echo SERVERURL; ?>entrada-list/"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; LISTA DE ENTRADAS</a>
           </li>
           
       </ul>
@@ -23,12 +23,12 @@
       <?php
 
         // llamando al controlador
-        require_once "./controladores/categoriaControlador.php";
-        $ins_evento = new categoriaControlador();
+        require_once "./controladores/entradaControlador.php";
+        $ins_entrada = new entradaControlador();
         $model = new mainModel();
         
         // Obtener lista de eventos
-        $listaCategorias= $ins_evento->paginador_categoria_controlador($pagina[1], 20, "");
+        $listaEntradas= $ins_entrada->paginador_entrada_controlador($pagina[1], 20, "");
         
         // Inicializar la tabla
         $tabla = '<div class="table-responsive">
@@ -43,20 +43,20 @@
                         <tbody>';
         
         // Verificar si hay asistentes en la lista
-        if (count($listaCategorias) > 0) {
+        if (count($listaEntradas) > 0) {
             // Iterar sobre los Categorias
-            foreach ($listaCategorias as $rows) {
+            foreach ($listaEntradas as $rows) {
                 $tabla .= '<tr class="text-center">
                     <td>' . $rows['descripcion'] . '</td>
                    
                     <td>
-                        <a href="' . SERVERURL . 'categoria-update/' . $model->encryption($rows['id_categoria']) . '/" class="btn btn-success">
+                        <a href="' . SERVERURL . 'entrada-update/' . $model->encryption($rows['id_tipo_entrada']) . '/" class="btn btn-success">
                             <i class="fas fa-sync-alt"></i>
                         </a>
                     </td>
                     <td>
-                        <form class="FormularioAjax" action="' . SERVERURL . 'ajax/categoriaAjax.php" method="POST" data-form="delete" autocomplete="off">
-                            <input type="hidden" name="categoria_id_del" value="' . $model->encryption($rows['id_categoria']) . '" >
+                        <form class="FormularioAjax" action="' . SERVERURL . 'ajax/entradaAjax.php" method="POST" data-form="delete" autocomplete="off">
+                            <input type="hidden" name="entrada_id_del" value="' . $model->encryption($rows['id_tipo_entrada']) . '" >
                             <button type="submit" class="btn btn-warning">
                                 <i class="far fa-trash-alt"></i>
                             </button>

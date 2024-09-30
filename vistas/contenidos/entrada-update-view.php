@@ -1,7 +1,7 @@
 <!-- Page header -->
 <div class="full-box page-header">
 	<h3 class="text-left">
-		<i class="fas fa-sync-alt fa-fw"></i> &nbsp; ACTUALIZAR CATEGORIA
+		<i class="fas fa-sync-alt fa-fw"></i> &nbsp; ACTUALIZAR ENTRADAS
 	</h3>
 
 </div>
@@ -9,10 +9,10 @@
 <div class="container-fluid">
 	<ul class="full-box list-unstyled page-nav-tabs">
 		<li>
-			<a href="<?php echo SERVERURL; ?>categoria-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; AGREGAR CATEGORIA</a>
+			<a href="<?php echo SERVERURL; ?>entrada-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; AGREGAR ENTRADAS</a>
 		</li>
 		<li>
-			<a href="<?php echo SERVERURL; ?>categoria-list/"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; LISTA DE CATEGORIA</a>
+			<a href="<?php echo SERVERURL; ?>entrada-list/"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; LISTA DE ENTRADAS</a>
 		</li>
 
 	</ul>
@@ -21,19 +21,19 @@
 <!--CONTENT-->
 <div class="container-fluid">
 	<?php
-	require_once "./controladores/categoriaControlador.php";
-	$ins_categoria = new categoriaControlador();
+	require_once "./controladores/entradaControlador.php";
+	$ins_entrada = new entradaControlador();
 
-	$datos_categoria = $ins_categoria->datos_categoria_controlador("Unico", $pagina[1]);
-	if ($datos_categoria->rowCount() == 1) {
-		$campos = $datos_categoria->fetch();
+	$datos_entrada = $ins_entrada->datos_entrada_controlador("Unico", $pagina[1]);
+	if ($datos_entrada->rowCount() == 1) {
+		$campos = $datos_entrada->fetch();
 
 	?>
 		<form class="form-neon FormularioAjax"
-			action="<?php echo SERVERURL; ?>ajax/categoriaAjax.php" method="POST" data-form="save" autocomplete="off">
+			action="<?php echo SERVERURL; ?>ajax/entradaiaAjax.php" method="POST" data-form="save" autocomplete="off">
 			<!-- Campo oculto para registrar el usuario logueado -->
 			<input type="hidden" name="id_admin" value="<?php echo $_SESSION['id_spm']; ?>">
-			<input type="hidden" name="categoria_id_up" value="<?php echo $pagina[1]; ?>">
+			<input type="hidden" name="entrada_id_up" value="<?php echo $pagina[1]; ?>">
 
 			<fieldset>
 				<legend><i class="far fa-plus-square"></i> &nbsp; Crear categoria</legend>
@@ -42,8 +42,8 @@
 
 						<div class="col-12 col-md-4">
 							<div class="form-group">
-								<label for="evento_nombre" class="bmd-label-floating">Nombre de la categoria</label>
-								<input value="<?php echo $campos['descripcion']; ?>" type="text" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9 ]{1,140}" class="form-control" name="categoria_nombre_up" id="categoria_nombre" maxlength="140" required>
+								<label for="evento_nombre" class="bmd-label-floating">Nombre de la entrada</label>
+								<input value="<?php echo $campos['descripcion']; ?>" type="text" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9 ]{1,140}" class="form-control" name="entrada_nombre_up" id="categoria_nombre" maxlength="140" required>
 							</div>
 						</div>
 

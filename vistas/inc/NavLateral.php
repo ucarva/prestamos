@@ -51,17 +51,15 @@
 						<a href="#" class="nav-btn-submenu"><i class="fas fa-pallet fa-fw"></i> &nbsp;Eventos <i class="fas fa-chevron-down"></i></a>
 						<ul>
 							<li>
-								<a href="<?php echo SERVERURL; ?>categoria-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; Agregar categoria</a>
+								<a href="<?php echo SERVERURL; ?>categoria-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; Crear categoria</a>
 							</li>
 							<li>
-								<a href="<?php echo SERVERURL; ?>evento-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; Crear eventos</a>
+								<a href="<?php echo SERVERURL; ?>entrada-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; Crear Entradas</a>
 							</li>
 							<li>
-								<a href="<?php echo SERVERURL; ?>evento-list/"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; Lista de eventos</a>
+								<a href="<?php echo SERVERURL; ?>evento-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; Crear Eventos</a>
 							</li>
-							<li>
-								<a href="<?php echo SERVERURL; ?>evento-search/"><i class="fas fa-search fa-fw"></i> &nbsp; Buscar eventos</a>
-							</li>
+							
 						</ul>
 					</li>
 

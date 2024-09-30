@@ -6,7 +6,7 @@
 
     if(isset($_POST['cliente_dni_reg']) || isset($_POST['cliente_id_del']) || isset($_POST['cliente_id_up']) ){
 
-        require_once"../controladores/clienteControlador.php";
+        require_once "../controladores/clienteControlador.php";
         $ins_cliente = new clienteControlador();
         
 

@@ -28,7 +28,7 @@ class categoriaModelo extends mainModel
                                             WHERE descripcion LIKE :busqueda 
                                             
                                             ORDER BY id_categoria ASC LIMIT :inicio, :registros");
-            $busqueda = "%$busqueda%"; // Ajustamos el valor de búsqueda
+            $busqueda = "%$busqueda%"; 
             $consulta->bindParam(':busqueda', $busqueda, PDO::PARAM_STR);
         } else {
             $consulta = $conexion->prepare("SELECT SQL_CALC_FOUND_ROWS * FROM categoria 
@@ -102,4 +102,6 @@ class categoriaModelo extends mainModel
         $sql->execute();
         return $sql;
     } //fin modelo
+
+   
 }

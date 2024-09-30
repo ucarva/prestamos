@@ -4,23 +4,16 @@
 
     require_once "../config/APP.php";
 
-    if(isset($_POST['categoria_nombre_reg']) || isset($_POST['categoria_id_del']) || isset($_POST['categoria_id_up']) ){
+    if(isset($_POST['evento_nombre_reg'])  ){
 
-        require_once "../controladores/categoriaControlador.php";
-        $ins_evento = new categoriaControlador();
+        require_once "../controladores/eventoControlador.php";
+        $ins_evento = new eventoControlador();
         
-        // Agregar una categoria
-        if(isset($_POST['categoria_nombre_reg'])){
-            echo $ins_evento->agregar_categoria_controlador();
+        // Agregar un evento
+        if(isset($_POST['evento_nombre_reg'])){
+            echo $ins_evento->agregar_evento_controlador();
         }
-        // Eliminar una categoria
-        if(isset($_POST['categoria_id_del'])){
-            echo $ins_evento->eliminar_categoria_controlador();
-        }
-        // actualizar una categoria
-        if(isset($_POST['categoria_id_up'])){
-            echo $ins_evento->actualizar_categoria_controlador();
-        }
+       
 
 
        
