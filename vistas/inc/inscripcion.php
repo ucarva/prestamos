@@ -1,24 +1,24 @@
 <script>
-    //funcion buscar evento
-    function buscar_evento() {
+    //funcion buscar cliente
+    function buscar_asistente() {
 
-        let input_evento = document.querySelector('#input_evento').value;
+        let input_asistente = document.querySelector('#input_asistente').value;
 
-        input_evento = input_evento.trim();
+        input_asistente = input_asistente.trim();
 
-        if (input_evento != "") {
+        if (input_asistente != "") {
             let datos = new FormData();
-            datos.append("buscar_evento", input_evento);
+            datos.append("buscar_asistente", input_asistente);
 
 
-            fetch("<?php echo SERVERURL; ?>ajax/prestamoAjax.php", {
+            fetch("<?php echo SERVERURL; ?>ajax/inscripcionAjax.php", {
                     method: 'POST',
                     body: datos
                 })
                 .then(respuesta => respuesta.text())
                 .then(respuesta => {
-                    let tabla_eventos = document.querySelector('#tabla_eventos');
-                    tabla_eventos.innerHTML = respuesta;
+                    let tabla_asistente = document.querySelector('#tabla_asistente');
+                    tabla_asistente.innerHTML = respuesta;
                 });
 
 
@@ -26,7 +26,7 @@
         } else {
             Swal.fire({
                 title: 'Ocurrio un error',
-                text: 'Debes introducir el DNI,Nombre,Apellido,Telefono',
+                text: 'Debes introducir el nombre dle asistente',
                 type: 'error',
                 confirmButtonText: 'Aceptar'
             });
@@ -35,13 +35,13 @@
     }
 
 
-    //funcion agregar evento
-    function agregar_evento(id) {
-        $('#Modalevento').modal('hide');
+    //funcion agregar cliente
+    function agregar_asistente(id) {
+        $('#ModalCliente').modal('hide');
 
         Swal.fire({
-            title: 'Quieres agregar este evento?',
-            text: 'Se va agregar este evento para realizar un prestamo',
+            title: 'Quieres agregar este asistente?',
+            text: 'Se va agregar este asistente para vincularlos a eventos',
             type: 'question',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -51,10 +51,10 @@
         }).then((result) => {
             if (result.value) {
                 let datos = new FormData();
-                datos.append("id_agregar_evento", id);
+                datos.append("id_agregar_asistente", id);
 
 
-                fetch("<?php echo SERVERURL; ?>ajax/prestamoAjax.php", {
+                fetch("<?php echo SERVERURL; ?>ajax/inscripcionAjax.php", {
                         method: 'POST',
                         body: datos
                     })
@@ -64,35 +64,35 @@
                     });
 
             } else {
-                $('#Modalevento').modal('show');
+                $('#ModalCliente').modal('show');
             }
         });
 
     }
 
     //buscar item
-    function buscar_item() {
+    function buscar_evento() {
 
-        let input_item = document.querySelector('#input_item').value;
+        let input_evento = document.querySelector('#input_evento').value;
         //quitar espacios
-        input_item = input_item.trim();
+        input_evento = input_evento.trim();
 
-        if (input_item != "") {
+        if (input_evento != "") {
             let datos = new FormData();
-            datos.append("buscar_item", input_item);
-            fetch("<?php echo SERVERURL; ?>ajax/prestamoAjax.php", {
+            datos.append("buscar_evento", input_evento);
+            fetch("<?php echo SERVERURL; ?>ajax/inscripcionAjax.php", {
                     method: 'POST',
                     body: datos
                 })
                 .then(respuesta => respuesta.text())
                 .then(respuesta => {
-                    let tabla_items = document.querySelector('#tabla_items');
-                    tabla_items.innerHTML = respuesta;
+                    let tabla_eventos = document.querySelector('#tabla_eventos');
+                    tabla_eventos.innerHTML = respuesta;
                 });
         } else {
             Swal.fire({
                 title: 'Ocurrio un error',
-                text: 'Debes introducir el codigo o el nombre del item',
+                text: 'Debes introducir el codigo o el nombre del evento',
                 type: 'error',
                 confirmButtonText: 'Aceptar'
             });
@@ -102,7 +102,7 @@
 
 
     //Modales del item
-    function modal_agregar_item(id){
+    function modal_agregar_evento(id){
         //ocultando ventana
         $('#ModalItem').modal('hide');
 
@@ -110,11 +110,11 @@
         $('#ModalAgregarItem').modal('show');
 
         //seleccionar item mediante un selector
-        let input_item = document.querySelector('#id_agregar_item').setAttribute("value",id);
+        let input_item = document.querySelector('#id_agregar_evento').setAttribute("value",id);
     }
 
     //modal para buscar item
-    function modal_buscar_item(){
+    function modal_buscar_evento(){
 
         //mostrar siguiente modal
         $('#ModalAgregarItem').modal('hide');
