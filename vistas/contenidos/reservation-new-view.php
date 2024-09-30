@@ -2,23 +2,21 @@
             <!-- Page header -->
             <div class="full-box page-header">
                 <h3 class="text-left">
-                    <i class="fas fa-plus fa-fw"></i> &nbsp; NUEVO PRÉSTAMO
+                    <i class="fas fa-plus fa-fw"></i> &nbsp; INSCRIPCION EVENTOS
                 </h3>
-                <p class="text-justify">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium quod harum vitae, fugit quo soluta. Molestias officiis voluptatum delectus doloribus at tempore, iste optio quam recusandae numquam non inventore dolor.
-                </p>
+                
             </div>
 
             <div class="container-fluid">
                 <ul class="full-box list-unstyled page-nav-tabs">
                     <li>
-                        <a class="active" href="<?php echo SERVERURL;?>reservation-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; NUEVO PRÉSTAMO</a>
+                        <a class="active" href="<?php echo SERVERURL;?>reservation-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; NUEVA INSCRIPCION</a>
                     </li>
                     <li>
                         <a href="<?php echo SERVERURL;?>reservation-reservation/"><i class="far fa-calendar-alt"></i> &nbsp; RESERVACIONES</a>
                     </li>
                     <li>
-                        <a href="<?php echo SERVERURL;?>reservation-pending/"><i class="fas fa-hand-holding-usd fa-fw"></i> &nbsp; PRÉSTAMOS</a>
+                        <a href="<?php echo SERVERURL;?>reservation-pending/"><i class="fas fa-hand-holding-usd fa-fw"></i> &nbsp; INSCRIPCION</a>
                     </li>
                     <li>
                         <a href="<?php echo SERVERURL;?>reservation-list/"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; FINALIZADOS</a>
@@ -32,26 +30,26 @@
             <div class="container-fluid">
                 <div class="container-fluid form-neon">
                     <div class="container-fluid">
-                        <p class="text-center roboto-medium">AGREGAR CLIENTE O ITEMS</p>
+                        <p class="text-center roboto-medium">AGREGAR EVENTO Y ASISTENTES</p>
                         <p class="text-center">
 
-                        <?php if(empty($_SESSION['datos_cliente'])) {?>
+                        <?php if(empty($_SESSION['datos_asistente'])) {?>
                            
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalCliente"><i class="fas fa-user-plus"></i> &nbsp; Agregar cliente</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalCliente"><i class="fas fa-user-plus"></i> &nbsp; Agregar evento</button>
                         <?php } ?>
 
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalItem"><i class="fas fa-box-open"></i> &nbsp; Agregar item</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalItem"><i class="fas fa-box-open"></i> &nbsp; Agregar asistente</button>
                         
                     </p>
 
                         <div>
-                            <span class="roboto-medium">CLIENTE:</span> 
+                            <span class="roboto-medium">EVENTO:</span> 
                             <?php if(empty($_SESSION['datos_cliente'])) {?>
-                            <span class="text-danger">&nbsp; <i class="fas fa-exclamation-triangle"></i> Seleccione un cliente</span>
+                            <span class="text-danger">&nbsp; <i class="fas fa-exclamation-triangle"></i> Seleccione un evento</span>
                             <?php } else{?>
                             <form class="FormularioAjax" action="<?php echo SERVERURL; ?>ajax/prestamoAjax.php"  method="POST" data-form="loans" style="display: inline-block !important;">
-                                <input type="hidden" name="id_eliminar_cliente" value="<?php echo  $_SESSION['datos_cliente']['ID']; ?>" >
-                                <?php echo $_SESSION['datos_cliente']['Nombre']." ".$_SESSION['datos_cliente']['Apellido']." (".$_SESSION['datos_cliente']['DNI'].")";?>
+                                <input type="hidden" name="id_eliminar_evento" value="<?php echo  $_SESSION['datos_evento']['ID']; ?>" >
+                                <?php echo $_SESSION['datos_evento']['titulo']."  (".$_SESSION['categoria_descripcion'].")";?>
                                 <button type="submit" class="btn btn-danger"><i class="fas fa-user-times"></i></button>
                             </form>
                             <?php } ?>
@@ -130,40 +128,40 @@
                             </table>
                         </div>
                     </div>
-                    <form class="FormularioAjax" action="<?php echo SERVERURL;?>ajax/prestamoAjax.php" method="POST" data-form="save"  autocomplete="off">
+                    <form class="FormularioAjax" action="<?php echo SERVERURL;?>ajax/inscripcionAjax.php" method="POST" data-form="save"  autocomplete="off">
                         <fieldset>
-                            <legend><i class="far fa-clock"></i> &nbsp; Fecha y hora de préstamo</legend>
+                            <legend><i class="far fa-clock"></i> &nbsp; Fecha y hora de inscripcion</legend>
                             <div class="container-fluid">
                                 <div class="row">
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
-                                            <label for="prestamo_fecha_inicio">Fecha de préstamo</label>
-                                            <input type="date" class="form-control" name="prestamo_fecha_inicio_reg" value="<?php echo date("Y-m-d"); ?>" id="prestamo_fecha_inicio">
+                                            <label for="inscripcion_fecha_inicio">Fecha de inscripcion</label>
+                                            <input type="date" class="form-control" name="inscripcion_fecha_inicio_reg" value="<?php echo date("Y-m-d"); ?>" id="inscripcion_fecha_inicio">
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
-                                            <label for="prestamo_hora_inicio">Hora de préstamo</label>
-                                            <input type="time" class="form-control" name="prestamo_hora_inicio_reg" value="<?php echo date("H:i"); ?>" id="prestamo_hora_inicio">
+                                            <label for="inscripcion_hora_inicio">Hora de inscripcion</label>
+                                            <input type="time" class="form-control" name="inscripcion_hora_inicio_reg" value="<?php echo date("H:i"); ?>" id="inscripcion_hora_inicio">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </fieldset>
                         <fieldset>
-                            <legend><i class="fas fa-history"></i> &nbsp; Fecha y hora de entrega</legend>
+                            <legend><i class="fas fa-history"></i> &nbsp; Fecha y hora de cierre</legend>
                             <div class="container-fluid">
                                 <div class="row">
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
-                                            <label for="prestamo_fecha_final">Fecha de entrega</label>
-                                            <input type="date" class="form-control" name="prestamo_fecha_final_reg" id="prestamo_fecha_final">
+                                            <label for="inscripcion_fecha_final">Fecha de cierre</label>
+                                            <input type="date" class="form-control" name="inscripcion_fecha_final_reg" id="inscripcion_fecha_final">
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
-                                            <label for="prestamo_hora_final">Hora de entrega</label>
-                                            <input type="time" class="form-control" name="prestamo_hora_final_reg" id="prestamo_hora_final">
+                                            <label for="inscripcion_hora_final">Hora de cierre</label>
+                                            <input type="time" class="form-control" name="inscripcion_hora_final_reg" id="inscripcion_hora_final">
                                         </div>
                                     </div>
                                 </div>
@@ -175,31 +173,31 @@
                                 <div class="row">
                                     <div class="col-12 col-md-4">
                                         <div class="form-group">
-                                            <label for="prestamo_estado" class="bmd-label-floating">Estado</label>
-                                            <select class="form-control" name="prestamo_estado_reg" id="prestamo_estado">
+                                            <label for="inscripcion_estado" class="bmd-label-floating">Estado</label>
+                                            <select class="form-control" name="inscripcion_estado_reg" id="inscripcion_estado">
                                                 <option value="" selected="">Seleccione una opción</option>
                                                 <option value="Reservacion">Reservación</option>
-                                                <option value="Prestamo">Préstamo</option>
+                                                <option value="inscripcion">Préstamo</option>
                                                 <option value="Finalizado">Finalizado</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-4">
                                         <div class="form-group">
-                                            <label for="prestamo_total" class="bmd-label-floating">Total a pagar en <?php echo MONEDA;?></label>
-                                            <input type="text" pattern="[0-9.]{1,10}" class="form-control" readonly="" value="<?php echo number_format($_SESSION['prestamo_total'],2,'.','');?>" id="prestamo_total" maxlength="10">
+                                            <label for="inscripcion_total" class="bmd-label-floating">Total generado evento <?php echo MONEDA;?></label>
+                                            <input type="text" pattern="[0-9.]{1,10}" class="form-control" readonly="" value="<?php echo number_format($_SESSION['inscripcion_total'],2,'.','');?>" id="inscripcion_total" maxlength="10">
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-4">
                                         <div class="form-group">
-                                            <label for="prestamo_pagado" class="bmd-label-floating">Total depositado en <?php echo MONEDA;?></label>
-                                            <input type="text" pattern="[0-9.]{1,10}" class="form-control" name="prestamo_pagado_reg" id="prestamo_pagado" maxlength="10">
+                                            <label for="inscripcion_pagado" class="bmd-label-floating">Total depositado en <?php echo MONEDA;?></label>
+                                            <input type="text" pattern="[0-9.]{1,10}" class="form-control" name="inscripcion_pagado_reg" id="inscripcion_pagado" maxlength="10">
                                         </div>
                                     </div>
                                     <div class="col-12">
                                         <div class="form-group">
-                                            <label for="prestamo_observacion" class="bmd-label-floating">Observación</label>
-                                            <input type="text" pattern="[a-zA-z0-9áéíóúÁÉÍÓÚñÑ#() ]{1,400}" class="form-control" name="prestamo_observacion_reg" id="prestamo_observacion" maxlength="400">
+                                            <label for="inscripcion_observacion" class="bmd-label-floating">Observación</label>
+                                            <input type="text" pattern="[a-zA-z0-9áéíóúÁÉÍÓÚñÑ#() ]{1,400}" class="form-control" name="inscripcion_observacion_reg" id="inscripcion_observacion" maxlength="400">
                                         </div>
                                     </div>
                                 </div>
@@ -221,7 +219,7 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="ModalCliente">Agregar cliente</h5>
+                            <h5 class="modal-title" id="ModalCliente">Agregar evento</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -229,16 +227,16 @@
                         <div class="modal-body">
                             <div class="container-fluid">
                                 <div class="form-group">
-                                    <label for="input_cliente" class="bmd-label-floating">DNI, Nombre, Apellido, Telefono</label>
-                                    <input type="text" pattern="[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]{1,30}" class="form-control" name="input_cliente" id="input_cliente" maxlength="30">
+                                    <label for="input_cliente" class="bmd-label-floating">Titulo del evento</label>
+                                    <input type="text" pattern="[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]{1,30}" class="form-control" name="input_evento" id="input_evento" maxlength="30">
                                 </div>
                             </div>
                             <br>
-                            <div class="container-fluid" id="tabla_clientes">  
+                            <div class="container-fluid" id="tabla_eventos">  
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" onclick="buscar_cliente()"><i class="fas fa-search fa-fw"></i> &nbsp; Buscar</button>
+                            <button type="button" class="btn btn-primary" onclick="buscar_evento()"><i class="fas fa-search fa-fw"></i> &nbsp; Buscar</button>
                             &nbsp; &nbsp;
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                         </div>

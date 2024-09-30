@@ -8,10 +8,13 @@
     isset($_POST['fecha_inicio']) || isset($_POST['fecha_final']) ){
 
         $data_url=[
+            "asistente"=>"asistente-search",
+            "evento"=>"evento-search",
+
             "usuario"=>"user-search",
             "cliente"=>"client-search",
-            "asistente"=>"asistente-search",
             "prestamo"=>"reservation-search"
+            
         ];
 
         if(isset($_POST['modulo'])){

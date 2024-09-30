@@ -1,14 +1,14 @@
 <script>
-    //funcion buscar cliente
-    function buscar_cliente() {
+    //funcion buscar evento
+    function buscar_evento() {
 
-        let input_cliente = document.querySelector('#input_cliente').value;
+        let input_evento = document.querySelector('#input_evento').value;
 
-        input_cliente = input_cliente.trim();
+        input_evento = input_evento.trim();
 
-        if (input_cliente != "") {
+        if (input_evento != "") {
             let datos = new FormData();
-            datos.append("buscar_cliente", input_cliente);
+            datos.append("buscar_evento", input_evento);
 
 
             fetch("<?php echo SERVERURL; ?>ajax/prestamoAjax.php", {
@@ -17,8 +17,8 @@
                 })
                 .then(respuesta => respuesta.text())
                 .then(respuesta => {
-                    let tabla_clientes = document.querySelector('#tabla_clientes');
-                    tabla_clientes.innerHTML = respuesta;
+                    let tabla_eventos = document.querySelector('#tabla_eventos');
+                    tabla_eventos.innerHTML = respuesta;
                 });
 
 
@@ -35,13 +35,13 @@
     }
 
 
-    //funcion agregar cliente
-    function agregar_cliente(id) {
-        $('#ModalCliente').modal('hide');
+    //funcion agregar evento
+    function agregar_evento(id) {
+        $('#Modalevento').modal('hide');
 
         Swal.fire({
-            title: 'Quieres agregar este cliente?',
-            text: 'Se va agregar este cliente para realizar un prestamo',
+            title: 'Quieres agregar este evento?',
+            text: 'Se va agregar este evento para realizar un prestamo',
             type: 'question',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -51,7 +51,7 @@
         }).then((result) => {
             if (result.value) {
                 let datos = new FormData();
-                datos.append("id_agregar_cliente", id);
+                datos.append("id_agregar_evento", id);
 
 
                 fetch("<?php echo SERVERURL; ?>ajax/prestamoAjax.php", {
@@ -64,7 +64,7 @@
                     });
 
             } else {
-                $('#ModalCliente').modal('show');
+                $('#Modalevento').modal('show');
             }
         });
 

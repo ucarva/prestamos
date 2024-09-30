@@ -40,7 +40,7 @@
                                 <th>NOMBRE</th>
                                 <th>APELLIDO</th>
                                 <th>CELULAR</th>                        
-                                <th>ACTUALIZAR</th>
+                                <th>EDITAR</th>
                                 <th>ELIMINAR</th>
                                 <th>EVENTO</th>
                             </tr>
@@ -57,7 +57,7 @@
                     <td>' . $rows['celular'] . '</td>
                     <td>
                         <a href="' . SERVERURL . 'asistente-update/' . $model->encryption($rows['id_asistente']) . '/" class="btn btn-success">
-                            <i class="fas fa-sync-alt"></i>
+                            <i class="fas fa-edit"></i>
                         </a>
                     </td>
                     <td>

@@ -3,7 +3,7 @@
     <h3 class="text-left">
         <i class="fas fa-search fa-fw"></i> &nbsp; BUSCAR EVENTO
     </h3>
-    
+
 </div>
 
 
@@ -23,16 +23,16 @@
 
 <!--CONTENT-->
 <?php
-if (!isset($_SESSION['busqueda_asistente']) && empty($_SESSION['busqueda_asistente'])) {
+if (!isset($_SESSION['busqueda_evento']) && empty($_SESSION['busqueda_evento'])) {
 ?>
     <div class="container-fluid">
-        <form class="form-neon FormularioAjax " action="<?php echo SERVERURL; ?>ajax/buscadorAjax.php" method="POST" data-form="default" autocomplete="off">
-            <input type="hidden" name="modulo" value="asistente">
+        <form class="form-neon FormularioAjax " action="<?php echo SERVERURL; ?>ajax/buscadorAjax.php" method="POST" data-form="search" autocomplete="off">
+            <input type="hidden" name="modulo" value="evento">
             <div class="container-fluid">
                 <div class="row justify-content-md-center">
                     <div class="col-12 col-md-6">
                         <div class="form-group">
-                            <label for="inputSearch" class="bmd-label-floating">¿Qué asistente estas buscando?</label>
+                            <label for="inputSearch" class="bmd-label-floating">¿Qué evento estas buscando?</label>
                             <input type="text" class="form-control" name="busqueda_inicial" id="inputSearch" maxlength="30">
                         </div>
                     </div>
@@ -48,14 +48,14 @@ if (!isset($_SESSION['busqueda_asistente']) && empty($_SESSION['busqueda_asisten
 <?php } else { ?>
 
     <div class="container-fluid">
-        <form class="form-neon FormularioAjax " action="<?php echo SERVERURL; ?>ajax/buscadorAjax.php" method="POST" data-form="default" autocomplete="off">
-            <input type="hidden" name="modulo" value="asistente">
+        <form class="form-neon FormularioAjax " action="<?php echo SERVERURL; ?>ajax/buscadorAjax.php" method="POST" data-form="search" autocomplete="off">
+            <input type="hidden" name="modulo" value="evento">
             <input type="hidden" name="eliminar_busqueda" value="eliminar">
             <div class="container-fluid">
                 <div class="row justify-content-md-center">
                     <div class="col-12 col-md-6">
                         <p class="text-center" style="font-size: 20px;">
-                            Resultados de la busqueda <strong>“<?php echo $_SESSION['busqueda_asistente']; ?>”</strong>
+                            Resultados de la busqueda <strong>“<?php echo $_SESSION['busqueda_evento']; ?>”</strong>
                         </p>
                     </div>
                     <div class="col-12">
@@ -68,70 +68,84 @@ if (!isset($_SESSION['busqueda_asistente']) && empty($_SESSION['busqueda_asisten
         </form>
     </div>
 
+    <!--CONTENT-->
     <div class="container-fluid">
-    <?php
-    // Llamando al controlador
-    require_once "./controladores/asistenteControlador.php";
-    $ins_asistente = new asistenteControlador();
-    $model = new mainModel();
+        <?php
 
-    // Obtener el término de búsqueda desde un formulario 
-    $busqueda = isset($_SESSION['busqueda_asistente']) ? $_SESSION['busqueda_asistente'] : "";
+        // llamando al controlador
+        require_once "./controladores/eventoControlador.php";
+        $ins_evento = new eventoControlador();
+        $model = new mainModel();
 
-    // Obtener lista de asistentes
-    $listaAsistentes = $ins_asistente->paginador_asistente_controlador($pagina[1], 20, $busqueda);
+        // Obtener lista de eventos
+        $listaEventos = $ins_evento->paginador_evento_controlador($pagina[1], 20, "");
 
-    // Inicializar la tabla
-    $tabla = '<div class="table-responsive">
-                 <table class="table table-dark table-sm">
-                    <thead>
-                        <tr class="text-center roboto-medium">                    
-                            <th>NOMBRE</th>
-                            <th>APELLIDO</th>
-                            <th>CELULAR</th>                        
-                            <th>ACTUALIZAR</th>
-                            <th>ELIMINAR</th>
-                            <th>EVENTO</th>
-                        </tr>
-                    </thead>
-                    <tbody>';
+        // Inicializar la tabla
+        $tabla = '<div class="table-responsive">
+                     <table class="table table-dark table-sm">
+                        <thead>
+                            <tr class="text-center roboto-medium">                    
+                                <th>NOMBRE</th>
+                                <th>DESCRIPCION</th>
+                                <th>HORA</th>                        
+                                <th>VALOR EVENTO</th>
+                                <th>CATEGORIA</th>
+                                <th>LUGAR</th>
+                                <th>CUPO PERSONAS</th>
+                                <th>ESTADO</th>
+                                <th>TIPO</th>                        
+                                <th>ENTRADA</th>
+                                <th>EDITAR</th>                        
+                                <th>ELIMINAR</th>
+                            </tr>
+                        </thead>
+                        <tbody>';
 
-    // Verificar si hay asistentes en la lista
-    if (count($listaAsistentes) > 0) {
-        // Iterar sobre los asistentes
-        foreach ($listaAsistentes as $rows) {
-            $tabla .= '<tr class="text-center">
-                <td>' . $rows['nombres'] . '</td>
-                <td>' . $rows['apellidos'] . '</td>
-                <td>' . $rows['celular'] . '</td>
-                <td>
-                    <a href="' . SERVERURL . 'asistente-update/' . $model->encryption($rows['id_asistente']) . '/" class="btn btn-success">
-                        <i class="fas fa-sync-alt"></i>
-                    </a>
-                </td>
-                <td>
-                    <form class="FormularioAjax" action="' . SERVERURL . 'ajax/asistenteAjax.php" method="POST" data-form="delete" autocomplete="off">
-                        <input type="hidden" name="asistente_id_del" value="' . $model->encryption($rows['id_asistente']) . '" >
-                        <button type="submit" class="btn btn-warning">
-                            <i class="far fa-trash-alt"></i>
-                        </button>
-                    </form>
-                </td>
-            </tr>';
+        // Verificar si hay asistentes en la lista
+        if (count($listaEventos) > 0) {
+            // Iterar sobre los Eventos
+            foreach ($listaEventos as $rows) {
+                $tabla .= '<tr class="text-center">
+                            <td>' . $rows['titulo'] . '</td>
+                            <td>' . $rows['descripcion'] . '</td>
+                            <td>' . $rows['hora'] . '</td>
+                            <td>' . $rows['valor_base'] . '</td>
+                            <td>' . $rows['categoria_descripcion'] . '</td> 
+                            <td>' . $rows['lugar'] . '</td>
+                            <td>' . $rows['cupo'] . '</td>
+                            <td>' . $rows['estado'] . '</td>
+                            <td>' . $rows['tipo'] . '</td>
+                            <td>' . $rows['tipo_entrada_descripcion'] . '</td>
+                                    
+                    <td>
+                        <a href="' . SERVERURL . 'evento-update/' . $model->encryption($rows['id_evento']) . '/" class="btn btn-success">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <form class="FormularioAjax" action="' . SERVERURL . 'ajax/eventoAjax.php" method="POST" data-form="delete" autocomplete="off">
+                            <input type="hidden" name="evento_id_del" value="' . $model->encryption($rows['id_evento']) . '" >
+                            <button type="submit" class="btn btn-warning">
+                                <i class="far fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>';
+            }
+        } else {
+            // Si no hay registros, mostrar mensaje
+            $tabla .= '<tr class="text-center"><td colspan="6">No hay registros en el sistema</td></tr>';
         }
-    } else {
-        // Si no hay registros, mostrar mensaje
-        $tabla .= '<tr class="text-center"><td colspan="6">No hay registros en el sistema</td></tr>';
-    }
 
-    $tabla .= '</tbody>
-             </table>
-         </div>';
+        $tabla .= '</tbody>
+                 </table>
+             </div>';
 
-    // Mostrar la tabla
-    echo $tabla;
-    ?>
-</div>
+        // Mostrar la tabla
+        echo $tabla;
+
+        ?>
+    </div>
 
 
 

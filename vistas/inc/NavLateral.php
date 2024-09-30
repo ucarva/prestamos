@@ -17,23 +17,9 @@
 						<a href="<?php echo SERVERURL; ?>home/"><i class="fab fa-dashcube fa-fw"></i> &nbsp; Dashboard</a>
 					</li>
 
-					<li>
-						<a href="#" class="nav-btn-submenu"><i class="fas fa-users fa-fw"></i> &nbsp; Clientes <i class="fas fa-chevron-down"></i></a>
-						<ul>
-							<li>
-								<a href="<?php echo SERVERURL; ?>client-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; Agregar Cliente</a>
-							</li>
-							<li>
-								<a href="<?php echo SERVERURL; ?>client-list/"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; Lista de clientes</a>
-							</li>
-							<li>
-								<a href="<?php echo SERVERURL; ?>client-search/"><i class="fas fa-search fa-fw"></i> &nbsp; Buscar cliente</a>
-							</li>
-						</ul>
-					</li>
 
 					<li>
-						<a href="#" class="nav-btn-submenu"><i class="fas fa-pallet fa-fw"></i> &nbsp; Asistentes <i class="fas fa-chevron-down"></i></a>
+						<a href="#" class="nav-btn-submenu"><i class="fas fa-users fa-fw"></i> &nbsp; Asistentes <i class="fas fa-chevron-down"></i></a>
 						<ul>
 							<li>
 								<a href="<?php echo SERVERURL; ?>asistente-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; Agregar asistente</a>
@@ -48,32 +34,42 @@
 					</li>
 
 					<li>
-						<a href="#" class="nav-btn-submenu"><i class="fas fa-pallet fa-fw"></i> &nbsp;Eventos <i class="fas fa-chevron-down"></i></a>
+						<a href="#" class="nav-btn-submenu"><i class="fas fa-pallet fa-fw"></i> &nbsp; Eventos <i class="fas fa-chevron-down"></i></a>
 						<ul>
 							<li>
-								<a href="<?php echo SERVERURL; ?>categoria-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; Crear categoria</a>
+								<a href="#" class="nav-btn-submenu"><i class="fas fa-tasks fa-fw"></i> &nbsp; Gestionar Eventos <i class="fas fa-chevron-down"></i></a>
+								<ul>
+									<li>
+										<a href="<?php echo SERVERURL; ?>categoria-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; Crear categoría</a>
+									</li>
+									<li>
+										<a href="<?php echo SERVERURL; ?>entrada-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; Crear Entradas</a>
+									</li>
+									<li>
+										<a href="<?php echo SERVERURL; ?>cupon-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; Crear Cupones</a>
+									</li>
+									
+								</ul>
+								<li>
+										<a href="<?php echo SERVERURL; ?>evento-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; Crear Eventos</a>
+									</li>
 							</li>
-							<li>
-								<a href="<?php echo SERVERURL; ?>entrada-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; Crear Entradas</a>
-							</li>
-							<li>
-								<a href="<?php echo SERVERURL; ?>evento-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; Crear Eventos</a>
-							</li>
-							
 						</ul>
 					</li>
 
+
+
 					<li>
-						<a href="#" class="nav-btn-submenu"><i class="fas fa-file-invoice-dollar fa-fw"></i> &nbsp; Préstamos <i class="fas fa-chevron-down"></i></a>
+						<a href="#" class="nav-btn-submenu"><i class="fas fa-file-invoice-dollar fa-fw"></i> &nbsp; Inscripcion <i class="fas fa-chevron-down"></i></a>
 						<ul>
 							<li>
-								<a href="<?php echo SERVERURL; ?>reservation-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; Nuevo préstamo</a>
+								<a href="<?php echo SERVERURL; ?>reservation-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; Nueva inscripcion</a>
 							</li>
 							<li>
 								<a href="<?php echo SERVERURL; ?>reservation-reservation/"><i class="far fa-calendar-alt fa-fw"></i> &nbsp; Reservaciones</a>
 							</li>
 							<li>
-								<a href="<?php echo SERVERURL; ?>reservation-pending/"><i class="fas fa-hand-holding-usd fa-fw"></i> &nbsp; Préstamos</a>
+								<a href="<?php echo SERVERURL; ?>reservation-pending/"><i class="fas fa-hand-holding-usd fa-fw"></i> &nbsp; inscripcion</a>
 							</li>
 							<li>
 								<a href="<?php echo SERVERURL; ?>reservation-list/"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; Finalizados</a>

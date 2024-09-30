@@ -26,7 +26,7 @@
 if (!isset($_SESSION['busqueda_asistente']) && empty($_SESSION['busqueda_asistente'])) {
 ?>
     <div class="container-fluid">
-        <form class="form-neon FormularioAjax " action="<?php echo SERVERURL; ?>ajax/buscadorAjax.php" method="POST" data-form="default" autocomplete="off">
+        <form class="form-neon FormularioAjax " action="<?php echo SERVERURL; ?>ajax/buscadorAjax.php" method="POST" data-form="search" autocomplete="off">
             <input type="hidden" name="modulo" value="asistente">
             <div class="container-fluid">
                 <div class="row justify-content-md-center">
@@ -48,7 +48,7 @@ if (!isset($_SESSION['busqueda_asistente']) && empty($_SESSION['busqueda_asisten
 <?php } else { ?>
 
     <div class="container-fluid">
-        <form class="form-neon FormularioAjax " action="<?php echo SERVERURL; ?>ajax/buscadorAjax.php" method="POST" data-form="default" autocomplete="off">
+        <form class="form-neon FormularioAjax " action="<?php echo SERVERURL; ?>ajax/buscadorAjax.php" method="POST" data-form="search" autocomplete="off">
             <input type="hidden" name="modulo" value="asistente">
             <input type="hidden" name="eliminar_busqueda" value="eliminar">
             <div class="container-fluid">
@@ -89,7 +89,7 @@ if (!isset($_SESSION['busqueda_asistente']) && empty($_SESSION['busqueda_asisten
                             <th>NOMBRE</th>
                             <th>APELLIDO</th>
                             <th>CELULAR</th>                        
-                            <th>ACTUALIZAR</th>
+                            <th>EDITAR</th>
                             <th>ELIMINAR</th>
                             <th>EVENTO</th>
                         </tr>
@@ -106,7 +106,7 @@ if (!isset($_SESSION['busqueda_asistente']) && empty($_SESSION['busqueda_asisten
                 <td>' . $rows['celular'] . '</td>
                 <td>
                     <a href="' . SERVERURL . 'asistente-update/' . $model->encryption($rows['id_asistente']) . '/" class="btn btn-success">
-                        <i class="fas fa-sync-alt"></i>
+                        <i class="fas fa-edit"></i>
                     </a>
                 </td>
                 <td>
