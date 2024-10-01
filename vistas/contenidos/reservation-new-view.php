@@ -290,84 +290,51 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-12">
-                            
-                                
 
-                                <div class="form-group">
-                            <label for="evento_entrada" class="bmd-label-floating">Tipo entrada</label>
-                            <select class="form-control" name="evento_entrada_reg" id="evento_entrada" required>
-                                <option value="">Seleccione un tipo de entrada</option>
 
-                                <?php
-                                // Llamando al controlador
-                                require_once "./controladores/entradaControlador.php";
-                                $ins_entrada = new entradaControlador();
 
-                                // Obtener lista de tipos de entrada
-                                $listaEntradas = $ins_entrada->paginador_entrada_controlador($pagina[1], 20, "");
+                            <div class="form-group">
+                                <label for="evento_entrada" class="bmd-label-floating">Tipo entrada</label>
+                                <select class="form-control" name="evento_entrada" id="evento_entrada" required>
+                                    <option value="">Seleccione un tipo de entrada</option>
 
-                                // Verificar si hay entradas en la lista
-                                if (count($listaEntradas) > 0) {
-                                    // Iterar sobre las entradas
-                                    foreach ($listaEntradas as $rows) {
-                                        // Aquí ya no estamos encriptando el ID
-                                        echo '<option value="' . $rows['id_tipo_entrada'] . '">' . $rows['descripcion'] . '</option>';
+                                    <?php
+                                    // Llamando al controlador
+                                    require_once "./controladores/entradaControlador.php";
+                                    $ins_entrada = new entradaControlador();
+
+                                    // Obtener lista de tipos de entrada
+                                    $listaEntradas = $ins_entrada->paginador_entrada_controlador($pagina[1], 20, "");
+
+                                    // Verificar si hay entradas en la lista
+                                    if (count($listaEntradas) > 0) {
+                                        // Iterar sobre las entradas
+                                        foreach ($listaEntradas as $rows) {
+                                            // Aquí ya no estamos encriptando el ID
+                                            echo '<option value="' . $rows['id_tipo_entrada'] . '">' . $rows['descripcion'] . '</option>';
+                                        }
+                                    } else {
+                                        echo '<option value="">No hay entradas disponibles</option>';
                                     }
-                                } else {
-                                    echo '<option value="">No hay entradas disponibles</option>';
-                                }
-                                ?>
-                            </select>
-                        </div>
-                            
+                                    ?>
+                                </select>
+                            </div>
+
                         </div>
                         <div class="col-12 col-md-4">
                             <div class="form-group">
-                            <label for="evento_entrada" class="bmd-label-floating">Seleccione un tipo de cupon</label>
-                            <select class="form-control" name="evento_entrada_reg" id="evento_entrada" required>
-                                
-
-                                <?php
-                                // Llamando al controlador
-                                require_once "./controladores/cuponControlador.php";
-                                $ins_cupon = new cuponControlador();
-
-                                // Obtener lista de tipos de cupon
-                                $listacupones = $ins_cupon->paginador_cupon_controlador($pagina[1], 20, "");
-
-                                // Verificar si hay cupons en la lista
-                                if (count($listacupones) > 0) {
-                                    // Iterar sobre las cupons
-                                    foreach ($listacupones as $rows) {
-                                        // Aquí ya no estamos encriptando el ID
-                                        echo '<option value="' . $rows['id_codigo'] . '">' . $rows['codigo'] . '</option>';
-                                    }
-                                } else {
-                                    echo '<option value="">No hay cupones disponibles</option>';
-                                }
-                                ?>
-                            </select>
+                                <label for="cupon_codigo" class="bmd-label-floating">Igresa cupón descuento</label>
+                                <input type="text" pattern="[a-zA-Z0-9]{1,30}" class="form-control" name="cupon_codigo" id="cupon_codigo" maxlength="30" >
                             </div>
                         </div>
-                        <div class="col-12 col-md-4">
-                            <div class="form-group">
-                                <label for="detalle_tiempo" class="bmd-label-floating">Tiempo (según formato)</label>
-                                <input type="num" pattern="[0-9]{1,7}" class="form-control" name="detalle_tiempo" id="detalle_tiempo" maxlength="7" required="">
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-4">
-                            <div class="form-group">
-                                <label for="detalle_costo_tiempo" class="bmd-label-floating">Costo por unidad de tiempo</label>
-                                <input type="text" pattern="[0-9.]{1,15}" class="form-control" name="detalle_costo_tiempo" id="detalle_costo_tiempo" maxlength="15" required="">
-                            </div>
-                        </div>
+                      
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Agregar</button>
+                <button type="submit" class="btn btn-primary">Comprar</button>
                 &nbsp; &nbsp;
-                <button type="button" onclick=" modal_buscar_item()" class="btn btn-secondary">Cancelar</button>
+                <button type="button" onclick=" modal_buscar_evento()" class="btn btn-secondary">Cancelar</button>
             </div>
         </form>
     </div>

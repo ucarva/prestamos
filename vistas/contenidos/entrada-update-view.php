@@ -46,6 +46,12 @@
 								<input value="<?php echo $campos['descripcion']; ?>" type="text" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9 ]{1,140}" class="form-control" name="entrada_nombre_up" id="categoria_nombre" maxlength="140" required>
 							</div>
 						</div>
+						<div class="col-12 col-md-4">
+                        <div class="form-group">
+                            <label for="cupon_descuento" class="bmd-label-floating">Porcentaje de entrada</label>
+                            <input  value="<?php echo $campos['cantidad']; ?>" type="number" class="form-control" name="entrada_porcentaje_up" id="entrada_porcentaje" max="100" min="0" step="0.01" required>
+                        </div>
+                    </div>
 
 					</div>
 				</div>

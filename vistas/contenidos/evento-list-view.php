@@ -45,8 +45,10 @@
                                 <th>LUGAR</th>
                                 <th>CUPO PERSONAS</th>
                                 <th>ESTADO</th>
+                                <th>FECHA APERTURA</th>   
+                                <th>FECHA CIERRE</th>   
                                 <th>TIPO</th>                        
-                                <th>ENTRADA</th>
+                                
                                 <th>EDITAR</th>                        
                                 <th>ELIMINAR</th>
                             </tr>
@@ -66,8 +68,10 @@
                             <td>' . $rows['lugar'] . '</td>
                             <td>' . $rows['cupo'] . '</td>
                             <td>' . $rows['estado'] . '</td>
-                            <td>' . $rows['tipo'] . '</td>
-                            <td>' . $rows['tipo_entrada_descripcion'] . '</td>
+                            <td>' . $rows['fecha_apertura'] . '</td>
+                            <td>' . $rows['fecha_cierre'] . '</td>
+                            <td>' . $rows['es_entrada_gratis'] . '</td>
+                            
                                     
                     <td>
                         <a href="' . SERVERURL . 'evento-update/' . $model->encryption($rows['id_evento']) . '/" class="btn btn-success">

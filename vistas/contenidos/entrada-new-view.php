@@ -38,6 +38,13 @@
                         </div>
                     </div>
 
+                    <div class="col-12 col-md-4">
+                        <div class="form-group">
+                            <label for="cupon_descuento" class="bmd-label-floating">Porcentaje de entrada</label>
+                            <input type="number" class="form-control" name="entrada_porcentaje_reg" id="entrada_porcentaje" max="100" min="0" step="0.01" required>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </fieldset>

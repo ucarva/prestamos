@@ -62,6 +62,18 @@
 								<input value="<?php echo $campos['hora']; ?>" type="time" class="form-control" name="evento_hora_up" id="evento_hora" required>
 							</div>
 						</div>
+						<div class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label for="evento_fecha_inicio">Fecha de apertura</label>
+                            <input value="<?php echo $campos['fecha_apertura']; ?>" type="date" class="form-control" name="evento_fecha_inicio_up" value="<?php echo date("Y-m-d"); ?>" id="evento_fecha_inicio">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label for="evento_fecha_inicio">Fecha de cierre</label>
+                            <input value="<?php echo $campos['fecha_cierre']; ?>" type="date" class="form-control" name="evento_fecha_cierre_up" value="<?php echo date("Y-m-d"); ?>" id="evento_fecha_cierre">
+                        </div>
+                    </div>
 
 						<!-- Valor Base -->
 						<div class="col-12 col-md-4">
@@ -137,7 +149,7 @@
 						</div>
 
 
-						<!-- Tipo de Entrada -->
+						<!-- Tipo de Entrada 
 						<div class="container-fluid">
 							<div class="form-group">
 								<label for="evento_entrada" class="bmd-label-floating">Tipo entrada</label>
@@ -169,16 +181,16 @@
 							</div>
 						</div>
 
-
+-->
 
 						<!-- Tipo de Evento -->
 						<div class="col-12 col-md-6">
 							<div class="form-group">
-								<label for="evento_evento" class="bmd-label-floating">Tipo evento</label>
-								<select class="form-control" name="evento_evento_up" id="evento_evento">
+								<label for="evento_tipo_entrada" class="bmd-label-floating">Tipo evento</label>
+								<select class="form-control" name="evento_tipo_entrada_up" id="evento_tipo_entrada">
 									<option value="" selected disabled>Seleccione una opción</option>
-									<option value="Pago" <?php echo ($campos['tipo'] == 'Pago') ? 'selected' : ''; ?>>Pago</option>
-									<option value="Gratis" <?php echo ($campos['tipo'] == 'Gratis') ? 'selected' : ''; ?>>Gratis</option>
+									<option value="Pago" <?php echo ($campos['es_entrada_gratis'] == 'Pago') ? 'selected' : ''; ?>>Pago</option>
+									<option value="Gratis" <?php echo ($campos['es_entrada_gratis'] == 'Gratis') ? 'selected' : ''; ?>>Gratis</option>
 								</select>
 							</div>
 						</div>

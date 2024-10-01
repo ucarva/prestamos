@@ -8,10 +8,11 @@ class entradaModelo extends mainModel
     //Modelo para registrar entrada
     protected static function agregar_entrada_modelo($datos)
     {
-        $sql = mainModel::conectar()->prepare("INSERT INTO tipo_entrada(descripcion,id_admin)
-            VALUES(:Descripcion,:id_admin)");
+        $sql = mainModel::conectar()->prepare("INSERT INTO tipo_entrada(descripcion,cantidad,id_admin)
+            VALUES(:Descripcion,:Cantidad,:id_admin)");
 
         $sql->bindParam(":Descripcion", $datos['Descripcion']);
+        $sql->bindParam(":Cantidad", $datos['Cantidad']);
         $sql->bindParam(":id_admin", $datos['id_admin']);
 
         $sql->execute();
@@ -25,7 +26,7 @@ class entradaModelo extends mainModel
 
         if (!empty($busqueda)) {
             $consulta = $conexion->prepare("SELECT SQL_CALC_FOUND_ROWS * FROM tipo_entrada
-                                            WHERE descripcion LIKE :busqueda 
+                                            WHERE descripcion LIKE :busqueda OR cantidad LIKE :busqueda 
                                             
                                             ORDER BY id_tipo_entrada ASC LIMIT :inicio, :registros");
             $busqueda = "%$busqueda%"; // Ajustamos el valor de búsqueda

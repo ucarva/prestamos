@@ -36,6 +36,7 @@
                         <thead>
                             <tr class="text-center roboto-medium">                    
                                 <th>NOMBRE CATEGORIA</th>   
+                                <th>VALOR</th> 
                                 <th>ACTUALIZAR</th>
                                 <th>ELIMINAR</th>                            
                             </tr>
@@ -48,6 +49,7 @@
             foreach ($listaEntradas as $rows) {
                 $tabla .= '<tr class="text-center">
                     <td>' . $rows['descripcion'] . '</td>
+                    <td>' . $rows['cantidad'] . '%</td>
                    
                     <td>
                         <a href="' . SERVERURL . 'entrada-update/' . $model->encryption($rows['id_tipo_entrada']) . '/" class="btn btn-success">

@@ -56,6 +56,19 @@
                         </div>
                     </div>
 
+                    <div class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label for="evento_fecha_inicio">Fecha de apertura</label>
+                            <input type="date" class="form-control" name="evento_fecha_inicio_reg" value="<?php echo date("Y-m-d"); ?>" id="evento_fecha_inicio">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label for="evento_fecha_inicio">Fecha de cierre</label>
+                            <input type="date" class="form-control" name="evento_fecha_cierre_reg" value="<?php echo date("Y-m-d"); ?>" id="evento_fecha_cierre">
+                        </div>
+                    </div>
+
                     <!-- Valor Base -->
                     <div class="col-12 col-md-4">
                         <div class="form-group">
@@ -127,45 +140,14 @@
                         </div>
                     </div>
 
-                    <!-- Tipo de Entrada -->
-                    <div class="container-fluid">
-                        <div class="form-group">
-                            <label for="evento_entrada" class="bmd-label-floating">Tipo entrada</label>
-                            <select class="form-control" name="evento_entrada_reg" id="evento_entrada" required>
-                                <option value="">Seleccione un tipo de entrada</option>
-
-                                <?php
-                                // Llamando al controlador
-                                require_once "./controladores/entradaControlador.php";
-                                $ins_entrada = new entradaControlador();
-
-                                // Obtener lista de tipos de entrada
-                                $listaEntradas = $ins_entrada->paginador_entrada_controlador($pagina[1], 20, "");
-
-                                // Verificar si hay entradas en la lista
-                                if (count($listaEntradas) > 0) {
-                                    // Iterar sobre las entradas
-                                    foreach ($listaEntradas as $rows) {
-                                        // Aquí ya no estamos encriptando el ID
-                                        echo '<option value="' . $rows['id_tipo_entrada'] . '">' . $rows['descripcion'] . '</option>';
-                                    }
-                                } else {
-                                    echo '<option value="">No hay entradas disponibles</option>';
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    </div>
-
-
                     <!-- Tipo de Evento -->
                     <div class="col-12 col-md-6">
                         <div class="form-group">
-                            <label for="evento_evento" class="bmd-label-floating">Tipo evento</label>
-                            <select class="form-control" name="evento_evento_reg" id="evento_evento">
+                            <label for="evento_tipo_entrada" class="bmd-label-floating">Tipo entrada evento</label>
+                            <select class="form-control" name="evento_tipo_entrada_reg" id="evento_tipo_entrada">
                                 <option value="" selected="" disabled="">Seleccione una opción</option>
-                                <option value="Pago">Pago</option>
-                                <option value="Gratis">Gratis</option>
+                                <option value="0">Pago</option>
+                                <option value="1">Gratis</option>
                             </select>
                         </div>
                     </div>

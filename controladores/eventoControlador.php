@@ -20,9 +20,31 @@ class eventoControlador extends eventoModelo
         $lugar = mainModel::limpiar_cadena($_POST['evento_lugar_reg']);
         $cupo = mainModel::limpiar_cadena($_POST['evento_cupo_reg']);
         $estado = mainModel::limpiar_cadena($_POST['evento_estado_reg']);
-        $entrada = mainModel::limpiar_cadena($_POST['evento_entrada_reg']);
-        $tipo = mainModel::limpiar_cadena($_POST['evento_evento_reg']);
+        $fecha_inicio = mainModel::limpiar_cadena($_POST['evento_fecha_inicio_reg']);
+        $fecha_cierre = mainModel::limpiar_cadena($_POST['evento_fecha_cierre_reg']);
+       
+        $esEntradaGratis = mainModel::limpiar_cadena($_POST['evento_tipo_entrada_reg']);
         $id_admin = mainModel::limpiar_cadena($_POST['id_admin']);
+
+        $esEntradaGratis = $_POST['evento_tipo_entrada_reg'] === '0' ? false : true;
+
+        //validando fechas
+        if (strtotime($fecha_inicio) > strtotime($fecha_cierre)) {
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado",
+                "Texto" => "La fecha de inicio no puede ser mayor que la fecha de fin.",
+                "Tipo" => "error"
+            ];
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        }
+
+        //formateando fechas
+        $fecha_inicio = date("Y-m-d", strtotime($fecha_inicio));
+        $fecha_cierre = date("Y-m-d", strtotime($fecha_cierre));
+
 
         // Arreglo de datos para el registro del evento
         $datos_evento_reg = [
@@ -34,8 +56,9 @@ class eventoControlador extends eventoModelo
             "Lugar" => $lugar,          // Lugar del evento
             "Cupo" => $cupo,
             "Estado" => $estado,
-            "Entrada" => $entrada,
-            "Tipo" => $tipo,
+            "FechaInicio" => $fecha_inicio,
+            "FechaCierre" => $fecha_cierre,
+            "esGratis"=>$esEntradaGratis,
             "id_admin" => $id_admin
         ];
 
@@ -95,7 +118,6 @@ class eventoControlador extends eventoModelo
     //controlador para actualizar evento
     public function actualizar_evento_controlador()
     {
-
         // Limpiar y asignar datos del formulario
         $nombre = mainModel::limpiar_cadena($_POST['evento_nombre_up']);
         $descripcion = mainModel::limpiar_cadena($_POST['evento_descripcion_up']);
@@ -105,13 +127,32 @@ class eventoControlador extends eventoModelo
         $lugar = mainModel::limpiar_cadena($_POST['evento_lugar_up']);
         $cupo = mainModel::limpiar_cadena($_POST['evento_cupo_up']);
         $estado = mainModel::limpiar_cadena($_POST['evento_estado_up']);
-        $entrada = mainModel::limpiar_cadena($_POST['evento_entrada_up']);
-        $tipo = mainModel::limpiar_cadena($_POST['evento_evento_up']);
-
+        $fecha_inicio = mainModel::limpiar_cadena($_POST['evento_fecha_inicio_up']);
+        $fecha_cierre = mainModel::limpiar_cadena($_POST['evento_fecha_cierre_up']);
         
+        $esEntradaGratis = mainModel::limpiar_cadena($_POST['evento_tipo_entrada_up']);
 
-         // Arreglo de datos para el registro del evento
-         $datos_evento_up = [
+        //validando fechas
+        if (strtotime($fecha_inicio) > strtotime($fecha_cierre)) {
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado",
+                "Texto" => "La fecha de inicio no puede ser mayor que la fecha de fin.",
+                "Tipo" => "error"
+            ];
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        }
+
+        //formateando fechas
+        $fecha_inicio = date("Y-m-d", strtotime($fecha_inicio));
+        $fecha_cierre = date("Y-m-d", strtotime($fecha_cierre));
+
+
+
+        // Arreglo de datos para el registro del evento
+        $datos_evento_up = [
             "Titulo" => $nombre,
             "Descripcion" => $descripcion,
             "Hora" => $hora,
@@ -120,9 +161,10 @@ class eventoControlador extends eventoModelo
             "Lugar" => $lugar,          // Lugar del evento
             "Cupo" => $cupo,
             "Estado" => $estado,
-            "Entrada" => $entrada,
-            "Tipo" => $tipo,
-            
+            "FechaInicio" => $fecha_inicio,
+            "FechaCierre" => $fecha_cierre,
+            "Tipo" => $esEntradaGratis,
+
         ];
 
         $eventoActualizado = eventoModelo::actualizar_evento_modelo($datos_evento_up);
@@ -147,14 +189,14 @@ class eventoControlador extends eventoModelo
         exit();
     } //fin controlador
 
-      //controlador para los datos de evento
-      public  function datos_evento_controlador($tipo, $id)
-      {
-          $tipo = mainModel::limpiar_cadena($tipo);
-          $id = mainModel::decryption($id);
-          $id = mainModel::limpiar_cadena($id);
-  
-          return eventoModelo::datos_evento_modelo($tipo, $id);
-      } // fin controlador
+    //controlador para los datos de evento
+    public  function datos_evento_controlador($tipo, $id)
+    {
+        $tipo = mainModel::limpiar_cadena($tipo);
+        $id = mainModel::decryption($id);
+        $id = mainModel::limpiar_cadena($id);
+
+        return eventoModelo::datos_evento_modelo($tipo, $id);
+    } // fin controlador
 
 }

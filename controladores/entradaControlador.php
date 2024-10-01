@@ -13,12 +13,14 @@ class entradaControlador extends entradaModelo
     public function agregar_entrada_controlador()
     {
         $descripcion = mainModel::limpiar_cadena($_POST['entrada_nombre_reg']);
+        $cantidad = mainModel::limpiar_cadena($_POST['entrada_porcentaje_reg']);
         $id_admin = mainModel::limpiar_cadena($_POST['id_admin']);
 
         //registro de datos
 
         $datos_entrada_reg = [
             "Descripcion" => $descripcion,
+            "Cantidad" => $cantidad,
             "id_admin" => $id_admin
         ];
 
@@ -100,12 +102,14 @@ class entradaControlador extends entradaModelo
     {
         //recibiendo parametros del formulario
         $descripcion = mainModel::limpiar_cadena($_POST['entrada_nombre_up']);
+        $cantidad = mainModel::limpiar_cadena($_POST['entrada_porcentaje_up']);
         $id_admin = mainModel::limpiar_cadena($_POST['id_admin']);
 
         //Preparando datos par enviar al modelo
         $datos_entrada_up = [
             "Descripcion" => $descripcion,
-            "id_admin" => $id_admin,
+            "Cantidad"=>$cantidad,
+            "id_admin" => $id_admin
         ];
 
         $entradaActualizada = entradaModelo::actualizar_entrada_modelo($datos_entrada_up);

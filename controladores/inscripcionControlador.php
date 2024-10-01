@@ -60,7 +60,7 @@ class inscripcionControlador extends inscripcionModelo
     }
 
 
-   
+
     public function agregar_asistente_inscripcion_controlador()
     {
 
@@ -118,15 +118,15 @@ class inscripcionControlador extends inscripcionModelo
             echo json_encode($alerta);
             exit();
         }
-    } 
+    }
 
 
-    
+
     public function eliminar_asistente_inscripcion_controlador()
     {
 
-        
-        session_start(['name'=>'SPM']);
+
+        session_start(['name' => 'SPM']);
 
         unset($_SESSION['datos_asistente']);
 
@@ -148,7 +148,7 @@ class inscripcionControlador extends inscripcionModelo
 
         echo json_encode($alerta);
         exit();
-    } 
+    }
 
     //controlador para buscar evento
     public function buscar_evento_inscripcion_controlador()
@@ -207,11 +207,11 @@ class inscripcionControlador extends inscripcionModelo
     public function agregar_evento_inscripcion_controlador()
     {
 
-        //recibiendo el id del item
+        //recibiendo el id del evento
         $id = mainModel::limpiar_cadena($_POST['id_agregar_evento']);
 
-        //comprobar item en la bdd
-        $check_evento = mainModel::ejecutar_consulta_simple("SELECT * FROM evento WHERE id_evento='$id' ");
+        //comprobar evento en la bdd
+        $check_evento = mainModel::ejecutar_consulta_simple("SELECT * FROM evento WHERE id_evento='$id' AND (estado='Habilitado')  ");
 
         if ($check_evento->rowCount() <= 0) {
             $alerta = [
@@ -229,96 +229,36 @@ class inscripcionControlador extends inscripcionModelo
         }
 
 
-        //recuperando detalles del prestamo
+        //recuperando detalles de inscripcion
 
-        $formato = mainModel::limpiar_cadena($_POST['detalle_formato']);
-        $cantidad = mainModel::limpiar_cadena($_POST['detalle_cantidad']);
-        $tiempo = mainModel::limpiar_cadena($_POST['detalle_tiempo']);
-        $costo = mainModel::limpiar_cadena($_POST['detalle_costo_tiempo']);
+        $entrada = mainModel::limpiar_cadena($_POST['evento_entrada']);
+        $descuento = mainModel::limpiar_cadena($_POST['cupon_codigo']);
 
-        // Comprobar los datos obligatorios vengan con datos
-        if ($cantidad == "" || $tiempo == "" || $costo == "") {
-            $alerta = [
-                "Alerta" => "simple",
-                "Titulo" => "Ocurrió un error inesperado",
-                "Texto" => "No has llenado todos los campos que son obligatorios.",
-                "Tipo" => "error"
-            ];
-
-            header('Content-Type: application/json');
-            echo json_encode($alerta);
-            exit();
+        // Verificar si el código está vacío
+        if (empty($codigo)) {
+            $codigo = "sin codigo";
         }
 
-        //Verificar integridad de los datos
-        if (mainModel::verificar_datos("[0-9]{1,7}", $cantidad)) {
-            $alerta = [
-                "Alerta" => "simple",
-                "Titulo" => "Ocurrió un error inesperado",
-                "Texto" => "La cantidad no coincide con el formato solicitado.",
-                "Tipo" => "error"
-            ];
-            header('Content-Type: application/json');
-            echo json_encode($alerta);
-            exit();
-        }
 
-        if (mainModel::verificar_datos("[0-9]{1,7}", $tiempo)) {
-            $alerta = [
-                "Alerta" => "simple",
-                "Titulo" => "Ocurrió un error inesperado",
-                "Texto" => "El tiempo no coincide con el formato solicitado.",
-                "Tipo" => "error"
-            ];
-            header('Content-Type: application/json');
-            echo json_encode($alerta);
-            exit();
-        }
 
-        if (mainModel::verificar_datos("[0-9.]{1,15}", $costo)) {
-            $alerta = [
-                "Alerta" => "simple",
-                "Titulo" => "Ocurrió un error inesperado",
-                "Texto" => "El costo no coincide con el formato solicitado.",
-                "Tipo" => "error"
-            ];
-            header('Content-Type: application/json');
-            echo json_encode($alerta);
-            exit();
-        }
-
-        if ($formato != "Horas" && $formato != "Dias" && $formato != "Evento" && $formato != "Mes") {
-            $alerta = [
-                "Alerta" => "simple",
-                "Titulo" => "Ocurrió un error inesperado",
-                "Texto" => "El formato seleccionado no es valido.",
-                "Tipo" => "error"
-            ];
-            header('Content-Type: application/json');
-            echo json_encode($alerta);
-            exit();
-        }
 
         session_start(['name' => 'SPM']);
-        if (empty($_SESSION['datos_item'][$id])) {
-            $costo = number_format($costo, 2, '.', '');
+        if (empty($_SESSION['datos_evento'][$id])) {
+            
 
-            $_SESSION['datos_item'][$id] = [
+            $_SESSION['datos_evento'][$id] = [
 
-                "ID" => $campos['item_id'],
-                "codigo" => $campos['item_codigo'],
-                "Nombre" => $campos['item_nombre'],
-                "Detalle" => $campos['item_detalle'],
-                "Formato" => $formato,
-                "Cantidad" => $cantidad,
-                "Tiempo" => $tiempo,
-                "Costo" => $costo
+                "ID" => $campos['id_evento'],
+                "Entrada" => $campos['evento_entrada'],
+                "Descuento" => $campos['cupon_codigo'],
+                
+                
 
             ];
             $alerta = [
                 "Alerta" => "recargar",
-                "Titulo" => "Item agregado",
-                "Texto" => "El item ha sido agregado con exito.",
+                "Titulo" => "evento agregado",
+                "Texto" => "El evento ha sido agregado con exito.",
                 "Tipo" => "success"
             ];
             header('Content-Type: application/json');
@@ -328,7 +268,7 @@ class inscripcionControlador extends inscripcionModelo
             $alerta = [
                 "Alerta" => "simple",
                 "Titulo" => "Ocurrió un error inesperado",
-                "Texto" => "El item que intenta agregar ya se encuentra seleccionado.",
+                "Texto" => "El evento que intenta agregar ya se encuentra seleccionado.",
                 "Tipo" => "error"
             ];
             header('Content-Type: application/json');

@@ -72,20 +72,22 @@ if (!isset($_SESSION['busqueda_evento']) && empty($_SESSION['busqueda_evento']))
     <div class="container-fluid">
         <?php
 
-        // llamando al controlador
         require_once "./controladores/eventoControlador.php";
         $ins_evento = new eventoControlador();
         $model = new mainModel();
 
+        // Obtener el término de búsqueda desde un formulario 
+        $busqueda = isset($_SESSION['busqueda_evento']) ? $_SESSION['busqueda_evento'] : "";
+
         // Obtener lista de eventos
-        $listaEventos = $ins_evento->paginador_evento_controlador($pagina[1], 20, "");
+        $listaEventos = $ins_evento->paginador_evento_controlador($pagina[1], 20, $busqueda);
 
         // Inicializar la tabla
         $tabla = '<div class="table-responsive">
                      <table class="table table-dark table-sm">
                         <thead>
                             <tr class="text-center roboto-medium">                    
-                                <th>NOMBRE</th>
+                               <th>NOMBRE</th>
                                 <th>DESCRIPCION</th>
                                 <th>HORA</th>                        
                                 <th>VALOR EVENTO</th>
@@ -93,8 +95,9 @@ if (!isset($_SESSION['busqueda_evento']) && empty($_SESSION['busqueda_evento']))
                                 <th>LUGAR</th>
                                 <th>CUPO PERSONAS</th>
                                 <th>ESTADO</th>
-                                <th>TIPO</th>                        
-                                <th>ENTRADA</th>
+                                <th>FECHA APERTURA</th>   
+                                <th>FECHA CIERRE</th>   
+                                <th>TIPO</th>                                                       
                                 <th>EDITAR</th>                        
                                 <th>ELIMINAR</th>
                             </tr>
@@ -106,7 +109,7 @@ if (!isset($_SESSION['busqueda_evento']) && empty($_SESSION['busqueda_evento']))
             // Iterar sobre los Eventos
             foreach ($listaEventos as $rows) {
                 $tabla .= '<tr class="text-center">
-                            <td>' . $rows['titulo'] . '</td>
+                             <td>' . $rows['titulo'] . '</td>
                             <td>' . $rows['descripcion'] . '</td>
                             <td>' . $rows['hora'] . '</td>
                             <td>' . $rows['valor_base'] . '</td>
@@ -114,8 +117,9 @@ if (!isset($_SESSION['busqueda_evento']) && empty($_SESSION['busqueda_evento']))
                             <td>' . $rows['lugar'] . '</td>
                             <td>' . $rows['cupo'] . '</td>
                             <td>' . $rows['estado'] . '</td>
-                            <td>' . $rows['tipo'] . '</td>
-                            <td>' . $rows['tipo_entrada_descripcion'] . '</td>
+                            <td>' . $rows['fecha_apertura'] . '</td>
+                            <td>' . $rows['fecha_cierre'] . '</td>
+                            <td>' . $rows['es_entrada_gratis'] . '</td>
                                     
                     <td>
                         <a href="' . SERVERURL . 'evento-update/' . $model->encryption($rows['id_evento']) . '/" class="btn btn-success">

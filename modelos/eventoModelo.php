@@ -12,15 +12,10 @@ class eventoModelo extends mainModel
             return ["Alerta" => "simple", "Titulo" => "Error", "Texto" => "La categoría seleccionada no existe.", "Tipo" => "error"];
         }
 
-        // Validar el tipo de entrada
-        if (!self::validar_tipo_entrada($datos['Entrada'])) {
-            return ["Alerta" => "simple", "Titulo" => "Error", "Texto" => "El tipo de entrada seleccionado no existe.", "Tipo" => "error"];
-        }
-
         // Preparar la consulta para insertar el evento
         $sql = mainModel::conectar()->prepare("INSERT INTO evento 
-            (titulo, descripcion, hora, valor_base, id_categoria, lugar, cupo, estado, tipo, id_tipo_entrada, id_admin)
-            VALUES (:Titulo, :Descripcion, :Hora, :Valor, :Categoria, :Lugar, :Cupo, :Estado, :Tipo, :Entrada, :id_admin)");
+            (titulo, descripcion, hora, valor_base, id_categoria, lugar, cupo, estado, fecha_apertura, fecha_cierre, es_entrada_gratis, id_admin)
+           VALUES (:Titulo, :Descripcion, :Hora, :Valor, :Categoria, :Lugar, :Cupo, :Estado, :FechaInicio, :FechaCierre, :esGratis, :id_admin)");
 
         // Asignar valores a los parámetros
         $sql->bindParam(":Titulo", $datos['Titulo']);
@@ -31,8 +26,9 @@ class eventoModelo extends mainModel
         $sql->bindParam(":Lugar", $datos['Lugar']);
         $sql->bindParam(":Cupo", $datos['Cupo']);
         $sql->bindParam(":Estado", $datos['Estado']);
-        $sql->bindParam(":Tipo", $datos['Tipo']);
-        $sql->bindParam(":Entrada", $datos['Entrada']);
+        $sql->bindParam(":FechaInicio", $datos['FechaInicio']);
+        $sql->bindParam(":FechaCierre", $datos['FechaCierre']);
+        $sql->bindParam(":esGratis", $datos['esGratis']);
         $sql->bindParam(":id_admin", $datos['id_admin']);
 
         // Ejecutar la consulta
@@ -48,15 +44,6 @@ class eventoModelo extends mainModel
     {
         $sql = mainModel::conectar()->prepare("SELECT * FROM categoria WHERE id_categoria = :id_categoria");
         $sql->bindParam(":id_categoria", $id_categoria);
-        $sql->execute();
-        return $sql->rowCount() > 0; // Retorna true si existe
-    }
-
-    // Método para validar la existencia del tipo de entrada
-    protected static function validar_tipo_entrada($id_tipo_entrada)
-    {
-        $sql = mainModel::conectar()->prepare("SELECT * FROM tipo_entrada WHERE id_tipo_entrada = :id_tipo_entrada");
-        $sql->bindParam(":id_tipo_entrada", $id_tipo_entrada);
         $sql->execute();
         return $sql->rowCount() > 0; // Retorna true si existe
     }
@@ -79,25 +66,27 @@ class eventoModelo extends mainModel
     protected static function consultar_evento_modelo($inicio, $registros, $busqueda)
     {
         $campos = "evento.id_evento,
-                   evento.titulo,
-                   evento.descripcion,
-                   evento.hora,
-                   evento.valor_base,
-                   categoria.id_categoria,
-                   categoria.descripcion AS categoria_descripcion,
-                   evento.lugar,
-                   evento.cupo,
-                   evento.estado,
-                   evento.tipo,
-                   tipo_entrada.id_tipo_entrada,
-                   tipo_entrada.descripcion AS tipo_entrada_descripcion";
-    
+           evento.titulo,
+           evento.descripcion,
+           evento.hora,
+           evento.valor_base,
+           categoria.id_categoria,
+           categoria.descripcion AS categoria_descripcion,
+           evento.lugar,
+           evento.cupo,
+           evento.estado,
+           evento.fecha_apertura,
+           evento.fecha_cierre,
+           CASE WHEN evento.es_entrada_gratis = 1 THEN 'Gratis' ELSE 'Pago' END AS es_entrada_gratis
+           ";  // La coma después de es_entrada_gratis ha sido eliminada
+
+
         // Consulta base con INNER JOIN
         $consulta = "SELECT SQL_CALC_FOUND_ROWS $campos 
                      FROM evento 
                      INNER JOIN categoria ON evento.id_categoria = categoria.id_categoria 
-                     INNER JOIN tipo_entrada ON evento.id_tipo_entrada = tipo_entrada.id_tipo_entrada ";
-    
+                      ";
+
         // Condición de búsqueda
         if (!empty($busqueda)) {
             $consulta .= " WHERE evento.titulo LIKE :busqueda 
@@ -107,28 +96,30 @@ class eventoModelo extends mainModel
                            OR categoria.descripcion LIKE :busqueda 
                            OR evento.lugar LIKE :busqueda 
                            OR evento.cupo LIKE :busqueda 
-                           OR evento.estado LIKE :busqueda 
-                           OR evento.tipo LIKE :busqueda 
-                           OR tipo_entrada.descripcion LIKE :busqueda ";
+                           OR evento.estado LIKE :busqueda
+                           OR evento.fecha_apertura LIKE :busqueda
+                           OR evento.fecha_cierre LIKE :busqueda                          
+                           OR evento.es_entrada_gratis LIKE :busqueda
+                           ";
         }
-    
+
         $consulta .= " ORDER BY evento.id_evento ASC LIMIT :inicio, :registros";
-    
+
         $conexion = mainModel::conectar();
         $consulta = $conexion->prepare($consulta);
-    
+
         // Ajustamos el valor de búsqueda
         if (!empty($busqueda)) {
             $busqueda = "%$busqueda%";
             $consulta->bindParam(':busqueda', $busqueda, PDO::PARAM_STR);
         }
-    
+
         $consulta->bindParam(':inicio', $inicio, PDO::PARAM_INT);
         $consulta->bindParam(':registros', $registros, PDO::PARAM_INT);
-    
+
         $consulta->execute();
         $datos = $consulta->fetchAll(PDO::FETCH_ASSOC);
-    
+
         return $datos;
     }
 
@@ -164,9 +155,8 @@ class eventoModelo extends mainModel
         $obtenerEvento = mainModel::ejecutar_consulta_simple("SELECT * FROM evento WHERE id_evento = '$id' ");
         if ($obtenerEvento->rowCount() > 0) {
             $sql = mainModel::conectar()->prepare(("UPDATE evento SET
-         titulo=:Titulo,descripcion=:Descripcion,hora=:Hora,valor_base=:Valor,id_categoria=:Categoria,lugar=:Lugar,cupo=:Cupo,estado=:Estado,tipo=:Tipo,id_tipo_entrada=:Entrada
+         titulo=:Titulo,descripcion=:Descripcion,hora=:Hora,valor_base=:Valor,id_categoria=:Categoria,lugar=:Lugar,cupo=:Cupo,estado=:Estado,fecha_apertura=:FechaInicio,fecha_cierre=:FechaFin, es_entrada_gratis=:esGratis
          WHERE id_evento=:ID "));
-
 
             // Asignar valores a los parámetros
             $sql->bindParam(":Titulo", $datos['Titulo']);
@@ -177,9 +167,9 @@ class eventoModelo extends mainModel
             $sql->bindParam(":Lugar", $datos['Lugar']);
             $sql->bindParam(":Cupo", $datos['Cupo']);
             $sql->bindParam(":Estado", $datos['Estado']);
-            $sql->bindParam(":Tipo", $datos['Tipo']);
-            $sql->bindParam(":Entrada", $datos['Entrada']);
-
+            $sql->bindParam(":FechaInicio", $datos['FechaInicio']);
+            $sql->bindParam(":FechaFin", $datos['FechaFin']);
+            $sql->bindParam(":esGratis", $datos['esGratis']);
             $sql->bindParam(":ID", $datos['ID']);
 
             $sql->execute();
@@ -188,7 +178,4 @@ class eventoModelo extends mainModel
             return null;
         }
     }
-    
-
-
 }
