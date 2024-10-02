@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 30-09-2024 a las 14:26:39
+-- Tiempo de generación: 01-10-2024 a las 06:48:36
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -104,11 +104,18 @@ CREATE TABLE `codigo_promocional` (
   `id_codigo` int(11) NOT NULL,
   `codigo` varchar(50) NOT NULL,
   `porcentaje_descuento` decimal(5,2) NOT NULL,
-  `activo` tinyint(1) DEFAULT 1,
-  `fecha_vigencia_inicio` date DEFAULT NULL,
-  `fecha_vigencia_fin` date DEFAULT NULL,
+  `estado` varchar(10) NOT NULL,
+  `fecha_vigencia_inicio` date NOT NULL,
+  `fecha_vigencia_fin` date NOT NULL,
   `id_admin` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `codigo_promocional`
+--
+
+INSERT INTO `codigo_promocional` (`id_codigo`, `codigo`, `porcentaje_descuento`, `estado`, `fecha_vigencia_inicio`, `fecha_vigencia_fin`, `id_admin`) VALUES
+(2, 'crediservir50', 30.00, 'Activo', '2024-09-30', '2024-10-05', 1);
 
 -- --------------------------------------------------------
 
@@ -141,8 +148,9 @@ CREATE TABLE `evento` (
   `lugar` varchar(100) NOT NULL,
   `cupo` int(5) NOT NULL,
   `estado` varchar(20) NOT NULL,
-  `tipo` varchar(20) NOT NULL,
-  `id_tipo_entrada` int(11) NOT NULL,
+  `fecha_apertura` date NOT NULL,
+  `fecha_cierre` date NOT NULL,
+  `es_entrada_gratis` tinyint(1) NOT NULL,
   `id_admin` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -150,8 +158,9 @@ CREATE TABLE `evento` (
 -- Volcado de datos para la tabla `evento`
 --
 
-INSERT INTO `evento` (`id_evento`, `titulo`, `descripcion`, `hora`, `valor_base`, `id_categoria`, `lugar`, `cupo`, `estado`, `tipo`, `id_tipo_entrada`, `id_admin`) VALUES
-(35, 'logica de programación', 'evento para desarrollar logica de programacion a los estudiantes de la UFPSO', '23:23:00', 200000.00, 3, 'Escuela Bellas Artes', 45, 'Deshabilitado', 'Gratis', 6, 1);
+INSERT INTO `evento` (`id_evento`, `titulo`, `descripcion`, `hora`, `valor_base`, `id_categoria`, `lugar`, `cupo`, `estado`, `fecha_apertura`, `fecha_cierre`, `es_entrada_gratis`, `id_admin`) VALUES
+(44, 'Dia de la programacion', 'evento sobre la programacion', '21:17:00', 20000.00, 3, 'ocaña norte santander', 20, 'Habilitado', '2024-09-30', '2024-10-05', 0, 1),
+(45, 'evento de gastronomia', 'salud en el humano', '22:36:00', 25000.00, 4, 'biblioteca', 58, 'Habilitado', '2024-09-30', '2024-10-05', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -163,12 +172,9 @@ CREATE TABLE `inscripcion` (
   `id_inscripcion` int(11) NOT NULL,
   `id_evento` int(11) NOT NULL,
   `id_asistente` int(11) NOT NULL,
-  `tipo_entrada` enum('gratis','general','VIP') NOT NULL,
+  `id_tipo_entrada` int(5) NOT NULL,
   `valor_pago` decimal(10,2) DEFAULT NULL,
   `estado_pago` enum('pendiente','pagado') DEFAULT 'pendiente',
-  `fecha_registro` date NOT NULL,
-  `fecha_apertura` date NOT NULL,
-  `fecha_cierre` date NOT NULL,
   `id_admin` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -204,6 +210,7 @@ CREATE TABLE `lista_espera` (
 CREATE TABLE `tipo_entrada` (
   `id_tipo_entrada` int(11) NOT NULL,
   `descripcion` varchar(45) NOT NULL,
+  `cantidad` decimal(5,2) NOT NULL,
   `id_admin` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -211,10 +218,9 @@ CREATE TABLE `tipo_entrada` (
 -- Volcado de datos para la tabla `tipo_entrada`
 --
 
-INSERT INTO `tipo_entrada` (`id_tipo_entrada`, `descripcion`, `id_admin`) VALUES
-(5, 'Gratis', 1),
-(6, 'General', 1),
-(7, 'VIP', 1);
+INSERT INTO `tipo_entrada` (`id_tipo_entrada`, `descripcion`, `cantidad`, `id_admin`) VALUES
+(13, 'General', 15.00, 1),
+(14, 'VIP', 30.00, 1);
 
 --
 -- Índices para tablas volcadas
@@ -269,8 +275,6 @@ ALTER TABLE `evento`
   ADD KEY `fk_eventos_lugar1_idx` (`lugar`),
   ADD KEY `fk_evento_cupo1_idx` (`cupo`),
   ADD KEY `fk_evento_estado1_idx` (`estado`),
-  ADD KEY `fk_evento_tipo1_idx` (`tipo`),
-  ADD KEY `fk_evento_tipo_entrada1_idx` (`id_tipo_entrada`),
   ADD KEY `fk_evento_administradores1_idx` (`id_admin`);
 
 --
@@ -324,7 +328,7 @@ ALTER TABLE `categoria`
 -- AUTO_INCREMENT de la tabla `codigo_promocional`
 --
 ALTER TABLE `codigo_promocional`
-  MODIFY `id_codigo` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_codigo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `compra`
@@ -336,7 +340,7 @@ ALTER TABLE `compra`
 -- AUTO_INCREMENT de la tabla `evento`
 --
 ALTER TABLE `evento`
-  MODIFY `id_evento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id_evento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT de la tabla `inscripcion`
@@ -360,7 +364,7 @@ ALTER TABLE `lista_espera`
 -- AUTO_INCREMENT de la tabla `tipo_entrada`
 --
 ALTER TABLE `tipo_entrada`
-  MODIFY `id_tipo_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_tipo_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Restricciones para tablas volcadas
@@ -397,7 +401,6 @@ ALTER TABLE `compra`
 --
 ALTER TABLE `evento`
   ADD CONSTRAINT `fk_evento_administradores1` FOREIGN KEY (`id_admin`) REFERENCES `administradores` (`id_admin`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_evento_tipo_entrada1` FOREIGN KEY (`id_tipo_entrada`) REFERENCES `tipo_entrada` (`id_tipo_entrada`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_eventos_categoria1` FOREIGN KEY (`id_categoria`) REFERENCES `categoria` (`id_categoria`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --

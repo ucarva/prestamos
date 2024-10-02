@@ -26,6 +26,21 @@
     </ul>
 </div>
 
+<?php
+require_once "./controladores/eventoControlador.php";
+$ins_evento = new eventoControlador();
+
+
+
+$datos_evento = $ins_evento->datos_evento_controlador("Unico", $pagina[1]);
+if ($datos_evento->rowCount() == 1) {
+    $campos = $datos_evento->fetch();
+
+    
+
+?>
+
+
 <div class="container-fluid">
     <div class="container-fluid form-neon">
         <div class="container-fluid">
@@ -37,12 +52,10 @@
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalCliente"><i class="fas fa-user-plus"></i> &nbsp; Agregar asistente</button>
                 <?php } ?>
 
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalItem"><i class="fas fa-box-open"></i> &nbsp; Agregar evento</button>
-
             </p>
 
             <div>
-                <span class="roboto-medium">CLIENTE:</span>
+                <span class="roboto-medium">ASISTENTE:</span>
                 <?php if (empty($_SESSION['datos_asistente'])) { ?>
                     <span class="text-danger">&nbsp; <i class="fas fa-exclamation-triangle"></i> Seleccione un asistente</span>
                 <?php } else { ?>
@@ -53,162 +66,230 @@
                     </form>
                 <?php } ?>
             </div>
-            <div class="table-responsive">
-                <table class="table table-dark table-sm">
-                    <thead>
-                        <tr class="text-center roboto-medium">
-                            <th>ITEM</th>
-                            <th>CANTIDAD</th>
-                            <th>TIEMPO</th>
-                            <th>COSTO</th>
-                            <th>SUBTOTAL</th>
-                            <th>DETALLE</th>
-                            <th>ELIMINAR</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+           
+        </div>
 
-                        <?php if (isset($_SESSION['datos_item']) && count($_SESSION['datos_item']) >= 1) {
 
-                            $_SESSION['prestamo_total'] = 0;
-                            $_SESSION['prestamo_item'] = 0;
+        
+        <form class="FormularioAjax" action="<?php echo SERVERURL; ?>ajax/prestamoAjax.php" method="POST" data-form="save" autocomplete="off">
+           
+          
+        <legend><i class="far fa-plus-square"></i> &nbsp; Información del evento</legend>
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Nombre del Evento -->
+                <div class="col-12 col-md-4">
+                    <div class="form-group">
+                        <label for="evento_nombre" class="bmd-label-floating">Nombre del Evento</label>
+                        <input value="<?php echo $campos['titulo']; ?>" type="text" class="form-control" name="compra_nombre_reg" id="compra_nombre" maxlength="140" required readonly>
+                    </div>
+                </div>
 
-                            foreach ($_SESSION['datos_item'] as $items) {
-                                $subtotal = $items['Cantidad'] * ($items['Costo'] * $items['Tiempo']);
+                <!-- Descripción -->
+                <div class="col-12 col-md-4">
+                    <div class="form-group">
+                        <label for="evento_descripcion" class="bmd-label-floating">Descripción</label>
+                        <textarea class="form-control" name="compra_descripcion_reg" id="compra_descripcion" rows="3" required readonly><?php echo htmlspecialchars($campos['descripcion']); ?></textarea>
+                    </div>
+                </div>
 
-                                $subtotal = number_format($subtotal, 2, '.', '');
+                <!-- Hora del Evento -->
+                <div class="col-12 col-md-4">
+                    <div class="form-group">
+                        <label for="evento_hora" class="bmd-label-floating">Hora del Evento</label>
+                        <input value="<?php echo $campos['hora']; ?>" type="time" class="form-control" name="compra_hora_reg" id="compra_hora" required readonly>
+                    </div>
+                </div>
 
-                        ?>
-                                <tr class="text-center">
-                                    <td><?php echo $items['Nombre'] ?></td>
-                                    <td><?php echo $items['Cantidad'] ?></td>
-                                    <td><?php echo $items['Tiempo'] . " " . $items['Formato']; ?></td>
-                                    <td><?php echo MONEDA . $items['Costo'] . " x 1 " . $items['Formato']; ?></td>
-                                    <td><?php echo MONEDA . $subtotal; ?></td>
-                                    <td>
-                                        <button type="button" class="btn btn-info" data-toggle="popover" data-trigger="hover" title="<?php echo $items['Nombre'] ?>" data-content="<?php echo $items['Detalle'] ?>">
-                                            <i class="fas fa-info-circle"></i>
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <form class="FormularioAjax" action="<?php echo SERVERURL; ?>ajax/prestamoAjax.php" method="POST" data-form="loans" autocomplete="off">
-                                            <input type="hidden" name="id_eliminar_item" value="<?php echo $items['ID']; ?>">
-                                            <button type="submit" class="btn btn-warning">
-                                                <i class="far fa-trash-alt"></i>
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
+                <!-- Fecha de apertura -->
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label for="evento_fecha_inicio">Fecha de apertura</label>
+                        <input value="<?php echo $campos['fecha_apertura']; ?>" type="date" class="form-control" name="compra_fecha_inicio_reg" id="evento_fecha_inicio" readonly>
+                    </div>
+                </div>
 
+                <!-- Fecha de cierre -->
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label for="evento_fecha_cierre">Fecha de cierre</label>
+                        <input value="<?php echo $campos['fecha_cierre']; ?>" type="date" class="form-control" name="evento_fecha_cierre_up" id="evento_fecha_cierre" readonly>
+                    </div>
+                </div>
+
+                <!-- Valor Base -->
+                <div class="col-12 col-md-4">
+                    <div class="form-group">
+                        <label for="evento_valor" class="bmd-label-floating">Valor Base</label>
+                        <input value="<?php echo $campos['valor_base']; ?>" type="number" class="form-control" name="evento_valor_base_reg" id="evento_valor" min="0" required readonly>
+                    </div>
+                </div>
+
+                <!-- Lugar -->
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label for="evento_lugar" class="bmd-label-floating">Lugar del evento</label>
+                        <input value="<?php echo $campos['lugar']; ?>" type="text" class="form-control" name="evento_lugar_reg" id="evento_lugar" maxlength="70" required readonly>
+                    </div>
+                </div>
+
+                <!-- Categoría -->
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label for="evento_categoria" class="bmd-label-floating">Categoría</label>
+                        <select class="form-control" name="evento_categoria_up" id="evento_categoria" required disabled>
+                            <option value="">Seleccionar categoría</option>
                             <?php
-                                $_SESSION['prestamo_total'] += $subtotal;
-                                $_SESSION['prestamo_item'] += $items['Cantidad'];
+                            foreach ($listaCategorias as $rows) {
+                                $selected = ($rows['id_categoria'] == $campos['id_categoria']) ? 'selected' : '';
+                                echo '<option value="' . $rows['id_categoria'] . '" ' . $selected . '>' . $rows['descripcion'] . '</option>';
                             }
-
                             ?>
-                            <tr class="text-center bg-light">
-                                <td><strong>TOTAL</strong></td>
-                                <td><strong><?php echo $_SESSION['prestamo_item']; ?> items</strong></td>
-                                <td colspan="2"></td>
-                                <td><strong><?php echo MONEDA . number_format($_SESSION['prestamo_total'], 2, '.', ''); ?></strong></td>
-                                <td colspan="2"></td>
-                            </tr>
-                        <?php } else {
-                            $_SESSION['prestamo_total'] = 0;
-                            $_SESSION['prestamo_item'] = 0;
-                        ?>
-                            <tr class="text-center">
-                                <td colspan="7">no has seleccionado items</td>
-                            </tr>
-                        <?php }
-                        ?>
+                        </select>
+                    </div>
+                </div>
 
-                    </tbody>
-                </table>
+                <!-- Cupo -->
+                <div class="col-12 col-md-4">
+                    <div class="form-group">
+                        <label for="evento_stock" class="bmd-label-floating">Cupo de evento</label>
+                        <input value="<?php echo $campos['cupo']; ?>" type="number" class="form-control" name="evento_cupo1_reg" id="evento_stock" maxlength="9" required readonly>
+                    </div>
+                </div>
+
+                <!-- Estado -->
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label for="evento_estado" class="bmd-label-floating">Estado del evento</label>
+                        <select class="form-control" name="evento_estado_reg" id="evento_estado" required disabled>
+                            <option value="Habilitado" <?php echo ($campos['estado'] == 'Habilitado') ? 'selected' : ''; ?>>Habilitado</option>
+                            <option value="Deshabilitado" <?php echo ($campos['estado'] == 'Deshabilitado') ? 'selected' : ''; ?>>Deshabilitado</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Tipo evento -->
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label for="evento_tipo_entrada" class="bmd-label-floating">Tipo evento</label>
+
+                        <select class="form-control" name="" id="evento_tipo_entrada" required disabled>
+                            <option value="Pago" <?php echo ($campos['es_entrada_gratis'] == '0') ? 'selected' : ''; ?>>Pago</option>
+                            <option value="Gratis" <?php echo ($campos['es_entrada_gratis'] == '1') ? 'selected' : ''; ?>>Gratis</option>
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
-        <form class="FormularioAjax" action="<?php echo SERVERURL; ?>ajax/prestamoAjax.php" method="POST" data-form="save" autocomplete="off">
-            <fieldset>
-                <legend><i class="far fa-clock"></i> &nbsp; Fecha y hora de préstamo</legend>
+
+
+
+        <?php
+        if ($campos['es_entrada_gratis'] == '0') {
+        ?>
+
+            <div class="col-12 col-md-6">
                 <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label for="prestamo_fecha_inicio">Fecha de préstamo</label>
-                                <input type="date" class="form-control" name="prestamo_fecha_inicio_reg" value="<?php echo date("Y-m-d"); ?>" id="prestamo_fecha_inicio">
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label for="prestamo_hora_inicio">Hora de préstamo</label>
-                                <input type="time" class="form-control" name="prestamo_hora_inicio_reg" value="<?php echo date("H:i"); ?>" id="prestamo_hora_inicio">
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label for="evento_entrada" class="bmd-label-floating">Entradas</label>
+                        <select class="form-control" name="porcentaje_entrada_reg" id="evento_categoria" required>
+                            <option value="">Selecciona una entrada</option>
+
+                            <?php
+                            // llamando al controlador
+                            require_once "./controladores/entradaControlador.php";
+                            $ins_evento = new entradaControlador();
+                            $model = new mainModel();
+
+                            // Obtener lista de categorías
+                            $listaentradas = $ins_evento->paginador_entrada_controlador($pagina[1], 20, "");
+
+                            // Verificar si hay categorías en la lista
+                            if (count($listaentradas) > 0) {
+                                // Iterar sobre las categorías
+                                foreach ($listaentradas as $rows) {
+                                    echo '<option value="' . $rows['id_tipo_entrada'] . '' . $rows['cantidad'] . '">' . $rows['descripcion'] . '</option>';
+                                }
+                            } else {
+
+                                echo '<option value="">No hay categorías disponibles</option>';
+                            }
+                            ?>
+
+
+                        </select>
+
                     </div>
                 </div>
-            </fieldset>
-            <fieldset>
-                <legend><i class="fas fa-history"></i> &nbsp; Fecha y hora de entrega</legend>
+            </div>
+            <div class="col-12 col-md-6">
                 <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label for="prestamo_fecha_final">Fecha de entrega</label>
-                                <input type="date" class="form-control" name="prestamo_fecha_final_reg" id="prestamo_fecha_final">
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label for="prestamo_hora_final">Hora de entrega</label>
-                                <input type="time" class="form-control" name="prestamo_hora_final_reg" id="prestamo_hora_final">
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label for="cupon_codigo1" class="bmd-label-floating">Ingrese cupon uno</label>
+                        <input type="text" pattern="[a-zA-Z0-9]{1,30}" class="form-control" name="cupon_codigo1_reg" id="cupon_codigo1" maxlength="30">
                     </div>
                 </div>
-            </fieldset>
-            <fieldset>
-                <legend><i class="fas fa-cubes"></i> &nbsp; Otros datos</legend>
+            </div>
+
+            <div class="col-12 col-md-6">
                 <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-12 col-md-4">
-                            <div class="form-group">
-                                <label for="prestamo_estado" class="bmd-label-floating">Estado</label>
-                                <select class="form-control" name="prestamo_estado_reg" id="prestamo_estado">
-                                    <option value="" selected="">Seleccione una opción</option>
-                                    <option value="Reservacion">Reservación</option>
-                                    <option value="Prestamo">Préstamo</option>
-                                    <option value="Finalizado">Finalizado</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-4">
-                            <div class="form-group">
-                                <label for="prestamo_total" class="bmd-label-floating">Total a pagar en <?php echo MONEDA; ?></label>
-                                <input type="text" pattern="[0-9.]{1,10}" class="form-control" readonly="" value="<?php echo number_format($_SESSION['prestamo_total'], 2, '.', ''); ?>" id="prestamo_total" maxlength="10">
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-4">
-                            <div class="form-group">
-                                <label for="prestamo_pagado" class="bmd-label-floating">Total depositado en <?php echo MONEDA; ?></label>
-                                <input type="text" pattern="[0-9.]{1,10}" class="form-control" name="prestamo_pagado_reg" id="prestamo_pagado" maxlength="10">
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label for="prestamo_observacion" class="bmd-label-floating">Observación</label>
-                                <input type="text" pattern="[a-zA-z0-9áéíóúÁÉÍÓÚñÑ#() ]{1,400}" class="form-control" name="prestamo_observacion_reg" id="prestamo_observacion" maxlength="400">
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label for="cupon_codigo2" class="bmd-label-floating">Ingrese cupon dos</label>
+                        <input type="text" pattern="[a-zA-Z0-9]{1,30}" class="form-control" name="cupon_codigo2_reg" id="cupon_codigo2" maxlength="30">
                     </div>
                 </div>
-            </fieldset>
-            <br><br><br>
+            </div>
+
             <p class="text-center" style="margin-top: 40px;">
-                <button type="reset" class="btn btn-raised btn-secondary btn-sm"><i class="fas fa-paint-roller"></i> &nbsp; LIMPIAR</button>
+
+
                 &nbsp; &nbsp;
-                <button type="submit" class="btn btn-raised btn-info btn-sm"><i class="far fa-save"></i> &nbsp; GUARDAR</button>
+                <button type="submit" class="btn btn-raised btn-info btn-sm"><i class="far fa-save"></i> &nbsp; VALIDAR CUPONES</button>
             </p>
+
+
+            <?php
+            // Llamando al controlador
+            require_once "./controladores/facturaControlador.php";
+            $ins_factura = new facturaControlador();
+            $model = new mainModel();
+
+            // Inicializa el valor total
+            $valorTotal = 0;
+
+            // Verifica si el formulario ha sido enviado
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $valorTotal = $ins_factura->validar_cupones();
+            }
+            ?>
+
+            <div class="col-12 col-md-4">
+                <div class="form-group">
+                    <label for="evento_valor" class="bmd-label-floating">Valor total</label>
+                    <input value="<?php echo $valorTotal; ?>" type="number" class="form-control" name="evento_valor_up" id="evento_valor" min="0" required readonly>
+                </div>
+            </div>
+
+
+            </div>
+        <?php }  ?>
+        </fieldset>
+        <br><br><br>
+        <p class="text-center" style="margin-top: 40px;">
+
+            &nbsp; &nbsp;
+            <button type="submit" class="btn btn-raised btn-info btn-sm"><i class="far fa-save"></i> &nbsp; COMPRAR</button>
+        </p>
         </form>
+        <?php } else { ?>
+
+<div class="alert alert-danger text-center" role="alert">
+    <p><i class="fas fa-exclamation-triangle fa-5x"></i></p>
+    <h4 class="alert-heading">¡Ocurrió un error inesperado!</h4>
+    <p class="mb-0">Lo sentimos, no podemos mostrar la información solicitada debido a un error.</p>
+</div>
+</div>
+<?php }  ?>
     </div>
 </div>
 
@@ -242,102 +323,4 @@
         </div>
     </div>
 </div>
-
-
-<!-- MODAL ITEM -->
-<div class="modal fade" id="ModalItem" tabindex="-1" role="dialog" aria-labelledby="ModalItem" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="ModalItem">Agregar evento</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="container-fluid">
-                    <div class="form-group">
-                        <label for="input_item" class="bmd-label-floating">escribe el titulo del evento</label>
-                        <input type="text" pattern="[a-zA-z0-9áéíóúÁÉÍÓÚñÑ ]{1,30}" class="form-control" name="input_evento" id="input_evento" maxlength="30">
-                    </div>
-                </div>
-                <br>
-                <div class="container-fluid" id="tabla_eventos">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="buscar_evento()"><i class="fas fa-search fa-fw"></i> &nbsp; Buscar</button>
-                &nbsp; &nbsp;
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- MODAL AGREGAR ITEM -->
-<div class="modal fade" id="ModalAgregarItem" tabindex="-1" role="dialog" aria-labelledby="ModalAgregarItem" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <form class="modal-content FormularioAjax" action="<?php echo SERVERURL; ?>ajax/inscripcionAjax.php" method="POST" data-form="default" autocomplete="off">
-            <div class="modal-header">
-                <h5 class="modal-title" id="ModalAgregarItem">Selecciona el tipo de entrada que deseas y un codigo descuento si tienes</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" name="id_agregar_evento" id="id_agregar_evento">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-12">
-
-
-
-                            <div class="form-group">
-                                <label for="evento_entrada" class="bmd-label-floating">Tipo entrada</label>
-                                <select class="form-control" name="evento_entrada" id="evento_entrada" required>
-                                    <option value="">Seleccione un tipo de entrada</option>
-
-                                    <?php
-                                    // Llamando al controlador
-                                    require_once "./controladores/entradaControlador.php";
-                                    $ins_entrada = new entradaControlador();
-
-                                    // Obtener lista de tipos de entrada
-                                    $listaEntradas = $ins_entrada->paginador_entrada_controlador($pagina[1], 20, "");
-
-                                    // Verificar si hay entradas en la lista
-                                    if (count($listaEntradas) > 0) {
-                                        // Iterar sobre las entradas
-                                        foreach ($listaEntradas as $rows) {
-                                            // Aquí ya no estamos encriptando el ID
-                                            echo '<option value="' . $rows['id_tipo_entrada'] . '">' . $rows['descripcion'] . '</option>';
-                                        }
-                                    } else {
-                                        echo '<option value="">No hay entradas disponibles</option>';
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-
-                        </div>
-                        <div class="col-12 col-md-4">
-                            <div class="form-group">
-                                <label for="cupon_codigo" class="bmd-label-floating">Igresa cupón descuento</label>
-                                <input type="text" pattern="[a-zA-Z0-9]{1,30}" class="form-control" name="cupon_codigo" id="cupon_codigo" maxlength="30" >
-                            </div>
-                        </div>
-                      
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Comprar</button>
-                &nbsp; &nbsp;
-                <button type="button" onclick=" modal_buscar_evento()" class="btn btn-secondary">Cancelar</button>
-            </div>
-        </form>
-    </div>
-</div>
-
 <?php include_once "./vistas/inc/inscripcion.php"; ?>

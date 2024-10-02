@@ -4,10 +4,15 @@
 
     require_once "../config/APP.php";
 
+
+
+
+
     if(isset($_POST['buscar_asistente']) || isset($_POST['id_agregar_asistente']) || isset($_POST['id_eliminar_asistente'])
-        || isset($_POST['buscar_evento']) || isset($_POST['id_agregar_evento'])) { 
+        || isset($_POST['buscar_evento']) || isset($_POST['id_agregar_evento']) ) { 
 
         require_once"../controladores/inscripcionControlador.php"; 
+
         $ins_inscripcion = new inscripcionControlador();
 
         //activandocontrolador buscar evento
@@ -21,7 +26,9 @@
 
         //eliminar asistente
         if(isset($_POST['id_eliminar_asistente'])){
+
             echo $ins_inscripcion->eliminar_asistente_inscripcion_controlador();
+            
         }
 
          //buscar evento
@@ -34,6 +41,7 @@
             echo $ins_inscripcion->agregar_evento_inscripcion_controlador();
         }
 
+     
 
 
     }else{
@@ -43,5 +51,6 @@
         header("Location: ".SERVERURL."login/");
         exit();
     }
+    
 
-    ?>
+ 

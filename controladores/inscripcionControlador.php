@@ -277,5 +277,7 @@ class inscripcionControlador extends inscripcionModelo
         }
     } //fin controlador
 
+    
+
 
 }

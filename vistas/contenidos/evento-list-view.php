@@ -47,7 +47,8 @@
                                 <th>ESTADO</th>
                                 <th>FECHA APERTURA</th>   
                                 <th>FECHA CIERRE</th>   
-                                <th>TIPO</th>                        
+                                <th>TIPO</th>  
+                                <th>DETALLE</th>                       
                                 
                                 <th>EDITAR</th>                        
                                 <th>ELIMINAR</th>
@@ -71,6 +72,11 @@
                             <td>' . $rows['fecha_apertura'] . '</td>
                             <td>' . $rows['fecha_cierre'] . '</td>
                             <td>' . $rows['es_entrada_gratis'] . '</td>
+                            <td>
+                        <a href="' . SERVERURL . 'factura-new/' . $model->encryption($rows['id_evento']) . '/" class="btn btn-success">
+                            <i class="fas fa-list"></i>
+                        </a>
+                    </td>
                             
                                     
                     <td>

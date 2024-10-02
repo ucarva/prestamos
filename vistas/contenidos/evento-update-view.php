@@ -63,17 +63,17 @@
 							</div>
 						</div>
 						<div class="col-12 col-md-6">
-                        <div class="form-group">
-                            <label for="evento_fecha_inicio">Fecha de apertura</label>
-                            <input value="<?php echo $campos['fecha_apertura']; ?>" type="date" class="form-control" name="evento_fecha_inicio_up" value="<?php echo date("Y-m-d"); ?>" id="evento_fecha_inicio">
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6">
-                        <div class="form-group">
-                            <label for="evento_fecha_inicio">Fecha de cierre</label>
-                            <input value="<?php echo $campos['fecha_cierre']; ?>" type="date" class="form-control" name="evento_fecha_cierre_up" value="<?php echo date("Y-m-d"); ?>" id="evento_fecha_cierre">
-                        </div>
-                    </div>
+							<div class="form-group">
+								<label for="evento_fecha_inicio">Fecha de apertura</label>
+								<input value="<?php echo $campos['fecha_apertura']; ?>" type="date" class="form-control" name="evento_fecha_inicio_up" value="<?php echo date("Y-m-d"); ?>" id="evento_fecha_inicio">
+							</div>
+						</div>
+						<div class="col-12 col-md-6">
+							<div class="form-group">
+								<label for="evento_fecha_inicio">Fecha de cierre</label>
+								<input value="<?php echo $campos['fecha_cierre']; ?>" type="date" class="form-control" name="evento_fecha_cierre_up" value="<?php echo date("Y-m-d"); ?>" id="evento_fecha_cierre">
+							</div>
+						</div>
 
 						<!-- Valor Base -->
 						<div class="col-12 col-md-4">

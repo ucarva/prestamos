@@ -9,7 +9,7 @@
                 "reservation-reservation","reservation-search","reservation-update","user-list","user-new","user-search","user-update",
                 "asistente-list","asistente-new","asistente-search","asistente-update","asistente-search",
                 "evento-list","evento-new","evento-search","evento-update","evento-search","evento-ges","categoria-list","categoria-new","categoria-update","entrada-list","entrada-new","entrada-update",
-                "cupon-list","cupon-new","cupon-update"
+                "cupon-list","cupon-new","cupon-update","factura-new"
             ];
             if(in_array($vistas, $listaBlanca)){
 
