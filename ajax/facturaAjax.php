@@ -9,7 +9,7 @@ if ( isset($_POST['cupon_codigo1_reg']) || isset($_POST['cupon_codigo2_reg']) ||
     $ins_factura = new facturaControlador();
 
     // Validar cupones
-    if (isset($_POST['cupon_codigo1_reg']) || isset($_POST['cupon_codigo1_reg'])) {
+    if (isset($_POST['cupon_codigo1_reg']) || isset($_POST['cupon_codigo2_reg'])) {
         echo $ins_factura->validar_cupones();
 
         

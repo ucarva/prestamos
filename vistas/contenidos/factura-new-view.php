@@ -102,21 +102,37 @@ if ($datos_evento->rowCount() == 1) {
 
                         <!-- Mostrar campos de cupones solo si el evento no es gratis -->
                         <?php if ($campos['es_entrada_gratis'] == '0') { ?>
-                            <div class="col-12 col-md-4">
-                                <div class="form-group">
-                                    <label for="codigo1">Código de Cupón 1</label> <!-- Cambiado para que coincida con el id del input -->
-                                    <input type="text" class="form-control" name="cupon_codigo1_reg" id="codigo1">
+                            <div class="container mt-5">
+                                <h2 class="text-center">Validación de Código de Cupón</h2>
+                                <div class="row justify-content-center">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="cupon_codigo1_reg">Código de Cupón</label>
+                                            <input type="text" class="form-control" name="cupon_codigo1_reg" id="cupon_codigo1_reg" placeholder="Introduce tu código de cupón">
+                                        </div>
+                                        <button type="button" class="btn btn-info" onclick="validarCupon('cupon_codigo1_reg', 'cupon_codigo1_reg')">Validar Cupón</button>
+                                    </div>
                                 </div>
-                                <button type="button" class="btn btn-info" onclick="validarCupon('cupon_codigo1_reg', 'codigo1')">Validar Cupón 1</button>
-                            </div>
-                            <div class="col-12 col-md-4">
-                                <div class="form-group">
-                                    <label for="codigo2">Código de Cupón 2</label> <!-- Cambiado para que coincida con el id del input -->
-                                    <input type="text" class="form-control" name="cupon_codigo2_reg" id="codigo2">
-                                </div>
-                                <button type="button" class="btn btn-info" onclick="validarCupon('cupon_codigo2_reg', 'codigo2')">Validar Cupón 2</button>
+
+                                <div id="alert-container" class="mt-3"></div>
                             </div>
 
+                            <div class="container mt-5">
+                                <h2 class="text-center">Validación de Código de Cupón</h2>
+                                <div class="row justify-content-center">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="cupon_codigo2_reg">Código de Cupón</label>
+                                            <input type="text" class="form-control" name="cupon_codigo2_reg" id="cupon_codigo2_reg" placeholder="Introduce tu código de cupón">
+                                        </div>
+                                        <button type="button" class="btn btn-info" onclick="validarCupon('cupon_codigo2_reg', 'cupon_codigo2_reg')">Validar Cupón</button>
+                                    </div>
+                                </div>
+
+                                <div id="alert-container" class="mt-3"></div>
+                            </div>
+                           
+                            
                             <?php include_once "./vistas/inc/cupones.php"; ?>
                         <?php } ?>
 
