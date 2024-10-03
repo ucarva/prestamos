@@ -100,48 +100,83 @@ if ($datos_evento->rowCount() == 1) {
                         </div>
 
 
+                        <?php
+                        require_once "./controladores/facturaControlador.php";
+                        $ins_factura = new facturaControlador();
+                        ?>
+
                         <!-- Mostrar campos de cupones solo si el evento no es gratis -->
                         <?php if ($campos['es_entrada_gratis'] == '0') { ?>
                             <div class="container mt-5">
-                                <h2 class="text-center">Validación de Código de Cupón</h2>
+                                <h2 class="text-center">Validación de Códigos de Cupón</h2>
                                 <div class="row justify-content-center">
+                                    <!-- Cupón 1 -->
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="cupon_codigo1_reg">Código de Cupón</label>
+                                            <label for="cupon_codigo1_reg">Código de Cupón 1</label>
                                             <input type="text" class="form-control" name="cupon_codigo1_reg" id="cupon_codigo1_reg" placeholder="Introduce tu código de cupón">
                                         </div>
-                                        <button type="button" class="btn btn-info" onclick="validarCupon('cupon_codigo1_reg', 'cupon_codigo1_reg')">Validar Cupón</button>
+                                        <button type="button" class="btn btn-info" id="boton_cupon1" onclick="validarCupon('cupon_codigo1_reg', 'boton_cupon1')">Validar Cupón 1</button>
                                     </div>
-                                </div>
-
-                                <div id="alert-container" class="mt-3"></div>
-                            </div>
-
-                            <div class="container mt-5">
-                                <h2 class="text-center">Validación de Código de Cupón</h2>
-                                <div class="row justify-content-center">
+                                    <!-- Cupón 2 -->
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="cupon_codigo2_reg">Código de Cupón</label>
+                                            <label for="cupon_codigo2_reg">Código de Cupón 2</label>
                                             <input type="text" class="form-control" name="cupon_codigo2_reg" id="cupon_codigo2_reg" placeholder="Introduce tu código de cupón">
                                         </div>
-                                        <button type="button" class="btn btn-info" onclick="validarCupon('cupon_codigo2_reg', 'cupon_codigo2_reg')">Validar Cupón</button>
+                                        <button type="button" class="btn btn-info" id="boton_cupon2" onclick="validarCupon('cupon_codigo2_reg', 'boton_cupon2')">Validar Cupón 2</button>
                                     </div>
                                 </div>
 
                                 <div id="alert-container" class="mt-3"></div>
+
+                                <!-- Mostrar el valor total con descuento aplicado -->
+                                <div class="form-group mt-5">
+                                    <label for="valor_total" class="bmd-label-floating">Valor a Pagar con Descuento</label>
+                                    <input value="<?php echo $campos['valor_base']; ?>" type="number" class="form-control" name="valor_total" id="valor_total" min="0" readonly>
+                                </div>
                             </div>
-                           
-                            
                             <?php include_once "./vistas/inc/cupones.php"; ?>
                         <?php } ?>
 
 
 
+                        <!-- Tipo de Entrada -->
+                        <div class="container-fluid">
+                            <div class="form-group">
+                                <label for="evento_entrada" class="bmd-label-floating">Tipo entrada</label>
+                                <select class="form-control" name="evento_entrada_up" id="evento_entrada" required>
+                                    <option value="">Seleccione un tipo de entrada</option>
+
+                                    <?php
+                                    // Llamando al controlador
+                                    require_once "./controladores/entradaControlador.php";
+                                    $ins_entrada = new entradaControlador();
+
+                                    // Obtener lista de tipos de entrada
+                                    $listaEntradas = $ins_entrada->paginador_entrada_controlador($pagina[1], 20, "");
+
+                                    // Verificar si hay entradas en la lista
+                                    if (count($listaEntradas) > 0) {
+                                        // Iterar sobre las entradas
+                                        foreach ($listaEntradas as $rows) {
+                                            // Comparar el ID actual con el ID almacenado en $campos['id_tipo_entrada']
+                                            echo '<option value="' . $rows['id_tipo_entrada'] . '"' .
+                                                (($rows['id_tipo_entrada'] == $campos['id_tipo_entrada']) ? ' selected' : '') .
+                                                '>' . $rows['descripcion'] . '</option>';
+                                        }
+                                    } else {
+                                        echo '<option value="">No hay entradas disponibles</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+
                         <!-- Valor Pago (valor_pago) -->
                         <div class="col-12 col-md-4">
                             <div class="form-group">
-                                <label for="valor_pago" class="bmd-label-floating">Valor total</label>
+                                <label for="valor_pago" class="bmd-label-floating">Valor evento</label>
                                 <input value="<?php echo ($campos['es_entrada_gratis'] == '1') ? '0' : $campos['valor_base']; ?>" type="number" class="form-control" name="valor_pago" id="valor_pago" min="0" required readonly>
                             </div>
                         </div>

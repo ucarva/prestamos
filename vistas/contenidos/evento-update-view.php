@@ -149,39 +149,7 @@
 						</div>
 
 
-						<!-- Tipo de Entrada 
-						<div class="container-fluid">
-							<div class="form-group">
-								<label for="evento_entrada" class="bmd-label-floating">Tipo entrada</label>
-								<select class="form-control" name="evento_entrada_up" id="evento_entrada" required>
-									<option value="">Seleccione un tipo de entrada</option>
 
-									<?php
-									// Llamando al controlador
-									require_once "./controladores/entradaControlador.php";
-									$ins_entrada = new entradaControlador();
-
-									// Obtener lista de tipos de entrada
-									$listaEntradas = $ins_entrada->paginador_entrada_controlador($pagina[1], 20, "");
-
-									// Verificar si hay entradas en la lista
-									if (count($listaEntradas) > 0) {
-										// Iterar sobre las entradas
-										foreach ($listaEntradas as $rows) {
-											// Comparar el ID actual con el ID almacenado en $campos['id_tipo_entrada']
-											echo '<option value="' . $rows['id_tipo_entrada'] . '"' .
-												(($rows['id_tipo_entrada'] == $campos['id_tipo_entrada']) ? ' selected' : '') .
-												'>' . $rows['descripcion'] . '</option>';
-										}
-									} else {
-										echo '<option value="">No hay entradas disponibles</option>';
-									}
-									?>
-								</select>
-							</div>
-						</div>
-
--->
 
 						<!-- Tipo de Evento -->
 						<div class="col-12 col-md-6">

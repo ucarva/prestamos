@@ -1,55 +1,59 @@
-
-
 <script>
-// Función para validar cupones
-function validarCupon(cuponInputName, cuponInputId) {
-    let cuponCodigo = document.querySelector(`#${cuponInputId}`).value.trim(); // Obtener el valor del cupón
+    function validarCupon(cuponInputName, buttonId) {
+        let cuponCodigo = document.querySelector(`#${cuponInputName}`).value.trim();
 
-    if (cuponCodigo === "") {
-        Swal.fire({
-            title: 'Ocurrió un error',
-            text: 'Debes introducir un código de cupón.',
-            icon: 'error',
-            confirmButtonText: 'Aceptar'
-        });
-        return; // Salir de la función si el campo está vacío
+        if (cuponCodigo === "") {
+            Swal.fire({
+                title: 'Ocurrió un error',
+                text: 'Debes introducir un código de cupón.',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            return;
+        }
+
+        let datos = new FormData();
+        datos.append(cuponInputName, cuponCodigo);
+        datos.append('validar_cupon', true);
+
+        fetch("<?php echo SERVERURL; ?>ajax/facturaAjax.php", {
+                method: 'POST',
+                body: datos
+            })
+            .then(respuesta => respuesta.json())
+            .then(respuesta => {
+                mostrarAlertas(respuesta);
+                
+                // Verifica si hay un nuevo valor en la respuesta y actualiza el campo
+                if (respuesta[0] && respuesta[0].NuevoValor) {
+                    let valorBase = parseFloat(document.querySelector('#valor_total').value);
+                    let nuevoDescuento = parseFloat(respuesta[0].NuevoValor);
+                    document.querySelector('#valor_total').value = valorBase - nuevoDescuento;
+
+                    // Deshabilitar el botón después de una validación exitosa
+                    document.querySelector(`#${buttonId}`).disabled = true; // Deshabilitar el botón
+                }
+            })
+            .catch(error => {
+                console.error('Error al validar el cupón:', error);
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Hubo un problema al validar el cupón. Intenta de nuevo.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            });
     }
 
-    let datos = new FormData();
-    datos.append(cuponInputName, cuponCodigo); // Agregar el cupón al FormData
-    datos.append('validar_cupon', true); // Indicador de que se está validando el cupón
+    function mostrarAlertas(respuesta) {
+        const alertContainer = document.getElementById("alert-container");
+        alertContainer.innerHTML = ""; // Limpiar alertas previas
 
-    fetch("<?php echo SERVERURL; ?>ajax/facturaAjax.php", { // Cambia la URL según tu configuración
-        method: 'POST',
-        body: datos
-    })
-    .then(respuesta => respuesta.json())
-    .then(respuesta => {
-        mostrarAlertas(respuesta); // Manejar la respuesta utilizando la función de alertas
-    })
-    .catch(error => {
-        console.error('Error al validar el cupón:', error);
-        Swal.fire({
-            title: 'Error',
-            text: 'Hubo un problema al validar el cupón. Intenta de nuevo.',
-            icon: 'error',
-            confirmButtonText: 'Aceptar'
+        respuesta.forEach(alerta => {
+            const alertaDiv = document.createElement("div");
+            alertaDiv.className = `alert alert-${alerta.Tipo}`;
+            alertaDiv.innerText = `${alerta.Titulo}: ${alerta.Texto}`;
+            alertContainer.appendChild(alertaDiv);
         });
-    });
-}
-
-// Función para mostrar alertas
-function mostrarAlertas(respuesta) {
-    const alertContainer = document.getElementById("alert-container");
-    alertContainer.innerHTML = ""; // Limpiar alertas previas
-
-    respuesta.forEach(alerta => {
-        const alertaDiv = document.createElement("div");
-        alertaDiv.className = `alert alert-${alerta.Tipo}`;
-        alertaDiv.innerText = `${alerta.Titulo}: ${alerta.Texto}`;
-        alertContainer.appendChild(alertaDiv);
-    });
-}
+    }
 </script>
-
-

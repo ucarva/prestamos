@@ -95,87 +95,59 @@ class facturaControlador extends facturaModelo
 
 
     public function validar_cupones()
-    {
-        // Inicializar el array de alertas
-        $alertas = [];
-    
-        // Validar el cupón 1
-        if (isset($_POST['cupon_codigo1_reg'])) {
-            $cupon1 = mainModel::limpiar_cadena($_POST['cupon_codigo1_reg']);
-            
-            // Si el cupón está vacío, se puede manejar como un caso especial
-            if (empty($cupon1)) {
-                // Opcional: agregar una alerta informando que el cupón 1 está vacío
-                $alertas[] = [
-                    "Alerta" => "simple",
-                    "Titulo" => "Cupón 1 vacío",
-                    "Texto" => "No se ha introducido un código para el cupón 1.",
-                    "Tipo" => "info" // Puedes usar un tipo diferente para indicar que es información
-                ];
-            } else {
-                $cupon1Valido = facturaModelo::consultar_cupon_modelo($cupon1);
-        
-                if ($cupon1Valido !== null) {
-                    $alertas[] = [
-                        "Alerta" => "simple",
-                        "Titulo" => "Cupón válido",
-                        "Texto" => "El cupón ha sido validado correctamente.",
-                        "Tipo" => "success"
-                    ];
-                } else {
-                    $alertas[] = [
-                        "Alerta" => "simple",
-                        "Titulo" => "Cupón inválido",
-                        "Texto" => "El cupón no es válido o ha expirado.",
-                        "Tipo" => "error"
-                    ];
-                }
-            }
-        }
+{
+    $alertas = [];
+    $totalDescuento = 0;
 
-         // Validar el cupón 2
-         if (isset($_POST['cupon_codigo2_reg'])) {
-            $cupon2 = mainModel::limpiar_cadena($_POST['cupon_codigo2_reg']);
-            
-            // Si el cupón está vacío, se puede manejar como un caso especial
-            if (empty($cupon2)) {
-                // Opcional: agregar una alerta informando que el cupón 2 está vacío
+    if (isset($_POST['cupon_codigo1_reg'])) {
+        $cupon1 = mainModel::limpiar_cadena($_POST['cupon_codigo1_reg']);
+        if (!empty($cupon1)) {
+            $cupon1Valido = facturaModelo::consultar_cupon_modelo($cupon1);
+            if ($cupon1Valido !== null) {
+                $descuento1 = $cupon1Valido['porcentaje_descuento'];
+                $totalDescuento += $descuento1;
                 $alertas[] = [
                     "Alerta" => "simple",
-                    "Titulo" => "Cupón 2 vacío",
-                    "Texto" => "No se ha introducido un código para el cupón 2.",
-                    "Tipo" => "info" // Puedes usar un tipo diferente para indicar que es información
+                    "Titulo" => "Cupón válido",
+                    "Texto" => "El cupón 1 ha sido validado correctamente. Descuento aplicado: $descuento1%",
+                    "Tipo" => "success",
+                    "NuevoValor" => $descuento1 // Se envía el valor del descuento
                 ];
-            } else {
-                $cupon2Valido = facturaModelo::consultar_cupon_modelo($cupon2);
-        
-                if ($cupon2Valido !== null) {
-                    $alertas[] = [
-                        "Alerta" => "simple",
-                        "Titulo" => "Cupón válido",
-                        "Texto" => "El cupón ha sido validado correctamente.",
-                        "Tipo" => "success"
-                    ];
-                } else {
-                    $alertas[] = [
-                        "Alerta" => "simple",
-                        "Titulo" => "Cupón inválido",
-                        "Texto" => "El cupón no es válido o ha expirado.",
-                        "Tipo" => "error"
-                    ];
-                }
             }
         }
-    
-        // Enviar respuesta en formato JSON
-        header('Content-Type: application/json');
-        echo json_encode($alertas);
-        exit();
     }
-    
-    
 
-    
-    
+    if (isset($_POST['cupon_codigo2_reg'])) {
+        $cupon2 = mainModel::limpiar_cadena($_POST['cupon_codigo2_reg']);
+        if (!empty($cupon2)) {
+            $cupon2Valido = facturaModelo::consultar_cupon_modelo($cupon2);
+            if ($cupon2Valido !== null) {
+                $descuento2 = $cupon2Valido['porcentaje_descuento'];
+                $totalDescuento += $descuento2;
+                $alertas[] = [
+                    "Alerta" => "simple",
+                    "Titulo" => "Cupón válido",
+                    "Texto" => "El cupón 2 ha sido validado correctamente. Descuento aplicado: $descuento2%",
+                    "Tipo" => "success",
+                    "NuevoValor" => $descuento2
+                ];
+            }
+        }
+    }
 
+    header('Content-Type: application/json');
+    echo json_encode($alertas);
+    exit();
 }
+
+    
+
+    
+    
+}
+    
+
+    
+    
+
+
