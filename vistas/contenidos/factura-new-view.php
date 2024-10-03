@@ -61,6 +61,7 @@ if ($datos_evento->rowCount() == 1) {
                 <!-- Campo oculto para el id del evento -->
                 <input type="hidden" name="id_evento" value="<?php echo $campos['id_evento']; ?>">
 
+
                 <!-- Campo oculto para el id del asistente -->
                 <?php if (isset($_SESSION['datos_asistente']['ID'])) { ?>
                     <input type="hidden" name="id_asistente" value="<?php echo $_SESSION['datos_asistente']['ID']; ?>">
@@ -70,6 +71,7 @@ if ($datos_evento->rowCount() == 1) {
 
                 <!-- Campo oculto para registrar el usuario logueado (id_admin) -->
                 <input type="hidden" name="id_admin" value="<?php echo $_SESSION['id_spm']; ?>">
+
 
                 <legend><i class="far fa-plus-square"></i> &nbsp; Información del evento</legend>
                 <div class="container-fluid">
@@ -87,6 +89,8 @@ if ($datos_evento->rowCount() == 1) {
                                 <textarea class="form-control" name="evento_descripcion" id="evento_descripcion" rows="3" required readonly><?php echo htmlspecialchars($campos['descripcion']); ?></textarea>
                             </div>
                         </div>
+
+
 
                         <!-- Tipo de Entrada (id_tipo_entrada) -->
                         <div class="col-12 col-md-6">
@@ -114,7 +118,7 @@ if ($datos_evento->rowCount() == 1) {
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="cupon_codigo1_reg">Código de Cupón 1</label>
-                                            <input type="text" class="form-control" name="cupon_codigo1_reg" id="cupon_codigo1_reg" placeholder="Introduce tu código de cupón">
+                                            <input type="text" class="form-control" name="" id="cupon_codigo1_reg" placeholder="Introduce tu código de cupón">
                                         </div>
                                         <button type="button" class="btn btn-info" id="boton_cupon1" onclick="validarCupon('cupon_codigo1_reg', 'boton_cupon1')">Validar Cupón 1</button>
                                     </div>
@@ -122,7 +126,7 @@ if ($datos_evento->rowCount() == 1) {
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="cupon_codigo2_reg">Código de Cupón 2</label>
-                                            <input type="text" class="form-control" name="cupon_codigo2_reg" id="cupon_codigo2_reg" placeholder="Introduce tu código de cupón">
+                                            <input type="text" class="form-control" name="" id="cupon_codigo2_reg" placeholder="Introduce tu código de cupón">
                                         </div>
                                         <button type="button" class="btn btn-info" id="boton_cupon2" onclick="validarCupon('cupon_codigo2_reg', 'boton_cupon2')">Validar Cupón 2</button>
                                     </div>
@@ -130,56 +134,67 @@ if ($datos_evento->rowCount() == 1) {
 
                                 <div id="alert-container" class="mt-3"></div>
 
-                                <!-- Mostrar el valor total con descuento aplicado -->
-                                <div class="form-group mt-5">
-                                    <label for="valor_total" class="bmd-label-floating">Valor a Pagar con Descuento</label>
-                                    <input value="<?php echo $campos['valor_base']; ?>" type="number" class="form-control" name="valor_total" id="valor_total" min="0" readonly>
-                                </div>
+
                             </div>
                             <?php include_once "./vistas/inc/cupones.php"; ?>
                         <?php } ?>
 
 
-
                         <!-- Tipo de Entrada -->
-                        <div class="container-fluid">
-                            <div class="form-group">
-                                <label for="evento_entrada" class="bmd-label-floating">Tipo entrada</label>
-                                <select class="form-control" name="evento_entrada_up" id="evento_entrada" required>
-                                    <option value="">Seleccione un tipo de entrada</option>
+                        <?php if ($campos['es_entrada_gratis'] == '0') { ?>
+                            <div class="container-fluid">
+                                <div class="form-group">
+                                    <label for="evento_entrada" class="bmd-label-floating">Tipo entrada</label>
+                                    <select class="form-control" name="id_tipo_entrada" id="evento_entrada" required>
+                                        <option value="">Seleccione un tipo de entrada</option>
 
-                                    <?php
-                                    // Llamando al controlador
-                                    require_once "./controladores/entradaControlador.php";
-                                    $ins_entrada = new entradaControlador();
+                                        <?php
+                                        // Llamando al controlador
+                                        require_once "./controladores/entradaControlador.php";
+                                        $ins_entrada = new entradaControlador();
 
-                                    // Obtener lista de tipos de entrada
-                                    $listaEntradas = $ins_entrada->paginador_entrada_controlador($pagina[1], 20, "");
+                                        // Obtener lista de tipos de entrada
+                                        $listaEntradas = $ins_entrada->paginador_entrada_controlador($pagina[1], 20, "");
 
-                                    // Verificar si hay entradas en la lista
-                                    if (count($listaEntradas) > 0) {
-                                        // Iterar sobre las entradas
-                                        foreach ($listaEntradas as $rows) {
-                                            // Comparar el ID actual con el ID almacenado en $campos['id_tipo_entrada']
-                                            echo '<option value="' . $rows['id_tipo_entrada'] . '"' .
-                                                (($rows['id_tipo_entrada'] == $campos['id_tipo_entrada']) ? ' selected' : '') .
-                                                '>' . $rows['descripcion'] . '</option>';
+                                        // Verificar si hay entradas en la lista
+                                        if (count($listaEntradas) > 0) {
+                                            // Iterar sobre las entradas
+                                            foreach ($listaEntradas as $rows) {
+                                                // Asegúrate de que los valores no sean nulos o vacíos
+                                                if (!empty($rows['id_tipo_entrada']) && !empty($rows['descripcion'])) {
+                                                    echo '<option value="' . htmlspecialchars($rows['id_tipo_entrada']) . '"' .
+                                                        (($rows['id_tipo_entrada'] == $campos['id_tipo_entrada']) ? ' selected' : '') .
+                                                        '>' . htmlspecialchars($rows['descripcion']) . '</option>';
+                                                }
+                                            }
+                                        } else {
+                                            echo '<option value="">No hay entradas disponibles</option>';
                                         }
-                                    } else {
-                                        echo '<option value="">No hay entradas disponibles</option>';
-                                    }
-                                    ?>
-                                </select>
+                                        ?>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
 
+
+                        <?php } ?>
                         <!-- Valor Pago (valor_pago) -->
                         <div class="col-12 col-md-4">
                             <div class="form-group">
-                                <label for="valor_pago" class="bmd-label-floating">Valor evento</label>
-                                <input value="<?php echo ($campos['es_entrada_gratis'] == '1') ? '0' : $campos['valor_base']; ?>" type="number" class="form-control" name="valor_pago" id="valor_pago" min="0" required readonly>
+                                <label for="valor_total" class="bmd-label-floating">Valor a Pagar con Descuento</label>
+
+                                <input value="<?php echo $campos['valor_base']; ?>" type="number" class="form-control" name="valor_pago" id="valor_total" min="0" readonly>
                             </div>
                         </div>
+
+                        <?php if ($campos['es_entrada_gratis'] == '0') { ?>
+                            <!-- Mostrar el valor total con descuento aplicado -->
+                            <div class="col-12 col-md-4">
+                                <div class="form-group ">
+                                    <label for="valor_pago" class="bmd-label-floating">Valor evento</label>
+                                    <input value="<?php echo ($campos['es_entrada_gratis'] == '1') ? '0' : $campos['valor_base']; ?>" type="number" class="form-control" name="" id="valor_pago" min="0" required readonly>
+                                </div>
+                            </div>
+                        <?php } ?>
 
                         <!-- Estado del Pago (estado_pago) -->
                         <?php if ($campos['es_entrada_gratis'] == '0') { ?>
@@ -233,7 +248,7 @@ if ($datos_evento->rowCount() == 1) {
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="form-group">
-                        <label for="input_cliente" class="bmd-label-floating">introduce el nombre del asistente</label>
+                        <label for="input_asistente" class="bmd-label-floating">introduce el nombre del asistente</label>
                         <input type="text" pattern="[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]{1,30}" class="form-control" name="input_asistente" id="input_asistente" maxlength="30">
                     </div>
                 </div>

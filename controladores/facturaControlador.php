@@ -9,7 +9,6 @@ if ($peticionAjax) {
 class facturaControlador extends facturaModelo
 {
 
-
     public function agregar_factura_controlador()
     {
         // Limpiar los datos enviados por POST
