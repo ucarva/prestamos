@@ -53,6 +53,9 @@
 								<li>
 										<a href="<?php echo SERVERURL; ?>evento-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; Crear Eventos</a>
 									</li>
+									<li>
+										<a href="<?php echo SERVERURL; ?>evento-list/"><i class="fas fa-plus fa-fw"></i> &nbsp; Lista de Eventos</a>
+									</li>
 							</li>
 						</ul>
 					</li>

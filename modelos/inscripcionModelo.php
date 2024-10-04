@@ -19,4 +19,9 @@ class inscripcionModelo extends mainModel
             return null; // Devuelve null si no se encontró el cupón
         }
     }
+
+   
+    
+   
+    
 }

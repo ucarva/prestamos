@@ -198,5 +198,9 @@ class eventoControlador extends eventoModelo
 
         return eventoModelo::datos_evento_modelo($tipo, $id);
     } // fin controlador
-
+    
+    public function obtenerEventos() {
+        return eventoModelo::datos_evento_modelo("Conteo", 0);
+    }
+    
 }

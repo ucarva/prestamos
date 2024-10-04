@@ -91,62 +91,49 @@ class facturaControlador extends facturaModelo
         exit();
     }
 
-
-
     public function validar_cupones()
-{
-    $alertas = [];
-    $totalDescuento = 0;
+    {
+        $alertas = [];
+        $totalDescuento = 0;
 
-    if (isset($_POST['cupon_codigo1_reg'])) {
-        $cupon1 = mainModel::limpiar_cadena($_POST['cupon_codigo1_reg']);
-        if (!empty($cupon1)) {
-            $cupon1Valido = facturaModelo::consultar_cupon_modelo($cupon1);
-            if ($cupon1Valido !== null) {
-                $descuento1 = $cupon1Valido['porcentaje_descuento'];
-                $totalDescuento += $descuento1;
-                $alertas[] = [
-                    "Alerta" => "simple",
-                    "Titulo" => "Cupón válido",
-                    "Texto" => "El cupón 1 ha sido validado correctamente. Descuento aplicado: $descuento1%",
-                    "Tipo" => "success",
-                    "NuevoValor" => $descuento1 // Se envía el valor del descuento
-                ];
+        if (isset($_POST['cupon_codigo1_reg'])) {
+            $cupon1 = mainModel::limpiar_cadena($_POST['cupon_codigo1_reg']);
+            if (!empty($cupon1)) {
+                $cupon1Valido = facturaModelo::consultar_cupon_modelo($cupon1);
+                if ($cupon1Valido !== null) {
+                    $descuento1 = $cupon1Valido['porcentaje_descuento'];
+                    $totalDescuento += $descuento1;
+                    $alertas[] = [
+                        "Alerta" => "simple",
+                        "Titulo" => "Cupón válido",
+                        "Texto" => "El cupón 1 ha sido validado correctamente. Descuento aplicado: $descuento1%",
+                        "Tipo" => "success",
+                        "NuevoValor" => $descuento1 // Se envía el valor del descuento
+                    ];
+                }
             }
         }
-    }
 
-    if (isset($_POST['cupon_codigo2_reg'])) {
-        $cupon2 = mainModel::limpiar_cadena($_POST['cupon_codigo2_reg']);
-        if (!empty($cupon2)) {
-            $cupon2Valido = facturaModelo::consultar_cupon_modelo($cupon2);
-            if ($cupon2Valido !== null) {
-                $descuento2 = $cupon2Valido['porcentaje_descuento'];
-                $totalDescuento += $descuento2;
-                $alertas[] = [
-                    "Alerta" => "simple",
-                    "Titulo" => "Cupón válido",
-                    "Texto" => "El cupón 2 ha sido validado correctamente. Descuento aplicado: $descuento2%",
-                    "Tipo" => "success",
-                    "NuevoValor" => $descuento2
-                ];
+        if (isset($_POST['cupon_codigo2_reg'])) {
+            $cupon2 = mainModel::limpiar_cadena($_POST['cupon_codigo2_reg']);
+            if (!empty($cupon2)) {
+                $cupon2Valido = facturaModelo::consultar_cupon_modelo($cupon2);
+                if ($cupon2Valido !== null) {
+                    $descuento2 = $cupon2Valido['porcentaje_descuento'];
+                    $totalDescuento += $descuento2;
+                    $alertas[] = [
+                        "Alerta" => "simple",
+                        "Titulo" => "Cupón válido",
+                        "Texto" => "El cupón 2 ha sido validado correctamente. Descuento aplicado: $descuento2%",
+                        "Tipo" => "success",
+                        "NuevoValor" => $descuento2
+                    ];
+                }
             }
         }
+
+        header('Content-Type: application/json');
+        echo json_encode($alertas);
+        exit();
     }
-
-    header('Content-Type: application/json');
-    echo json_encode($alertas);
-    exit();
 }
-
-    
-
-    
-    
-}
-    
-
-    
-    
-
-

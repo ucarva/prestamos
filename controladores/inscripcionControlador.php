@@ -276,7 +276,25 @@ class inscripcionControlador extends inscripcionModelo
             exit();
         }
     } //fin controlador
+    
 
+    public function contarInscripciones($evento_id) {
+        // Consulta SQL con parámetro
+        $sql = "SELECT COUNT(*) AS total_inscripciones FROM inscripcion WHERE id_evento = :id_evento";
+        
+        // Parámetros a pasar
+        $parametros = [':id_evento' => $evento_id];
+        
+        // Ejecutar la consulta usando el método modificado
+        $contarInscripcion = mainModel::ejecutar_consulta_simple($sql, $parametros);
+        
+        // Obtener el resultado
+        $resultado = $contarInscripcion->fetch(PDO::FETCH_ASSOC);
+        
+        return $resultado['total_inscripciones'];
+    }
+    
+    
     
 
 

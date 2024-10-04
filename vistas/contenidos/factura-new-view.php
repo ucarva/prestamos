@@ -12,16 +12,14 @@
             <a class="active" href="<?php echo SERVERURL; ?>reservation-new/"><i class="fas fa-plus fa-fw"></i> &nbsp; NUEVO INSCRIPCION</a>
         </li>
         <li>
-            <a href="<?php echo SERVERURL; ?>reservation-reservation/"><i class="far fa-calendar-alt"></i> &nbsp; RESERVACIONES</a>
+            <a href="<?php echo SERVERURL; ?>evento-list/"><i class="far fa-calendar-alt"></i> &nbsp; LISTA EVENTOS</a>
         </li>
         <li>
-            <a href="<?php echo SERVERURL; ?>reservation-pending/"><i class="fas fa-hand-holding-usd fa-fw"></i> &nbsp; INSCRIPCIONES</a>
+            <a href="<?php echo SERVERURL; ?>evento-new/"><i class="fas fa-plus  fa-fw"></i> &nbsp; AGREGAR EVENTO</a>
         </li>
+        
         <li>
-            <a href="<?php echo SERVERURL; ?>reservation-list/"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; FINALIZADOS</a>
-        </li>
-        <li>
-            <a href="<?php echo SERVERURL; ?>reservation-search/"><i class="fas fa-search-dollar fa-fw"></i> &nbsp; BUSCAR POR FECHA</a>
+            <a href="<?php echo SERVERURL; ?>evento-search/"><i class="fas fa-search-dollar fa-fw"></i> &nbsp; BUSCAR EVENTO</a>
         </li>
     </ul>
 </div>
@@ -89,9 +87,6 @@ if ($datos_evento->rowCount() == 1) {
                                 <textarea class="form-control" name="evento_descripcion" id="evento_descripcion" rows="3" required readonly><?php echo htmlspecialchars($campos['descripcion']); ?></textarea>
                             </div>
                         </div>
-
-
-
                         <!-- Tipo de Entrada (id_tipo_entrada) -->
                         <div class="col-12 col-md-6">
                             <div class="form-group">
@@ -102,13 +97,10 @@ if ($datos_evento->rowCount() == 1) {
                                 <input type="hidden" name="id_tipo_entrada" value="<?php echo ($campos['es_entrada_gratis'] == '0') ? 'Pago' : 'Gratis'; ?>">
                             </div>
                         </div>
-
-
                         <?php
                         require_once "./controladores/facturaControlador.php";
                         $ins_factura = new facturaControlador();
                         ?>
-
                         <!-- Mostrar campos de cupones solo si el evento no es gratis -->
                         <?php if ($campos['es_entrada_gratis'] == '0') { ?>
                             <div class="container mt-5">
@@ -131,15 +123,10 @@ if ($datos_evento->rowCount() == 1) {
                                         <button type="button" class="btn btn-info" id="boton_cupon2" onclick="validarCupon('cupon_codigo2_reg', 'boton_cupon2')">Validar Cupón 2</button>
                                     </div>
                                 </div>
-
                                 <div id="alert-container" class="mt-3"></div>
-
-
                             </div>
                             <?php include_once "./vistas/inc/cupones.php"; ?>
                         <?php } ?>
-
-
                         <!-- Tipo de Entrada -->
                         <?php if ($campos['es_entrada_gratis'] == '0') { ?>
                             <div class="container-fluid">
@@ -147,7 +134,6 @@ if ($datos_evento->rowCount() == 1) {
                                     <label for="evento_entrada" class="bmd-label-floating">Tipo entrada</label>
                                     <select class="form-control" name="id_tipo_entrada" id="evento_entrada" required>
                                         <option value="">Seleccione un tipo de entrada</option>
-
                                         <?php
                                         // Llamando al controlador
                                         require_once "./controladores/entradaControlador.php";
@@ -174,18 +160,20 @@ if ($datos_evento->rowCount() == 1) {
                                     </select>
                                 </div>
                             </div>
-
-
                         <?php } ?>
-                        <!-- Valor Pago (valor_pago) -->
-                        <div class="col-12 col-md-4">
+                        <?php if ($campos['es_entrada_gratis'] == '0') { ?>
+                            <!-- Mostrar el valor total con descuento aplicado -->
+                            <div class="col-12 col-md-4">
                             <div class="form-group">
                                 <label for="valor_total" class="bmd-label-floating">Valor a Pagar con Descuento</label>
 
                                 <input value="<?php echo $campos['valor_base']; ?>" type="number" class="form-control" name="valor_pago" id="valor_total" min="0" readonly>
                             </div>
                         </div>
-
+                           
+                        <?php } ?>
+                        <!-- Valor Pago (valor_pago) -->
+                
                         <?php if ($campos['es_entrada_gratis'] == '0') { ?>
                             <!-- Mostrar el valor total con descuento aplicado -->
                             <div class="col-12 col-md-4">

@@ -39,6 +39,8 @@ class eventoModelo extends mainModel
         }
     }
 
+ 
+
     // Método para validar la existencia de la categoría
     protected static function validar_categoria($id_categoria)
     {
@@ -56,7 +58,7 @@ class eventoModelo extends mainModel
 
             $sql->bindParam(":ID", $id);
         } elseif ($tipo == "Conteo") {
-            $sql = mainModel::conectar()->prepare("SELECT id_evento FROM evento ");
+            $sql = mainModel::conectar()->prepare("SELECT id_evento, titulo FROM evento ");
         }
 
         $sql->execute();
@@ -178,4 +180,7 @@ class eventoModelo extends mainModel
             return null;
         }
     }
+
+
+   
 }

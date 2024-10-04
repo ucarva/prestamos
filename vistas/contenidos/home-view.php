@@ -1,46 +1,86 @@
 <!-- Page header -->
 <div class="full-box page-header">
-				<h3 class="text-left">
-					<i class="fab fa-dashcube fa-fw"></i> &nbsp; DASHBOARD
-				</h3>
-				
-			</div>
-			
-			<!-- Content -->
-			<div class="full-box tile-container">
+	<h3 class="text-left">
+		<i class="fab fa-dashcube fa-fw"></i> &nbsp; DASHBOARD
+	</h3>
 
-			<?php 	
-						require_once "./controladores/asistenteControlador.php";
-						$ins_asistente = new asistenteControlador();
-						//consulta a la base de datos para ver los registros
-						$total_asistentes = $ins_asistente->datos_asistente_controlador("Conteo",0);
+</div>
 
-				?>
-				<a href="<?php echo SERVERURL;?>asistente-list/" class="tile">
-					<div class="tile-tittle">asistentes</div>
-					<div class="tile-icon">
-						<i class="fas fa-pallet fa-fw"></i>
-						<p><?php echo $total_asistentes->rowCount(); ?> Registrados</p>
-					</div>
-				</a>
+<!-- Content -->
+<div class="full-box tile-container">
 
-				<?php 	
-						require_once "./controladores/eventoControlador.php";
-						$ins_evento = new eventoControlador();
-						//consulta a la base de datos para ver los registros
-						$total_eventos = $ins_evento->datos_evento_controlador("Conteo",0);
+    <?php
+    require_once "./controladores/asistenteControlador.php";
+    $ins_asistente = new asistenteControlador();
+    // consulta a la base de datos para ver los registros
+    $total_asistentes = $ins_asistente->datos_asistente_controlador("Conteo", 0);
+    ?>
+    <a href="<?php echo SERVERURL; ?>asistente-list/" class="tile">
+        <div class="tile-icon" style="display: flex; align-items: center;">
+            <i class="fas fa-pallet fa-fw" style="font-size: 1.5em; margin-right: 10px;"></i>
+            <div>
+                <div class="tile-title" style="font-size: 1.5em; font-weight: bold; margin: 0;">
+                    Asistentes
+                </div>
+                <div class="tile-message" style="font-size: 1em; color: #666;">
+                    <?php echo $total_asistentes->rowCount(); ?> Registrados
+                </div>
+            </div>
+        </div>
+    </a>
 
-				?>
-				<a href="<?php echo SERVERURL;?>evento-new/" class="tile">
-					<div class="tile-tittle">Eventos</div>
-					<div class="tile-icon">
-						<i class="fas fa-users fa-fw"></i>
-						<p><?php echo $total_eventos->rowCount(); ?> Registrados</p>
-						
-					</div>
-				</a>
-				
-				
+    <?php
+    require_once "./controladores/eventoControlador.php";
+    $ins_evento = new eventoControlador();
+    // consulta a la base de datos para ver los registros
+    $total_eventos = $ins_evento->datos_evento_controlador("Conteo", 0);
+    ?>
+    <a href="<?php echo SERVERURL; ?>evento-new/" class="tile">
+        <div class="tile-icon" style="display: flex; align-items: center;">
+            <i class="fas fa-users fa-fw" style="font-size: 1.5em; margin-right: 10px;"></i>
+            <div>
+                <div class="tile-title" style="font-size: 1.5em; font-weight: bold; margin: 0;">
+                    Eventos
+                </div>
+                <div class="tile-message" style="font-size: 1em; color: #666;">
+                    <?php echo $total_eventos->rowCount(); ?> Registrados
+                </div>
+            </div>
+        </div>
+    </a>
 
-				
-			</div>
+    <?php
+    require_once "./controladores/inscripcionControlador.php";
+    require_once "./controladores/eventoControlador.php";
+
+    // Crear instancias de los controladores
+    $contarInscripciones = new inscripcionControlador();
+    $eventoControlador = new eventoControlador();
+
+    // Obtener los eventos registrados
+    $eventos = $eventoControlador->obtenerEventos();
+
+    // Iterar sobre los eventos para mostrar cada uno
+    while ($evento = $eventos->fetch(PDO::FETCH_ASSOC)) {
+        $evento_id = $evento['id_evento'];
+        $nombre_evento = $evento['titulo']; // Asumiendo que este es el campo en tu base de datos
+
+        // Obtener el número de inscripciones para cada evento
+        $total_inscripciones = $contarInscripciones->contarInscripciones($evento_id);
+    ?>
+        <a href="<?php echo SERVERURL; ?>evento-list/" class="tile">
+            <div class="tile-icon" style="display: flex; align-items: center;">
+                <i class="fas fa-calendar-alt fa-fw" style="font-size: 1.5em; margin-right: 10px;"></i>
+                <div>
+                    <div class="tile-title" style="font-size: 1.5em; font-weight: bold; margin: 0;">
+                        <?php echo $nombre_evento; ?>
+                    </div>
+                    <div class="tile-message" style="font-size: 1em; color: #666;">
+                        <?php echo "El evento tiene " . $total_inscripciones . " inscripciones."; ?> Registradas
+                    </div>
+                </div>
+            </div>
+        </a>
+    <?php } // Cerrar el bucle 
+    ?>
+</div>
