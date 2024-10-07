@@ -10,8 +10,8 @@ class facturaModelo extends mainModel
         try {
             $sql = mainModel::conectar()->prepare("
                 INSERT INTO inscripcion 
-                (id_evento, id_asistente, id_tipo_entrada, valor_pago, estado_pago, id_admin) 
-                VALUES (:Evento, :Asistente, :Entrada, :Valor, :Estado, :id_admin)
+                (id_evento, id_asistente, id_tipo_entrada, valor_pago, estado_pago, activo, id_admin) 
+                VALUES (:Evento, :Asistente, :Entrada, :Valor, :Estado, :Activo, :id_admin)
             ");
 
             // Asignación de parámetros
@@ -20,6 +20,7 @@ class facturaModelo extends mainModel
             $sql->bindParam(":Entrada", $datos['Entrada']);
             $sql->bindParam(":Valor", $datos['Valor'], PDO::PARAM_INT); // Asegura que se almacene como número entero
             $sql->bindParam(":Estado", $datos['Estado']);
+            $sql->bindParam(":Activo", $datos['Activo']);
             $sql->bindParam(":id_admin", $datos['id_admin']);
 
             // Ejecutar la consulta

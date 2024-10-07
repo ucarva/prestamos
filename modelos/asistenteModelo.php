@@ -8,14 +8,15 @@ class asistenteModelo extends mainModel
     //Modelo para registrar asistentes
     protected static function agregar_asistente_modelo($datos)
     {
-        $sql = mainModel::conectar()->prepare("INSERT INTO asistente (nombres,apellidos,fecha_nacimiento,email,celular,id_admin)
-            VALUES(:Nombre,:Apellido,:FechaNacimiento,:Email,:Celular,:id_admin)");
+        $sql = mainModel::conectar()->prepare("INSERT INTO asistente (nombres,apellidos,fecha_nacimiento,email,celular,activo,id_admin)
+            VALUES(:Nombre,:Apellido,:FechaNacimiento,:Email,:Celular,:Activo,:id_admin)");
 
         $sql->bindParam(":Nombre", $datos['Nombre']);
         $sql->bindParam(":Apellido", $datos['Apellido']);
         $sql->bindParam(":FechaNacimiento", $datos['FechaNacimiento']);
         $sql->bindParam(":Email", $datos['Email']);
         $sql->bindParam(":Celular", $datos['Celular']);
+        $sql->bindParam(":Activo", $datos['Activo']);
         $sql->bindParam(":id_admin", $datos['id_admin']);
 
         $sql->execute();
@@ -28,14 +29,16 @@ class asistenteModelo extends mainModel
 
         if (!empty($busqueda)) {
             $consulta = $conexion->prepare("SELECT SQL_CALC_FOUND_ROWS * FROM asistente 
-                                            WHERE nombres LIKE :busqueda 
+                                            WHERE (nombres LIKE :busqueda 
                                             OR apellidos LIKE :busqueda 
-                                            OR celular LIKE :busqueda 
+                                            OR celular LIKE :busqueda) 
+                                            AND activo = 1 
                                             ORDER BY id_asistente ASC LIMIT :inicio, :registros");
             $busqueda = "%$busqueda%"; // Ajustamos el valor de búsqueda
             $consulta->bindParam(':busqueda', $busqueda, PDO::PARAM_STR);
         } else {
             $consulta = $conexion->prepare("SELECT SQL_CALC_FOUND_ROWS * FROM asistente 
+                                            WHERE activo = 1 
                                             ORDER BY id_asistente ASC LIMIT :inicio, :registros");
         }
 
@@ -47,6 +50,7 @@ class asistenteModelo extends mainModel
 
         return $datos;
     }
+
 
 
     //Modelo para seleccionar los datos de asistente
@@ -65,24 +69,34 @@ class asistenteModelo extends mainModel
     } //fin modelo
 
 
-    //Modelo para eliminar el asistente
+    // Modelo para eliminar (desactivar) el asistente
     protected static function eliminar_asistente_modelo()
     {
         $id = mainModel::decryption($_POST['asistente_id_del']);
         $id = mainModel::limpiar_cadena($id);
 
-        $obtenerAsistente = mainModel::ejecutar_consulta_simple("SELECT id_asistente FROM asistente WHERE id_asistente='$id'");
-        if ($obtenerAsistente->rowCount() > 0) {
-            $sql = mainModel::conectar()->prepare("DELETE FROM asistente WHERE id_asistente=:ID");
+        // Verificar si el asistente existe
+        $obtenerAsistente = mainModel::ejecutar_consulta_simple("SELECT id_asistente FROM asistente WHERE id_asistente = :id AND activo = 1", [':id' => $id]);
 
-            //sustituyendo marcador :ID por la variable $id
+        if ($obtenerAsistente->rowCount() > 0) {
+            // Desactivar el asistente
+            $sql = mainModel::conectar()->prepare("UPDATE asistente SET activo = 0 WHERE id_asistente = :ID");
             $sql->bindParam(":ID", $id);
             $sql->execute();
-            return $sql;
+
+            // Opcional: desactivar las inscripciones asociadas
+            $sqlInscripciones = mainModel::conectar()->prepare("UPDATE inscripcion SET activo = 0 WHERE id_asistente = :id_asistente");
+            $sqlInscripciones->bindParam(":id_asistente", $id);
+            $sqlInscripciones->execute();
+
+            return true; 
         } else {
-            return null;
+            return null; 
         }
-    } //fin modelo
+    } // fin modelo
+
+
+
 
     //Modelo para actualizar asistente
     protected static function actualizar_asistente_modelo($datos)
@@ -114,7 +128,4 @@ class asistenteModelo extends mainModel
             return null;
         }
     }
-    
-
-   
 } //fin modelo

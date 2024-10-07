@@ -43,6 +43,7 @@ class facturaControlador extends facturaModelo
         $id_tipo_entrada = mainModel::limpiar_cadena($_POST['id_tipo_entrada']);
         $valor_pago = !empty($_POST['valor_pago']) ? mainModel::limpiar_cadena($_POST['valor_pago']) : 0;
         $estado_pago = mainModel::limpiar_cadena($_POST['estado_pago']);
+        $activo = mainModel::limpiar_cadena($_POST['asistente_activo']);
         $id_admin = mainModel::limpiar_cadena($_POST['id_admin']);
 
         // Crear un array asociativo de los campos esperados
@@ -51,7 +52,7 @@ class facturaControlador extends facturaModelo
             'id_asistente' => $id_asistente,
             'id_tipo_entrada' => $id_tipo_entrada,
             'valor_pago' => $valor_pago,
-            'estado_pago' => $estado_pago,
+            'estado_pago' => $estado_pago,        
             'id_admin' => $id_admin
         ];
 
@@ -91,6 +92,10 @@ class facturaControlador extends facturaModelo
             exit();
         }
 
+        
+         // Establecer el valor de activo como 1
+         $activo = 1; // Por defecto, los nuevos asistentes están activos
+
 
 
         // Preparar datos para la factura
@@ -100,6 +105,8 @@ class facturaControlador extends facturaModelo
             "Entrada" => $id_tipo_entrada,
             "Valor" => $valor_pago,
             "Estado" => $estado_pago,
+            "Activo" => $activo,
+
             "id_admin" => $id_admin
         ];
 

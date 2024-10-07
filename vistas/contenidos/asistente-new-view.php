@@ -29,10 +29,13 @@
         action="<?php echo SERVERURL; ?>ajax/asistenteAjax.php" method="POST" data-form="save" autocomplete="off">
         <!-- Campo oculto para registrar el usuario logueado -->
         <input type="hidden" name="id_admin" value="<?php echo $_SESSION['id_spm']; ?>">
+        
 
         <fieldset>
             <legend><i class="far fa-plus-square"></i> &nbsp; Información del Asistente</legend>
             <div class="container-fluid">
+
+            <input type="hidden" name="asistente_activo_reg" value="1"> <!-- Campo oculto para activo -->
                 
                 <div class="row">
                     <div class="col-12 col-md-4">

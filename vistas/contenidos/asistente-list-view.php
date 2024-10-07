@@ -42,7 +42,7 @@
                                 <th>CELULAR</th>                        
                                 <th>EDITAR</th>
                                 <th>ELIMINAR</th>
-                                <th>EVENTO</th>
+                                
                             </tr>
                         </thead>
                         <tbody>';

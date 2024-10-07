@@ -279,8 +279,10 @@ class inscripcionControlador extends inscripcionModelo
     
 
     public function contarInscripciones($evento_id) {
-        // Consulta SQL con parámetro
-        $sql = "SELECT COUNT(*) AS total_inscripciones FROM inscripcion WHERE id_evento = :id_evento";
+        // Consulta SQL con parámetro, ahora contando solo inscripciones activas
+        $sql = "SELECT COUNT(*) AS total_inscripciones 
+                FROM inscripcion 
+                WHERE id_evento = :id_evento AND activo = 1"; // Filtra solo inscripciones activas
         
         // Parámetros a pasar
         $parametros = [':id_evento' => $evento_id];
@@ -293,6 +295,7 @@ class inscripcionControlador extends inscripcionModelo
         
         return $resultado['total_inscripciones'];
     }
+    
     
     public function obtenerCupoMaximo($evento_id) {
         // Consulta para obtener el cupo máximo del evento

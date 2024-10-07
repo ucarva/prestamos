@@ -18,9 +18,11 @@ class asistenteControlador extends asistenteModelo
         $fecha_nacimiento = mainmodel::limpiar_cadena($_POST['asistente_fecha_nacimiento_reg']);
         $email = mainModel::limpiar_cadena($_POST['asistente_email_reg']);
         $telefono = mainModel::limpiar_cadena($_POST['asistente_telefono_reg']);
+        $activo = mainModel::limpiar_cadena($_POST['asistente_activo_reg']);
         $id_admin = mainModel::limpiar_cadena($_POST['id_admin']);
 
-
+        // Establecer el valor de activo como 1
+        $activo = 1; // Por defecto, los nuevos asistentes están activos
 
         //registro de datos
 
@@ -31,6 +33,7 @@ class asistenteControlador extends asistenteModelo
             "FechaNacimiento" => $fecha_nacimiento,
             "Email" => $email,
             "Celular" => $telefono,
+            "Activo" => $activo,
             "id_admin" => $id_admin
 
         ];
@@ -65,13 +68,13 @@ class asistenteControlador extends asistenteModelo
     } //fin controlador
 
     // Controlador para paginar asistente
-    public function paginador_asistente_controlador($pagina, $registros,$busqueda)
+    public function paginador_asistente_controlador($pagina, $registros, $busqueda)
     {
         $pagina = mainModel::limpiar_cadena($pagina);
         $registros = mainModel::limpiar_cadena($registros);
         $busqueda = mainModel::limpiar_cadena($busqueda);
-       
-        
+
+
         $pagina = (isset($pagina) && $pagina > 0) ? (int)$pagina : 1;
         $inicio = ($pagina > 0) ? (($pagina * $registros) - $registros) : 0;
 
@@ -80,33 +83,35 @@ class asistenteControlador extends asistenteModelo
         return $listaAsistentes;
     } //fin controlador
 
-    // Controlador para eliminar asistente
+    // Controlador para eliminar (desactivar) asistente
     public function eliminar_asistente_controlador()
     {
         $eliminar_asistente = asistenteModelo::eliminar_asistente_modelo();
-        if ($eliminar_asistente != null) {
+
+        // Verificar si la desactivación fue exitosa
+        if ($eliminar_asistente === true) {
             $alerta = [
                 "Alerta" => "recargar",
-                "Titulo" => "asistente eliminado.",
-                "Texto" => "asistente eliminado con exito.",
+                "Titulo" => "Asistente eliminado.",
+                "Texto" => "Asistente eliminado con éxito.",
                 "Tipo" => "success"
             ];
-            header('Content-Type: application/json');
-            echo json_encode($alerta);
-            exit();
         } else {
+            // Si $eliminar_asistente es null, significa que no se pudo desactivar el asistente
             $alerta = [
                 "Alerta" => "simple",
                 "Titulo" => "Ocurrió un error inesperado.",
-                "Texto" => "No hemos podido eliminar el usuario.",
+                "Texto" => "No hemos podido eliminar el asistente.",
                 "Tipo" => "error"
             ];
-
-            header('Content-Type: application/json');
-            echo json_encode($alerta);
-            exit();
         }
-    } //fin controlador
+
+        header('Content-Type: application/json');
+        echo json_encode($alerta);
+        exit();
+    } // fin controlador
+
+
 
     //controlador para los datos de asistente
     public  function datos_asistente_controlador($tipo, $id)

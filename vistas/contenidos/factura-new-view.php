@@ -67,6 +67,7 @@ if ($datos_evento->rowCount() == 1) {
 
                 <!-- Campo oculto para registrar el usuario logueado (id_admin) -->
                 <input type="hidden" name="id_admin" value="<?php echo $_SESSION['id_spm']; ?>">
+                <input type="hidden" name="asistente_activo" value="1"> <!-- Campo oculto para activo -->
 
 
                 <legend><i class="far fa-plus-square"></i> &nbsp; Información del evento</legend>
