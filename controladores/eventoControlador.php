@@ -202,5 +202,19 @@ class eventoControlador extends eventoModelo
     public function obtenerEventos() {
         return eventoModelo::datos_evento_modelo("Conteo", 0);
     }
-    
+    public function obtenerCupoMaximo($evento_id) {
+        // Consulta para obtener el cupo máximo del evento
+        $sql = "SELECT cupo FROM evento WHERE id_evento = :id_evento";
+        
+        // Parámetros a pasar
+        $parametros = [':id_evento' => $evento_id];
+        
+        // Ejecutar la consulta
+        $cupoMaximo = mainModel::ejecutar_consulta_simple($sql, $parametros);
+        
+        // Obtener el resultado
+        $resultado = $cupoMaximo->fetch(PDO::FETCH_ASSOC);
+        
+        return $resultado['cupo']; 
+    }
 }

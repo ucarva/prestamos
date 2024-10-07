@@ -294,6 +294,21 @@ class inscripcionControlador extends inscripcionModelo
         return $resultado['total_inscripciones'];
     }
     
+    public function obtenerCupoMaximo($evento_id) {
+        // Consulta para obtener el cupo máximo del evento
+        $sql = "SELECT cupo FROM evento WHERE id_evento = :id_evento";
+        
+        // Parámetros a pasar
+        $parametros = [':id_evento' => $evento_id];
+        
+        // Ejecutar la consulta
+        $cupoMaximo = mainModel::ejecutar_consulta_simple($sql, $parametros);
+        
+        // Obtener el resultado
+        $resultado = $cupoMaximo->fetch(PDO::FETCH_ASSOC);
+        
+        return $resultado['cupo']; // Cambia 'cupo_maximo' por 'cupo'
+    }
     
     
 

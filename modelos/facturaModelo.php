@@ -77,7 +77,7 @@ class facturaModelo extends mainModel
         // Obtener el resultado
         $resultado = $cupoMaximo->fetch(PDO::FETCH_ASSOC);
         
-        return $resultado['cupo']; // Cambia 'cupo_maximo' por 'cupo'
+        return $resultado['cupo']; 
     }
     
     

@@ -52,7 +52,7 @@
     <?php
     require_once "./controladores/inscripcionControlador.php";
     require_once "./controladores/eventoControlador.php";
-
+    
     // Crear instancias de los controladores
     $contarInscripciones = new inscripcionControlador();
     $eventoControlador = new eventoControlador();
@@ -63,10 +63,13 @@
     // Iterar sobre los eventos para mostrar cada uno
     while ($evento = $eventos->fetch(PDO::FETCH_ASSOC)) {
         $evento_id = $evento['id_evento'];
-        $nombre_evento = $evento['titulo']; 
+        $nombre_evento = $evento['titulo'];
 
         // Obtener el número de inscripciones para cada evento
         $total_inscripciones = $contarInscripciones->contarInscripciones($evento_id);
+
+        // Obtener el cupo máximo del evento
+        $cupo_maximo = $eventoControlador->obtenerCupoMaximo($evento_id);
     ?>
         <a href="<?php echo SERVERURL; ?>evento-list/" class="tile">
             <div class="tile-icon" style="display: flex; align-items: center;">
@@ -76,11 +79,15 @@
                         <?php echo $nombre_evento; ?>
                     </div>
                     <div class="tile-message" style="font-size: 1em; color: #666;">
-                        <?php echo "El evento tiene " . $total_inscripciones . " inscripciones."; ?> Registradas
+                        <?php echo "El evento tiene " . $total_inscripciones . " inscripciones registradas."; ?>
+                        <br>
+                        <?php echo "Cupo máximo: " . $cupo_maximo; ?>
                     </div>
                 </div>
             </div>
         </a>
+  
+
     <?php }
     ?>
 </div>
