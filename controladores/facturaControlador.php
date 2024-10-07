@@ -9,16 +9,39 @@ if ($peticionAjax) {
 class facturaControlador extends facturaModelo
 {
 
+    public function validarInscripcion($evento_id)
+    {
+        // Obtener el número actual de inscripciones
+        $totalInscripciones = facturaModelo::contarInscripciones($evento_id);
+
+        // Obtener el cupo máximo del evento
+        $cupoMaximo = facturaModelo::obtenerCupoMaximo($evento_id);
+
+        // Verificar si el cupo ya ha sido alcanzado
+        if ($totalInscripciones >= $cupoMaximo) {
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Evento lleno",
+                "Texto" => "El evento ya alcanzó su cupo máximo.",
+                "Tipo" => "error"
+            ];
+            echo json_encode($alerta);
+            exit();
+        } else {
+            return [
+                "estado" => "exito",
+                "mensaje" => "Inscripción permitida, puedes continuar."
+            ];
+        }
+    }
+
     public function agregar_factura_controlador()
     {
         // Limpiar los datos enviados por POST
         $id_evento = mainModel::limpiar_cadena($_POST['id_evento']);
         $id_asistente = mainModel::limpiar_cadena($_POST['id_asistente']);
         $id_tipo_entrada = mainModel::limpiar_cadena($_POST['id_tipo_entrada']);
-
-        // Asignar 0 a valor_pago si está vacío
         $valor_pago = !empty($_POST['valor_pago']) ? mainModel::limpiar_cadena($_POST['valor_pago']) : 0;
-
         $estado_pago = mainModel::limpiar_cadena($_POST['estado_pago']);
         $id_admin = mainModel::limpiar_cadena($_POST['id_admin']);
 
@@ -32,17 +55,30 @@ class facturaControlador extends facturaModelo
             'id_admin' => $id_admin
         ];
 
-        // Crear un array para guardar los campos que están vacíos
-        $campos_vacios = [];
+        // Validar el cupo del evento
+        $resultadoValidacion = $this->validarInscripcion($id_evento);
 
-        // Verificar qué campos están vacíos
+        if ($resultadoValidacion['estado'] == 'error') {
+            // Mostrar el mensaje de error de validación de cupo
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Cupo excedido",
+                "Texto" => $resultadoValidacion['mensaje'],
+                "Tipo" => "error"
+            ];
+            echo json_encode($alerta);
+            exit();  // Detener ejecución si el cupo ya fue alcanzado
+        }
+
+
+        // Verificar campos vacíos
+        $campos_vacios = [];
         foreach ($campos as $campo => $valor) {
-            if (empty($valor) && $campo !== 'valor_pago') { // Ignorar valor_pago ya que tiene valor por defecto
+            if (empty($valor) && $campo !== 'valor_pago') {
                 $campos_vacios[] = $campo;
             }
         }
 
-        // Si hay campos vacíos, devolver un mensaje de error con los nombres de los campos faltantes
         if (!empty($campos_vacios)) {
             $alerta = [
                 "Alerta" => "simple",
@@ -54,6 +90,8 @@ class facturaControlador extends facturaModelo
             echo json_encode($alerta);
             exit();
         }
+
+
 
         // Preparar datos para la factura
         $datos_factura = [
@@ -90,6 +128,8 @@ class facturaControlador extends facturaModelo
         echo json_encode($alerta);
         exit();
     }
+
+
 
     public function validar_cupones()
     {

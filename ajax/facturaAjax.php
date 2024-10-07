@@ -9,7 +9,7 @@ error_reporting(E_ALL);
 $peticionAjax = true;
 require_once "../config/APP.php";
 
-if ( isset($_POST['id_evento']) || isset($_POST['cupon_codigo1_reg']) || isset($_POST['cupon_codigo2_reg'])  || isset($_POST['id_tipo_entrada'])  ) {
+if (  isset($_POST['id_evento']) || isset($_POST['cupon_codigo1_reg']) || isset($_POST['cupon_codigo2_reg'])  || isset($_POST['id_tipo_entrada'])  ) {
 
     require_once "../controladores/facturaControlador.php";
     $ins_factura = new facturaControlador();
@@ -29,8 +29,6 @@ if ( isset($_POST['id_evento']) || isset($_POST['cupon_codigo1_reg']) || isset($
         echo $ins_factura->validar_entrada();
     }
 
-   
-    
     
     
 }

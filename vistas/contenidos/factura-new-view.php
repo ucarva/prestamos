@@ -58,8 +58,6 @@ if ($datos_evento->rowCount() == 1) {
             <form class="FormularioAjax" action="<?php echo SERVERURL; ?>ajax/facturaAjax.php" method="POST" data-form="save" autocomplete="off">
                 <!-- Campo oculto para el id del evento -->
                 <input type="hidden" name="id_evento" value="<?php echo $campos['id_evento']; ?>">
-
-
                 <!-- Campo oculto para el id del asistente -->
                 <?php if (isset($_SESSION['datos_asistente']['ID'])) { ?>
                     <input type="hidden" name="id_asistente" value="<?php echo $_SESSION['datos_asistente']['ID']; ?>">

@@ -21,6 +21,8 @@ class inscripcionModelo extends mainModel
         }
     }
 
+   
+    
 
     
 }
