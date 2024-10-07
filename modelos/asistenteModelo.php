@@ -114,4 +114,7 @@ class asistenteModelo extends mainModel
             return null;
         }
     }
+    
+
+   
 } //fin modelo

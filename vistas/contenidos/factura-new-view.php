@@ -17,7 +17,7 @@
         <li>
             <a href="<?php echo SERVERURL; ?>evento-new/"><i class="fas fa-plus  fa-fw"></i> &nbsp; AGREGAR EVENTO</a>
         </li>
-        
+
         <li>
             <a href="<?php echo SERVERURL; ?>evento-search/"><i class="fas fa-search-dollar fa-fw"></i> &nbsp; BUSCAR EVENTO</a>
         </li>
@@ -164,16 +164,16 @@ if ($datos_evento->rowCount() == 1) {
                         <?php if ($campos['es_entrada_gratis'] == '0') { ?>
                             <!-- Mostrar el valor total con descuento aplicado -->
                             <div class="col-12 col-md-4">
-                            <div class="form-group">
-                                <label for="valor_total" class="bmd-label-floating">Valor a Pagar con Descuento</label>
+                                <div class="form-group">
+                                    <label for="valor_total" class="bmd-label-floating">Valor total a pagar</label>
 
-                                <input value="<?php echo $campos['valor_base']; ?>" type="number" class="form-control" name="valor_pago" id="valor_total" min="0" readonly>
+                                    <input value="<?php echo $campos['valor_base']; ?>" type="number" class="form-control" name="valor_pago" id="valor_total" min="0" readonly>
+                                </div>
                             </div>
-                        </div>
-                           
+
                         <?php } ?>
                         <!-- Valor Pago (valor_pago) -->
-                
+
                         <?php if ($campos['es_entrada_gratis'] == '0') { ?>
                             <!-- Mostrar el valor total con descuento aplicado -->
                             <div class="col-12 col-md-4">

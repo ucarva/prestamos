@@ -1,7 +1,7 @@
 <!-- Page header -->
 <div class="full-box page-header">
 	<h3 class="text-left">
-		<i class="fab fa-dashcube fa-fw"></i> &nbsp; DASHBOARD
+		<i class="fab fa-dashcube fa-fw"></i> &nbsp; SISTEMA GESTION DE EVENTOS
 	</h3>
 
 </div>
@@ -63,7 +63,7 @@
     // Iterar sobre los eventos para mostrar cada uno
     while ($evento = $eventos->fetch(PDO::FETCH_ASSOC)) {
         $evento_id = $evento['id_evento'];
-        $nombre_evento = $evento['titulo']; // Asumiendo que este es el campo en tu base de datos
+        $nombre_evento = $evento['titulo']; 
 
         // Obtener el número de inscripciones para cada evento
         $total_inscripciones = $contarInscripciones->contarInscripciones($evento_id);
@@ -81,6 +81,6 @@
                 </div>
             </div>
         </a>
-    <?php } // Cerrar el bucle 
+    <?php }
     ?>
 </div>

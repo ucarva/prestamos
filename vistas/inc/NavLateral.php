@@ -14,7 +14,7 @@
 			<nav class="full-box nav-lateral-menu">
 				<ul>
 					<li>
-						<a href="<?php echo SERVERURL; ?>home/"><i class="fab fa-dashcube fa-fw"></i> &nbsp; Dashboard</a>
+						<a href="<?php echo SERVERURL; ?>home/"><i class="fab fa-dashcube fa-fw"></i> &nbsp; Escritorio</a>
 					</li>
 
 
