@@ -24,21 +24,21 @@ class facturaModelo extends mainModel
 
             // Ejecutar la consulta
             if ($sql->execute()) {
-                return true;  // Retornar verdadero si la inserción fue exitosa
+                return true;  
             } else {
-                return false;  // Retornar falso si falló
+                return false;  
             }
         } catch (PDOException $e) {
             // Capturar el error de PDO
             error_log("Error en la inserción de inscripción: " . $e->getMessage());
-            return false;  // Retornar falso si hubo una excepción
+            return false;  
         }
     }
 
     protected static function consultar_cupon_modelo($cupon)
     {
-        // Obtener la fecha actual
-        $fechaActual = date('Y-m-d H:i:s'); // Ajusta el formato según tu base de datos
+        
+        $fechaActual = date('Y-m-d H:i:s'); 
     
         // Consultar en la base de datos
         $obtenerCupon = mainModel::ejecutar_consulta_simple("SELECT porcentaje_descuento FROM codigo_promocional WHERE codigo='$cupon' AND estado='Activo' AND fecha_vigencia_fin > '$fechaActual'");
@@ -50,6 +50,20 @@ class facturaModelo extends mainModel
             return null; // Devuelve null si no se encontró el cupón
         }
     }
+
+    protected static function consultar_valorEntrada_modelo($entrada)
+    {
+        // Consultar en la base de datos por el id_tipo_entrada
+        $valorEntrada = mainModel::ejecutar_consulta_simple("SELECT cantidad FROM tipo_entrada WHERE id_tipo_entrada='$entrada'");
+    
+        if ($valorEntrada->rowCount() > 0) {
+            // Retorna un array asociativo con el valor de la cantidad
+            return $valorEntrada->fetch(PDO::FETCH_ASSOC);
+        } else {
+            return null; // Devuelve null si no se encontró la entrada
+        }
+    }
+    
     
 
     

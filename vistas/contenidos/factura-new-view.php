@@ -146,7 +146,6 @@ if ($datos_evento->rowCount() == 1) {
                                         if (count($listaEntradas) > 0) {
                                             // Iterar sobre las entradas
                                             foreach ($listaEntradas as $rows) {
-                                                // Asegúrate de que los valores no sean nulos o vacíos
                                                 if (!empty($rows['id_tipo_entrada']) && !empty($rows['descripcion'])) {
                                                     echo '<option value="' . htmlspecialchars($rows['id_tipo_entrada']) . '"' .
                                                         (($rows['id_tipo_entrada'] == $campos['id_tipo_entrada']) ? ' selected' : '') .
@@ -159,7 +158,10 @@ if ($datos_evento->rowCount() == 1) {
                                         ?>
                                     </select>
                                 </div>
+                                <button type="button" class="btn btn-info" id="boton_entrada" onclick="validarEntrada('evento_entrada', 'boton_entrada')">Validar entrada</button>
                             </div>
+                            <?php include_once "./vistas/inc/cupones.php"; ?>
+
                         <?php } ?>
                         <?php if ($campos['es_entrada_gratis'] == '0') { ?>
                             <!-- Mostrar el valor total con descuento aplicado -->

@@ -35,7 +35,7 @@
     // consulta a la base de datos para ver los registros
     $total_eventos = $ins_evento->datos_evento_controlador("Conteo", 0);
     ?>
-    <a href="<?php echo SERVERURL; ?>evento-new/" class="tile">
+    <a href="<?php echo SERVERURL; ?>evento-list/" class="tile">
         <div class="tile-icon" style="display: flex; align-items: center;">
             <i class="fas fa-users fa-fw" style="font-size: 1.5em; margin-right: 10px;"></i>
             <div>

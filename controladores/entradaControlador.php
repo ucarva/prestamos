@@ -144,12 +144,5 @@ class entradaControlador extends entradaModelo
         return entradaModelo::datos_entrada_modelo($tipo, $id);
     } // fin controlador
 
-    // Controlador de entrada
-    public function obtenerPorcentajeEntrada($id_tipo_entrada)
-    {
-        $id_tipo_entrada = mainModel::limpiar_cadena($id_tipo_entrada);
-        $consulta = mainModel::ejecutar_consulta_simple("SELECT cantidad FROM tipo_entrada WHERE id_tipo_entrada = '$id_tipo_entrada'");
-
-        return $consulta->fetch(PDO::FETCH_ASSOC)['cantidad'] ?? 0; // Retorna 0 si no se encuentra
-    }
+    
 }

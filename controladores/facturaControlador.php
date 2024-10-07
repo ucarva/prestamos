@@ -136,4 +136,40 @@ class facturaControlador extends facturaModelo
         echo json_encode($alertas);
         exit();
     }
+
+    public function validar_entrada()
+    {
+        $alertas = [];
+        $totalDescuento = 0;
+
+        if (isset($_POST['id_tipo_entrada'])) {
+            $entrada = mainModel::limpiar_cadena($_POST['id_tipo_entrada']);
+            if (!empty($entrada)) {
+                $entradaValidado = facturaModelo::consultar_valorEntrada_modelo($entrada);
+                if ($entradaValidado !== null) {
+                    $precioEntrada = $entradaValidado['cantidad'];
+                    $totalDescuento += $precioEntrada;
+
+                    $alertas[] = [
+                        "Alerta" => "simple",
+                        "Titulo" => "Entrada válida",
+                        "Texto" => "La entrada ha sido validada correctamente. Precio: $precioEntrada",
+                        "Tipo" => "success",
+                        "NuevoValor" => $precioEntrada
+                    ];
+                } else {
+                    $alertas[] = [
+                        "Alerta" => "simple",
+                        "Titulo" => "Entrada inválida",
+                        "Texto" => "El tipo de entrada seleccionado no es válido.",
+                        "Tipo" => "error"
+                    ];
+                }
+            }
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($alertas);
+        exit();
+    }
 }
