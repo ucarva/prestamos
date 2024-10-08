@@ -5,7 +5,7 @@ require_once "mainModel.php";
 class entradaModelo extends mainModel
 {
 
-    //Modelo para registrar entrada
+    
     protected static function agregar_entrada_modelo($datos)
     {
         $sql = mainModel::conectar()->prepare("INSERT INTO tipo_entrada(descripcion,cantidad,id_admin)
@@ -17,9 +17,8 @@ class entradaModelo extends mainModel
 
         $sql->execute();
         return $sql;
-    } //fin modelo
-
-    //Modelo consultar entradas
+    } 
+ 
     protected static function consultar_entrada_modelo($inicio, $registros, $busqueda)
     {
         $conexion = mainModel::conectar();
@@ -43,10 +42,8 @@ class entradaModelo extends mainModel
         $datos = $consulta->fetchAll(PDO::FETCH_ASSOC);
 
         return $datos;
-    } //fin modelo
-
-
-    //Modelo para eliminar la entrada
+    } 
+  
     protected static function eliminar_entrada_modelo()
     {
         $id = mainModel::decryption($_POST['entrada_id_del']);
@@ -63,9 +60,8 @@ class entradaModelo extends mainModel
         } else {
             return null;
         }
-    } //fin modelo
-
-    //Modelo para actualizar entrada
+    } 
+  
     protected static function actualizar_entrada_modelo($datos)
     {
         $id = mainModel::decryption($_POST['entrada_id_up']);
@@ -83,13 +79,11 @@ class entradaModelo extends mainModel
             $sql->bindParam(":ID", $id);
             $sql->execute();
             return $sql;
-            
         } else {
             return null;
         }
     }
 
-    //Modelo para seleccionar los datos de entrada
     protected static function datos_entrada_modelo($tipo, $id)
     {
         if ($tipo == "Unico") {
@@ -102,5 +96,5 @@ class entradaModelo extends mainModel
 
         $sql->execute();
         return $sql;
-    } //fin modelo
+    } 
 }

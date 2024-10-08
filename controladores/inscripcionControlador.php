@@ -61,8 +61,6 @@ class inscripcionControlador extends inscripcionModelo
         }
     }
 
-
-
     public function agregar_asistente_inscripcion_controlador()
     {
 
@@ -122,8 +120,6 @@ class inscripcionControlador extends inscripcionModelo
         }
     }
 
-
-
     public function eliminar_asistente_inscripcion_controlador()
     {
 
@@ -151,8 +147,7 @@ class inscripcionControlador extends inscripcionModelo
         echo json_encode($alerta);
         exit();
     }
-
-    //controlador para buscar evento
+ 
     public function buscar_evento_inscripcion_controlador()
     {
 
@@ -203,9 +198,8 @@ class inscripcionControlador extends inscripcionModelo
                  </div>';
             exit();
         }
-    } //fin controlador
+    } 
 
-    //controlador para agregar asistente
     public function agregar_evento_inscripcion_controlador()
     {
 
@@ -277,9 +271,8 @@ class inscripcionControlador extends inscripcionModelo
             echo json_encode($alerta);
             exit();
         }
-    } //fin controlador
+    } 
     
-
     public function contarInscripciones($evento_id) {
         // Consulta SQL con parámetro, ahora contando solo inscripciones activas
         $sql = "SELECT COUNT(*) AS total_inscripciones 
@@ -297,8 +290,7 @@ class inscripcionControlador extends inscripcionModelo
         
         return $resultado['total_inscripciones'];
     }
-    
-    
+       
     public function obtenerCupoMaximo($evento_id) {
         // Consulta para obtener el cupo máximo del evento
         $sql = "SELECT cupo FROM evento WHERE id_evento = :id_evento AND activo = 1";

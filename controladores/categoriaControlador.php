@@ -9,7 +9,7 @@ if ($peticionAjax) {
 
 class categoriaControlador extends categoriaModelo
 {
-    //Controlador para agregar categoria
+   
     public function agregar_categoria_controlador()
     {
         $descripcion = mainModel::limpiar_cadena($_POST['categoria_nombre_reg']);
@@ -49,9 +49,9 @@ class categoriaControlador extends categoriaModelo
         header('Content-Type: application/json');
         echo json_encode($alerta);
         exit();
-    } //fin controlador
+    }
 
-    // Controlador para paginar categorias
+    
     public function paginador_categoria_controlador($pagina, $registros, $busqueda)
     {
         $pagina = mainModel::limpiar_cadena($pagina);
@@ -65,9 +65,9 @@ class categoriaControlador extends categoriaModelo
         $listaCategorias = categoriaModelo::consultar_categoria_modelo($inicio, $registros, $busqueda);
 
         return $listaCategorias;
-    } //fin controlador
+    } 
 
-    // Controlador para eliminar categoria
+   
     public function eliminar_categoria_controlador()
     {
         $eliminar_categoria = categoriaModelo::eliminar_categoria_modelo();
@@ -93,9 +93,9 @@ class categoriaControlador extends categoriaModelo
             echo json_encode($alerta);
             exit();
         }
-    } //fin controlador
+    } 
 
-    //controlador para actualizar categoria
+   
     public function actualizar_categoria_controlador()
     {
         //recibiendo parametros del formulario
@@ -128,9 +128,9 @@ class categoriaControlador extends categoriaModelo
         header('Content-Type: application/json');
         echo json_encode($alerta);
         exit();
-    } //fin controlador
+    } 
 
-    //controlador para los datos de categoria
+    
     public  function datos_categoria_controlador($tipo, $id)
     {
         $tipo = mainModel::limpiar_cadena($tipo);
@@ -138,7 +138,7 @@ class categoriaControlador extends categoriaModelo
         $id = mainModel::limpiar_cadena($id);
 
         return categoriaModelo::datos_categoria_modelo($tipo, $id);
-    } // fin controlador
+    } 
 
 
 

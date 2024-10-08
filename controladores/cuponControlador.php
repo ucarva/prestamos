@@ -9,7 +9,7 @@ if ($peticionAjax) {
 
 class cuponControlador extends cuponModelo
 {
-    //Controlador para agregar codigo promocional
+
     public function agregar_cupon_controlador()
     {
         if (empty($_POST['cupon_codigo_reg']) || empty($_POST['cupon_descuento_reg']) || empty($_POST['cupon_estado_reg']) || empty($_POST['cupon_fecha_vigencia_reg']) || empty($_POST['cupon_fecha_fin_reg'])) {
@@ -87,9 +87,8 @@ class cuponControlador extends cuponModelo
         header('Content-Type: application/json');
         echo json_encode($alerta);
         exit();
-    } //fin controlador
+    }
 
-    //controlador para los datos de entrada
     public  function datos_cupon_controlador($tipo, $id)
     {
         $tipo = mainModel::limpiar_cadena($tipo);
@@ -97,25 +96,23 @@ class cuponControlador extends cuponModelo
         $id = mainModel::limpiar_cadena($id);
 
         return cuponModelo::datos_cupon_modelo($tipo, $id);
-    } // fin controlador
+    }
 
-     // Controlador para paginar cupones
-     public function paginador_cupon_controlador($pagina, $registros, $busqueda)
-     {
-         $pagina = mainModel::limpiar_cadena($pagina);
-         $registros = mainModel::limpiar_cadena($registros);
-         $busqueda = mainModel::limpiar_cadena($busqueda);
- 
- 
-         $pagina = (isset($pagina) && $pagina > 0) ? (int)$pagina : 1;
-         $inicio = ($pagina > 0) ? (($pagina * $registros) - $registros) : 0;
- 
-         $listaCupones = cuponModelo::consultar_cupon_modelo($inicio, $registros, $busqueda);
- 
-         return $listaCupones;
-     } //fin controlador
+    public function paginador_cupon_controlador($pagina, $registros, $busqueda)
+    {
+        $pagina = mainModel::limpiar_cadena($pagina);
+        $registros = mainModel::limpiar_cadena($registros);
+        $busqueda = mainModel::limpiar_cadena($busqueda);
 
-      //controlador para actualizar cupones
+
+        $pagina = (isset($pagina) && $pagina > 0) ? (int)$pagina : 1;
+        $inicio = ($pagina > 0) ? (($pagina * $registros) - $registros) : 0;
+
+        $listaCupones = cuponModelo::consultar_cupon_modelo($inicio, $registros, $busqueda);
+
+        return $listaCupones;
+    }
+
     public function actualizar_cupon_controlador()
     {
         //recibiendo parametros del formulario
@@ -173,34 +170,32 @@ class cuponControlador extends cuponModelo
         header('Content-Type: application/json');
         echo json_encode($alerta);
         exit();
-    } //fin controlador
+    }
 
-     // Controlador para eliminar cupon
-     public function eliminar_cupon_controlador()
-     {
-         $eliminar_cupon = cuponModelo::eliminar_cupon_modelo();
-         if ($eliminar_cupon != null) {
-             $alerta = [
-                 "Alerta" => "recargar",
-                 "Titulo" => "cupon eliminado.",
-                 "Texto" => "cupon eliminado con exito.",
-                 "Tipo" => "success"
-             ];
-             header('Content-Type: application/json');
-             echo json_encode($alerta);
-             exit();
-         } else {
-             $alerta = [
-                 "Alerta" => "simple",
-                 "Titulo" => "Ocurrió un error inesperado.",
-                 "Texto" => "No hemos podido eliminar el cupon.",
-                 "Tipo" => "error"
-             ];
- 
-             header('Content-Type: application/json');
-             echo json_encode($alerta);
-             exit();
-         }
-     } //fin controlador
+    public function eliminar_cupon_controlador()
+    {
+        $eliminar_cupon = cuponModelo::eliminar_cupon_modelo();
+        if ($eliminar_cupon != null) {
+            $alerta = [
+                "Alerta" => "recargar",
+                "Titulo" => "cupon eliminado.",
+                "Texto" => "cupon eliminado con exito.",
+                "Tipo" => "success"
+            ];
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        } else {
+            $alerta = [
+                "Alerta" => "simple",
+                "Titulo" => "Ocurrió un error inesperado.",
+                "Texto" => "No hemos podido eliminar el cupon.",
+                "Tipo" => "error"
+            ];
 
+            header('Content-Type: application/json');
+            echo json_encode($alerta);
+            exit();
+        }
+    }
 }

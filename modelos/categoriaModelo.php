@@ -5,7 +5,7 @@ require_once "mainModel.php";
 class categoriaModelo extends mainModel
 {
 
-    //Modelo para registrar categoria
+
     protected static function agregar_categoria_modelo($datos)
     {
         $sql = mainModel::conectar()->prepare("INSERT INTO categoria (descripcion,id_admin)
@@ -16,9 +16,8 @@ class categoriaModelo extends mainModel
 
         $sql->execute();
         return $sql;
-    } //fin modelo
-
-    //Modelo consultar categorias
+    } 
+  
     protected static function consultar_categoria_modelo($inicio, $registros, $busqueda)
     {
         $conexion = mainModel::conectar();
@@ -42,10 +41,8 @@ class categoriaModelo extends mainModel
         $datos = $consulta->fetchAll(PDO::FETCH_ASSOC);
 
         return $datos;
-    } //fin modelo
+    } 
 
-
-    //Modelo para eliminar la categoria
     protected static function eliminar_categoria_modelo()
     {
         $id = mainModel::decryption($_POST['categoria_id_del']);
@@ -62,9 +59,8 @@ class categoriaModelo extends mainModel
         } else {
             return null;
         }
-    } //fin modelo
+    } 
 
-    //Modelo para actualizar categoria
     protected static function actualizar_categoria_modelo($datos)
     {
         $id = mainModel::decryption($_POST['categoria_id_up']);
@@ -88,7 +84,6 @@ class categoriaModelo extends mainModel
         }
     }
 
-    //Modelo para seleccionar los datos de categoria
     protected static function datos_categoria_modelo($tipo, $id)
     {
         if ($tipo == "Unico") {
@@ -101,7 +96,6 @@ class categoriaModelo extends mainModel
 
         $sql->execute();
         return $sql;
-    } //fin modelo
-
+    } 
    
 }

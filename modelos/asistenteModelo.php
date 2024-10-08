@@ -4,8 +4,6 @@ require_once "mainModel.php";
 
 class asistenteModelo extends mainModel
 {
-
-   
     protected static function agregar_asistente_modelo($datos)
     {
         $sql = mainModel::conectar()->prepare("INSERT INTO asistente (nombres,apellidos,fecha_nacimiento,email,celular,activo,id_admin)

@@ -9,7 +9,7 @@ if ($peticionAjax) {
 
 class entradaControlador extends entradaModelo
 {
-    //Controlador para agregar categoria
+    
     public function agregar_entrada_controlador()
     {
         $descripcion = mainModel::limpiar_cadena($_POST['entrada_nombre_reg']);
@@ -51,9 +51,9 @@ class entradaControlador extends entradaModelo
         header('Content-Type: application/json');
         echo json_encode($alerta);
         exit();
-    } //fin controlador
+    } 
 
-    // Controlador para paginar entradas
+    
     public function paginador_entrada_controlador($pagina, $registros, $busqueda)
     {
         $pagina = mainModel::limpiar_cadena($pagina);
@@ -67,9 +67,9 @@ class entradaControlador extends entradaModelo
         $listaentradas = entradaModelo::consultar_entrada_modelo($inicio, $registros, $busqueda);
 
         return $listaentradas;
-    } //fin controlador
+    } 
 
-    // Controlador para eliminar entrada
+   
     public function eliminar_entrada_controlador()
     {
         $eliminar_entrada = entradaModelo::eliminar_entrada_modelo();
@@ -95,9 +95,9 @@ class entradaControlador extends entradaModelo
             echo json_encode($alerta);
             exit();
         }
-    } //fin controlador
+    } 
 
-    //controlador para actualizar entrada
+   
     public function actualizar_entrada_controlador()
     {
         //recibiendo parametros del formulario
@@ -132,9 +132,9 @@ class entradaControlador extends entradaModelo
         header('Content-Type: application/json');
         echo json_encode($alerta);
         exit();
-    } //fin controlador
+    } 
 
-    //controlador para los datos de entrada
+   
     public  function datos_entrada_controlador($tipo, $id)
     {
         $tipo = mainModel::limpiar_cadena($tipo);
@@ -142,7 +142,7 @@ class entradaControlador extends entradaModelo
         $id = mainModel::limpiar_cadena($id);
 
         return entradaModelo::datos_entrada_modelo($tipo, $id);
-    } // fin controlador
+    } 
 
     
 }

@@ -9,8 +9,6 @@ if ($peticionAjax) {
 class usuarioControlador extends usuarioModelo
 {
 
-
-    // controlador para agregar usuario
     public function agregar_usuario_controlador()
     {
         $dni = mainModel::limpiar_cadena($_POST['usuario_dni_reg']);
@@ -252,9 +250,8 @@ class usuarioControlador extends usuarioModelo
         header('Content-Type: application/json');
         echo json_encode($alerta);
         exit();
-    } //fin controlador
+    } 
 
-    // Controlador para listar paginas usuarios
     public function paginador_usuario_controlador($pagina, $registros, $privilegio, $id, $url, $busqueda)
     {
         $pagina = mainModel::limpiar_cadena($pagina);
@@ -363,9 +360,9 @@ class usuarioControlador extends usuarioModelo
 
 
         return $tabla;
-    } //fin controlador
+    } 
 
-    // Controlador para eliminar usuarios
+    
     public function eliminar_usuario_controlador()
     {
         //recibiendo el id del usuario
@@ -465,9 +462,9 @@ class usuarioControlador extends usuarioModelo
             echo json_encode($alerta);
             exit();
         }
-    } //fincontrolador
+    } 
 
-    //controlador para los datos de usuario
+   
     public  function datos_usuario_controlador($tipo, $id)
     {
         $tipo = mainModel::limpiar_cadena($tipo);
@@ -476,9 +473,9 @@ class usuarioControlador extends usuarioModelo
         $id = mainModel::limpiar_cadena($id);
 
         return usuarioModelo::datos_usuario_modelo($tipo, $id);
-    } // fin controlador
+    } 
 
-    //controlador para actualizar usuario
+   
     public function actualizar_usuario_controlador()
     {
         //Recibiendo el id
@@ -846,6 +843,6 @@ class usuarioControlador extends usuarioModelo
         header('Content-Type: application/json');
             echo json_encode($alerta);
             exit();
-    } //fin controlador
+    } 
 
 }

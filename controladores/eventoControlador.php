@@ -8,7 +8,7 @@ if ($peticionAjax) {
 
 class eventoControlador extends eventoModelo
 {
-    // Controlador para agregar evento
+    
     public function agregar_evento_controlador()
     {
         // Limpiar y asignar datos del formulario
@@ -22,7 +22,7 @@ class eventoControlador extends eventoModelo
         $estado = mainModel::limpiar_cadena($_POST['evento_estado_reg']);
         $fecha_inicio = mainModel::limpiar_cadena($_POST['evento_fecha_inicio_reg']);
         $fecha_cierre = mainModel::limpiar_cadena($_POST['evento_fecha_cierre_reg']);
-       
+
         $esEntradaGratis = mainModel::limpiar_cadena($_POST['evento_tipo_entrada_reg']);
         $id_admin = mainModel::limpiar_cadena($_POST['id_admin']);
 
@@ -58,7 +58,7 @@ class eventoControlador extends eventoModelo
             "Estado" => $estado,
             "FechaInicio" => $fecha_inicio,
             "FechaCierre" => $fecha_cierre,
-            "esGratis"=>$esEntradaGratis,
+            "esGratis" => $esEntradaGratis,
             "id_admin" => $id_admin
         ];
 
@@ -71,7 +71,6 @@ class eventoControlador extends eventoModelo
         exit();
     }
 
-    // Controlador para paginar asistente
     public function paginador_evento_controlador($pagina, $registros, $busqueda)
     {
         $pagina = mainModel::limpiar_cadena($pagina);
@@ -85,9 +84,8 @@ class eventoControlador extends eventoModelo
         $listaEventos = eventoModelo::consultar_evento_modelo($inicio, $registros, $busqueda);
 
         return $listaEventos;
-    } //fin controlador
+    } 
 
-   
     public function eliminar_evento_controlador()
     {
         $eliminar_evento = eventoModelo::eliminar_evento_modelo();
@@ -113,9 +111,8 @@ class eventoControlador extends eventoModelo
             echo json_encode($alerta);
             exit();
         }
-    } 
+    }
 
-   
     public function actualizar_evento_controlador()
     {
         // Limpiar y asignar datos del formulario
@@ -128,7 +125,7 @@ class eventoControlador extends eventoModelo
         $cupo = mainModel::limpiar_cadena($_POST['evento_cupo_up']);
         $estado = mainModel::limpiar_cadena($_POST['evento_estado_up']);
         $fecha_inicio = mainModel::limpiar_cadena($_POST['evento_fecha_inicio_up']);
-        $fecha_cierre = mainModel::limpiar_cadena($_POST['evento_fecha_cierre_up']);       
+        $fecha_cierre = mainModel::limpiar_cadena($_POST['evento_fecha_cierre_up']);
         $esEntradaGratis = mainModel::limpiar_cadena($_POST['evento_tipo_entrada_up']);
         $id_evento = mainModel::limpiar_cadena($_POST['evento_id_up']);
 
@@ -189,8 +186,8 @@ class eventoControlador extends eventoModelo
         header('Content-Type: application/json');
         echo json_encode($alerta);
         exit();
-    } 
-  
+    }
+
     public  function datos_evento_controlador($tipo, $id)
     {
         $tipo = mainModel::limpiar_cadena($tipo);
@@ -198,24 +195,26 @@ class eventoControlador extends eventoModelo
         $id = mainModel::limpiar_cadena($id);
 
         return eventoModelo::datos_evento_modelo($tipo, $id);
-    } 
-    
-    public function obtenerEventos() {
+    }
+
+    public function obtenerEventos()
+    {
         return eventoModelo::datos_evento_modelo("Conteo", 0);
     }
-    public function obtenerCupoMaximo($evento_id) {
+    public function obtenerCupoMaximo($evento_id)
+    {
         // Consulta para obtener el cupo máximo del evento
         $sql = "SELECT cupo FROM evento WHERE id_evento = :id_evento";
-        
+
         // Parámetros a pasar
         $parametros = [':id_evento' => $evento_id];
-        
+
         // Ejecutar la consulta
         $cupoMaximo = mainModel::ejecutar_consulta_simple($sql, $parametros);
-        
+
         // Obtener el resultado
         $resultado = $cupoMaximo->fetch(PDO::FETCH_ASSOC);
-        
-        return $resultado['cupo']; 
+
+        return $resultado['cupo'];
     }
 }

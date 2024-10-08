@@ -50,11 +50,11 @@ class eventoModelo extends mainModel
     protected static function datos_evento_modelo($tipo, $id)
     {
         if ($tipo == "Unico") {
-            $sql = mainModel::conectar()->prepare("SELECT * FROM evento WHERE id_evento=:ID ");
+            $sql = mainModel::conectar()->prepare("SELECT * FROM evento WHERE id_evento=:ID  ");
 
             $sql->bindParam(":ID", $id);
         } elseif ($tipo == "Conteo") {
-            $sql = mainModel::conectar()->prepare("SELECT id_evento, titulo FROM evento ");
+            $sql = mainModel::conectar()->prepare("SELECT id_evento, titulo FROM evento WHERE estado ='Habilitado'");
         }
 
         $sql->execute();
@@ -75,8 +75,8 @@ class eventoModelo extends mainModel
            evento.estado,
            evento.fecha_apertura,
            evento.fecha_cierre,
-           CASE WHEN evento.es_entrada_gratis = 1 THEN 'Gratis' ELSE 'Pago' END AS es_entrada_gratis
-           ";  // La coma después de es_entrada_gratis ha sido eliminada
+           CASE WHEN evento.es_entrada_gratis = 1 THEN 'Gratis' ELSE 'Pago' END AS es_entrada_gratis  
+           ";  
 
 
         // Consulta base con INNER JOIN

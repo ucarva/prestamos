@@ -4,7 +4,7 @@ require_once "mainModel.php";
 
 class cuponModelo extends mainModel
 {
-    //Modelo para registrar cupones
+    
     protected static function agregar_cupon_modelo($datos)
     {
         $sql = mainModel::conectar()->prepare("INSERT INTO codigo_promocional (codigo,porcentaje_descuento,estado,fecha_vigencia_inicio,fecha_vigencia_fin,id_admin)
@@ -19,9 +19,9 @@ class cuponModelo extends mainModel
 
         $sql->execute();
         return $sql;
-    } //fin modelo
+    } 
 
-    //Modelo para seleccionar los datos de cupones
+    
     protected static function datos_cupon_modelo($tipo, $id)
     {
         if ($tipo == "Unico") {
@@ -34,9 +34,9 @@ class cuponModelo extends mainModel
 
         $sql->execute();
         return $sql;
-    } //fin modelo
+    }
 
-    // Modelo consultar cupones
+    
     protected static function consultar_cupon_modelo($inicio, $registros, $busqueda)
     {
         $conexion = mainModel::conectar();
@@ -58,10 +58,10 @@ class cuponModelo extends mainModel
         $datos = $consulta->fetchAll(PDO::FETCH_ASSOC);
 
         return $datos;
-    } // fin modelo
+    }
 
 
-    //Modelo para actualizar cupon
+    
     protected static function actualizar_cupon_modelo($datos)
     {
         // Limpiar y obtener el ID del cupón
@@ -89,42 +89,39 @@ class cuponModelo extends mainModel
             $sql->bindParam(":Inicio", $datos['Inicio']);
             $sql->bindParam(":Fin", $datos['Fin']);
             $sql->bindParam(":id_admin", $datos['id_admin']);
-            $sql->bindParam(":ID", $datos['ID']); 
+            $sql->bindParam(":ID", $datos['ID']);
 
-          
+
             $sql->execute();
-            return $sql; 
+            return $sql;
         } else {
-            
+
             return null;
         }
-    } // Fin del modelo
-
-     //Modelo para eliminar cupon
-    protected static function eliminar_cupon_modelo()
-{
-    // Limpiar y obtener el ID del cupón
-    $id = mainModel::decryption($_POST['cupon_id_del']);
-    $id = mainModel::limpiar_cadena($id);
-
-    // Verificar si el cupón existe
-    $obtenerCupon = mainModel::ejecutar_consulta_simple("SELECT id_codigo FROM codigo_promocional WHERE id_codigo='$id'");
-    if ($obtenerCupon->rowCount() > 0) {
-        // Preparar la consulta de eliminación
-        $sql = mainModel::conectar()->prepare("DELETE FROM codigo_promocional WHERE id_codigo=:ID");
-
-        // Sustituyendo marcador :ID por la variable $id
-        $sql->bindParam(":ID", $id);
-        $sql->execute();
-        
-        // Retornar el resultado de la consulta
-        return $sql->rowCount() > 0; // Retorna true si se eliminó al menos un registro
-    } else {
-        return null; // El cupón no fue encontrado
     }
-} // Fin del modelo
 
+   
+    protected static function eliminar_cupon_modelo()
+    {
+        // Limpiar y obtener el ID del cupón
+        $id = mainModel::decryption($_POST['cupon_id_del']);
+        $id = mainModel::limpiar_cadena($id);
 
+        // Verificar si el cupón existe
+        $obtenerCupon = mainModel::ejecutar_consulta_simple("SELECT id_codigo FROM codigo_promocional WHERE id_codigo='$id'");
+        if ($obtenerCupon->rowCount() > 0) {
+            // Preparar la consulta de eliminación
+            $sql = mainModel::conectar()->prepare("DELETE FROM codigo_promocional WHERE id_codigo=:ID");
 
+            // Sustituyendo marcador :ID por la variable $id
+            $sql->bindParam(":ID", $id);
+            $sql->execute();
+
+            // Retornar el resultado de la consulta
+            return $sql->rowCount() > 0; // Retorna true si se eliminó al menos un registro
+        } else {
+            return null; // El cupón no fue encontrado
+        }
+    }
 
 }
