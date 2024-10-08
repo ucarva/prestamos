@@ -64,7 +64,7 @@
                     </div>
                     <div class="col-12 col-md-6">
                         <div class="form-group">
-                            <label for="evento_fecha_inicio">Fecha de cierre</label>
+                            <label for="evento_fecha_cierre">Fecha de cierre</label>
                             <input type="date" class="form-control" name="evento_fecha_cierre_reg" value="<?php echo date("Y-m-d"); ?>" id="evento_fecha_cierre">
                         </div>
                     </div>

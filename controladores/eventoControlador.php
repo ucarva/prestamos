@@ -87,7 +87,7 @@ class eventoControlador extends eventoModelo
         return $listaEventos;
     } //fin controlador
 
-    // Controlador para eliminar eventos
+   
     public function eliminar_evento_controlador()
     {
         $eliminar_evento = eventoModelo::eliminar_evento_modelo();
@@ -113,9 +113,9 @@ class eventoControlador extends eventoModelo
             echo json_encode($alerta);
             exit();
         }
-    } //fin controlador
+    } 
 
-    //controlador para actualizar evento
+   
     public function actualizar_evento_controlador()
     {
         // Limpiar y asignar datos del formulario
@@ -128,9 +128,10 @@ class eventoControlador extends eventoModelo
         $cupo = mainModel::limpiar_cadena($_POST['evento_cupo_up']);
         $estado = mainModel::limpiar_cadena($_POST['evento_estado_up']);
         $fecha_inicio = mainModel::limpiar_cadena($_POST['evento_fecha_inicio_up']);
-        $fecha_cierre = mainModel::limpiar_cadena($_POST['evento_fecha_cierre_up']);
-        
+        $fecha_cierre = mainModel::limpiar_cadena($_POST['evento_fecha_cierre_up']);       
         $esEntradaGratis = mainModel::limpiar_cadena($_POST['evento_tipo_entrada_up']);
+        $id_evento = mainModel::limpiar_cadena($_POST['evento_id_up']);
+
 
         //validando fechas
         if (strtotime($fecha_inicio) > strtotime($fecha_cierre)) {
@@ -162,8 +163,9 @@ class eventoControlador extends eventoModelo
             "Cupo" => $cupo,
             "Estado" => $estado,
             "FechaInicio" => $fecha_inicio,
-            "FechaCierre" => $fecha_cierre,
-            "Tipo" => $esEntradaGratis,
+            "FechaFin" => $fecha_cierre,
+            "esGratis" => $esEntradaGratis,
+            "ID" => $id_evento
 
         ];
 
@@ -187,9 +189,8 @@ class eventoControlador extends eventoModelo
         header('Content-Type: application/json');
         echo json_encode($alerta);
         exit();
-    } //fin controlador
-
-    //controlador para los datos de evento
+    } 
+  
     public  function datos_evento_controlador($tipo, $id)
     {
         $tipo = mainModel::limpiar_cadena($tipo);
@@ -197,7 +198,7 @@ class eventoControlador extends eventoModelo
         $id = mainModel::limpiar_cadena($id);
 
         return eventoModelo::datos_evento_modelo($tipo, $id);
-    } // fin controlador
+    } 
     
     public function obtenerEventos() {
         return eventoModelo::datos_evento_modelo("Conteo", 0);

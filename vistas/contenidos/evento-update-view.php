@@ -34,6 +34,7 @@
 		<form class="form-neon FormularioAjax " action="<?php echo SERVERURL; ?>ajax/eventoAjax.php" method="POST" data-form="update" autocomplete="off">
 			<input type="hidden" name="evento_id_up" value="<?php echo $pagina[1]; ?>">
 			<input type="hidden" name="id_admin" value="<?php echo $_SESSION['id_spm']; ?>">
+		
 			<fieldset>
 				<legend><i class="far fa-plus-square"></i> &nbsp; Información del evento</legend>
 				<div class="container-fluid">
@@ -70,7 +71,7 @@
 						</div>
 						<div class="col-12 col-md-6">
 							<div class="form-group">
-								<label for="evento_fecha_inicio">Fecha de cierre</label>
+								<label for="evento_fecha_cierre">Fecha de cierre</label>
 								<input value="<?php echo $campos['fecha_cierre']; ?>" type="date" class="form-control" name="evento_fecha_cierre_up" value="<?php echo date("Y-m-d"); ?>" id="evento_fecha_cierre">
 							</div>
 						</div>
@@ -107,14 +108,14 @@
 									// Obtener lista de categorías
 									$listaCategorias = $ins_evento->paginador_categoria_controlador($pagina[1], 20, "");
 
-									// Suponiendo que tienes la categoría actual a editar almacenada en una variable $categoria_actual
-									$categoria_actual = $campos['id_categoria']; // Asegúrate de que esta variable contenga el ID de la categoría actual
 
-									// Verificar si hay categorías en la lista
+									$categoria_actual = $campos['id_categoria'];
+
+
 									if (count($listaCategorias) > 0) {
-										// Iterar sobre las categorías
+
 										foreach ($listaCategorias as $rows) {
-											// Comparar el ID de la categoría con el ID actual y agregar el atributo 'selected' si coinciden
+
 											$selected = ($rows['id_categoria'] == $categoria_actual) ? 'selected' : '';
 											echo '<option value="' . $rows['id_categoria'] . '" ' . $selected . '>' . $rows['descripcion'] . '</option>';
 										}
@@ -147,18 +148,14 @@
 								</select>
 							</div>
 						</div>
-
-
-
-
 						<!-- Tipo de Evento -->
 						<div class="col-12 col-md-6">
 							<div class="form-group">
 								<label for="evento_tipo_entrada" class="bmd-label-floating">Tipo evento</label>
 								<select class="form-control" name="evento_tipo_entrada_up" id="evento_tipo_entrada">
 									<option value="" selected disabled>Seleccione una opción</option>
-									<option value="Pago" <?php echo ($campos['es_entrada_gratis'] == 'Pago') ? 'selected' : ''; ?>>Pago</option>
-									<option value="Gratis" <?php echo ($campos['es_entrada_gratis'] == 'Gratis') ? 'selected' : ''; ?>>Gratis</option>
+									<option value="0" <?php echo ($campos['es_entrada_gratis'] == '0') ? 'selected' : ''; ?>>Pago</option>
+									<option value="1" <?php echo ($campos['es_entrada_gratis'] == '1') ? 'selected' : ''; ?>>Gratis</option>
 								</select>
 							</div>
 						</div>

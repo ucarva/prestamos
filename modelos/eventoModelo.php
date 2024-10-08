@@ -4,7 +4,7 @@ require_once "mainModel.php";
 
 class eventoModelo extends mainModel
 {
-    // Modelo para registrar eventos
+    
     protected static function agregar_evento_modelo($datos)
     {
         // Validar la categoría
@@ -39,9 +39,6 @@ class eventoModelo extends mainModel
         }
     }
 
- 
-
-    // Método para validar la existencia de la categoría
     protected static function validar_categoria($id_categoria)
     {
         $sql = mainModel::conectar()->prepare("SELECT * FROM categoria WHERE id_categoria = :id_categoria");
@@ -50,7 +47,6 @@ class eventoModelo extends mainModel
         return $sql->rowCount() > 0; // Retorna true si existe
     }
 
-    //Modelo para seleccionar los datos de evento
     protected static function datos_evento_modelo($tipo, $id)
     {
         if ($tipo == "Unico") {
@@ -63,7 +59,7 @@ class eventoModelo extends mainModel
 
         $sql->execute();
         return $sql;
-    } //fin modelo
+    } 
 
     protected static function consultar_evento_modelo($inicio, $registros, $busqueda)
     {
@@ -124,9 +120,7 @@ class eventoModelo extends mainModel
 
         return $datos;
     }
-
-
-    //Modelo para eliminar el evento
+ 
     protected static function eliminar_evento_modelo()
     {
         $id = mainModel::decryption($_POST['evento_id_del']);
@@ -143,10 +137,8 @@ class eventoModelo extends mainModel
         } else {
             return null;
         }
-    } //fin modelo
+    } 
 
-
-    //Modelo para actualizar evento
     protected static function actualizar_evento_modelo($datos)
     {
         $id = mainModel::decryption($_POST['evento_id_up']);

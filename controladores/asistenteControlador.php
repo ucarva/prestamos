@@ -10,7 +10,7 @@ if ($peticionAjax) {
 class asistenteControlador extends asistenteModelo
 {
 
-    //Controlador para agregar asistente
+  
     public function agregar_asistente_controlador()
     {
         $nombre = mainModel::limpiar_cadena($_POST['asistente_nombre_reg']);
@@ -65,9 +65,8 @@ class asistenteControlador extends asistenteModelo
         header('Content-Type: application/json');
         echo json_encode($alerta);
         exit();
-    } //fin controlador
-
-    // Controlador para paginar asistente
+    } 
+ 
     public function paginador_asistente_controlador($pagina, $registros, $busqueda)
     {
         $pagina = mainModel::limpiar_cadena($pagina);
@@ -81,9 +80,8 @@ class asistenteControlador extends asistenteModelo
         $listaAsistentes = asistenteModelo::consultar_asistente_modelo($inicio, $registros, $busqueda);
 
         return $listaAsistentes;
-    } //fin controlador
-
-    // Controlador para eliminar (desactivar) asistente
+    } 
+  
     public function eliminar_asistente_controlador()
     {
         $eliminar_asistente = asistenteModelo::eliminar_asistente_modelo();
@@ -109,11 +107,8 @@ class asistenteControlador extends asistenteModelo
         header('Content-Type: application/json');
         echo json_encode($alerta);
         exit();
-    } // fin controlador
+    } 
 
-
-
-    //controlador para los datos de asistente
     public  function datos_asistente_controlador($tipo, $id)
     {
         $tipo = mainModel::limpiar_cadena($tipo);
@@ -121,9 +116,8 @@ class asistenteControlador extends asistenteModelo
         $id = mainModel::limpiar_cadena($id);
 
         return asistenteModelo::datos_asistente_modelo($tipo, $id);
-    } // fin controlador
+    } 
 
-    //controlador para actualizar asistente
     public function actualizar_asistente_controlador()
     {
         //recibiendo parametros del formulario
@@ -164,6 +158,6 @@ class asistenteControlador extends asistenteModelo
         header('Content-Type: application/json');
         echo json_encode($alerta);
         exit();
-    } //fin controlador
+    } 
 
 }

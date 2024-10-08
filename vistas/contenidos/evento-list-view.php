@@ -80,7 +80,7 @@
                             
                                     
                     <td>
-                        <a href="' . SERVERURL . 'evento-update/' . $model->encryption($rows['id_evento']) . '/" class="btn btn-success">
+                        <a href="' . SERVERURL . 'evento-update/' . $model->encryption($rows['id_evento']) . '" class="btn btn-success">
                             <i class="fas fa-edit"></i>
                         </a>
                     </td>

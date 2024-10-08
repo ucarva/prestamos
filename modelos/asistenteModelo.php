@@ -5,7 +5,7 @@ require_once "mainModel.php";
 class asistenteModelo extends mainModel
 {
 
-    //Modelo para registrar asistentes
+   
     protected static function agregar_asistente_modelo($datos)
     {
         $sql = mainModel::conectar()->prepare("INSERT INTO asistente (nombres,apellidos,fecha_nacimiento,email,celular,activo,id_admin)
@@ -21,7 +21,7 @@ class asistenteModelo extends mainModel
 
         $sql->execute();
         return $sql;
-    } //fin modelo
+    } 
 
     protected static function consultar_asistente_modelo($inicio, $registros, $busqueda)
     {
@@ -34,7 +34,7 @@ class asistenteModelo extends mainModel
                                             OR celular LIKE :busqueda) 
                                             AND activo = 1 
                                             ORDER BY id_asistente ASC LIMIT :inicio, :registros");
-            $busqueda = "%$busqueda%"; // Ajustamos el valor de búsqueda
+            $busqueda = "%$busqueda%";
             $consulta->bindParam(':busqueda', $busqueda, PDO::PARAM_STR);
         } else {
             $consulta = $conexion->prepare("SELECT SQL_CALC_FOUND_ROWS * FROM asistente 
@@ -50,10 +50,7 @@ class asistenteModelo extends mainModel
 
         return $datos;
     }
-
-
-
-    //Modelo para seleccionar los datos de asistente
+  
     protected static function datos_asistente_modelo($tipo, $id)
     {
         if ($tipo == "Unico") {
@@ -66,8 +63,7 @@ class asistenteModelo extends mainModel
 
         $sql->execute();
         return $sql;
-    } //fin modelo
-
+    } 
 
     // Modelo para eliminar (desactivar) el asistente
     protected static function eliminar_asistente_modelo()
@@ -93,18 +89,16 @@ class asistenteModelo extends mainModel
         } else {
             return null; 
         }
-    } // fin modelo
-
-
-
-
-    //Modelo para actualizar asistente
+    } 
+  
     protected static function actualizar_asistente_modelo($datos)
     {
         $id = mainModel::decryption($_POST['asistente_id_up']);
         $id = mainModel::limpiar_cadena($id);
 
         $datos["ID"] = $id;
+
+    
 
         $obtenerAsistente = mainModel::ejecutar_consulta_simple("SELECT * FROM asistente WHERE id_asistente = '$id' ");
         if ($obtenerAsistente->rowCount() > 0) {
@@ -128,4 +122,4 @@ class asistenteModelo extends mainModel
             return null;
         }
     }
-} //fin modelo
+} 
