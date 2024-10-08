@@ -67,7 +67,7 @@ class facturaModelo extends mainModel
 
     public function obtenerCupoMaximo($evento_id) {
         // Consulta para obtener el cupo máximo del evento
-        $sql = "SELECT cupo FROM evento WHERE id_evento = :id_evento";
+        $sql = "SELECT cupo FROM evento WHERE id_evento = :id_evento ";
         
         // Parámetros a pasar
         $parametros = [':id_evento' => $evento_id];
@@ -84,7 +84,7 @@ class facturaModelo extends mainModel
     
     protected static  function contarInscripciones($evento_id) {
         // Consulta SQL con parámetro
-        $sql = "SELECT COUNT(*) AS total_inscripciones FROM inscripcion WHERE id_evento = :id_evento";
+        $sql = "SELECT COUNT(*) AS total_inscripciones FROM inscripcion WHERE id_evento = :id_evento AND activo = 1 ";
         
         // Parámetros a pasar
         $parametros = [':id_evento' => $evento_id];

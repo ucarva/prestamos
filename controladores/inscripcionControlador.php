@@ -25,9 +25,11 @@ class inscripcionControlador extends inscripcionModelo
         }
 
         //seleccionando asistentes en la base de datos
-        $datos_asistente = mainModel::ejecutar_consulta_simple("SELECT * FROM asistente WHERE nombres LIKE '%$asistente%'
-         OR apellidos LIKE '%$asistente%' 
-         ORDER BY id_asistente ASC");
+        $datos_asistente = mainModel::ejecutar_consulta_simple("SELECT * FROM asistente 
+        WHERE (nombres LIKE '%$asistente%' OR apellidos LIKE '%$asistente%') 
+        AND activo = 1  
+        ORDER BY id_asistente ASC");
+    
 
         if ($datos_asistente->rowCount() >= 1) {
             $datos_asistente = $datos_asistente->fetchAll();
@@ -68,7 +70,7 @@ class inscripcionControlador extends inscripcionModelo
         $id = mainModel::limpiar_cadena($_POST['id_agregar_asistente']);
 
 
-        $check_asistente = mainModel::ejecutar_consulta_simple("SELECT * FROM asistente WHERE id_asistente='$id'");
+        $check_asistente = mainModel::ejecutar_consulta_simple("SELECT * FROM asistente WHERE id_asistente='$id' AND activo = 1 ");
 
         if ($check_asistente->rowCount() <= 0) {
             $alerta = [
@@ -299,7 +301,7 @@ class inscripcionControlador extends inscripcionModelo
     
     public function obtenerCupoMaximo($evento_id) {
         // Consulta para obtener el cupo máximo del evento
-        $sql = "SELECT cupo FROM evento WHERE id_evento = :id_evento";
+        $sql = "SELECT cupo FROM evento WHERE id_evento = :id_evento AND activo = 1";
         
         // Parámetros a pasar
         $parametros = [':id_evento' => $evento_id];
@@ -310,7 +312,7 @@ class inscripcionControlador extends inscripcionModelo
         // Obtener el resultado
         $resultado = $cupoMaximo->fetch(PDO::FETCH_ASSOC);
         
-        return $resultado['cupo']; // Cambia 'cupo_maximo' por 'cupo'
+        return $resultado['cupo']; 
     }
     
     

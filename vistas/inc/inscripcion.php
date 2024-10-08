@@ -26,7 +26,7 @@
         } else {
             Swal.fire({
                 title: 'Ocurrio un error',
-                text: 'Debes introducir el nombre dle asistente',
+                text: 'Debes introducir el nombre del asistente',
                 type: 'error',
                 confirmButtonText: 'Aceptar'
             });

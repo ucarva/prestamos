@@ -136,8 +136,6 @@ class facturaControlador extends facturaModelo
         exit();
     }
 
-
-
     public function validar_cupones()
     {
         $alertas = [];
